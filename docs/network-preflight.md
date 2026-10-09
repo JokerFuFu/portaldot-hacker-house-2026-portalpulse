@@ -28,17 +28,42 @@ RPC 列表声明有某方法，不等于方法已实际调用成功。本次只�
 
 失败原因尚未确定；不能据此称该主机永久不可用。该失败没有混入名为 mainnet-readonly 的成功证据 JSON；也没有把第三方节点认作主办方活动 V3 测试网。
 
-## 尚未确认的活动 V3 条件
+## 官方公布的 V3 配置与失败预检
+
+官方团队的英文 V3 指南于 2026-10-03 发布；本次依据 [README / FAQ 固定版本](https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb)，revision 为 `d671a32758573f4d9ab00d891b2dd6a48f36bcbb`（2026-10-07）。以下配置与工作流是指南公布内容，不能当作 RPC 返回值或本项目验证结果。
+
+| 项目 | 官方文档公布值 |
+|---|---|
+| Substrate RPC | `wss://testnetv3-node.feso-apps.xyz` |
+| EVM RPC | `https://testnetv3-eth-rpc.feso-apps.xyz` |
+| EVM Chain ID | 420420777 |
+| 原生代币 | tPOTv3；精度 14 |
+| Node Explorer | [Node Explorer](https://node-console.feso-apps.xyz/)；尚未验证查询结果 |
+| 合约候选路径 | Solidity / Revive；经 EVM 工具或原生 `reviveApi` / `Revive.call` 交互，尚未验证编译器、SDK 或运行时兼容性 |
+
+只读预检始于 **2026-10-09T08:49:30.897Z**（北京时间 16:49:30.897）。完整原始记录：[v3-readonly-20261009.json](evidence/v3-readonly-20261009.json)。未签名、发送交易或部署合约。
+
+| 路径 | 时间（UTC） | 实际结果 |
+|---|---|---|
+| Substrate WebSocket | 08:49:30.898 至 08:49:33.023 | `WebSocket connection error`；未建立连接，未发送原生 RPC 请求 |
+| EVM `eth_chainId([])` | 请求 08:49:31.088；结束 08:49:32.396 | HTTP 502，HTML 错误页；没有链 ID 响应 |
+
+这是有时间边界的失败观测，不能断言端点永久不可用，也不能由此归因网络故障。尚未观察到 V3 创世哈希、运行时、metadata、EVM 链 ID 响应、余额、部署或能力成功；Chain ID 420420777 仍仅为文档公布值。失败结果独立保存，没有混入主网证据。
+
+## 仍须核验的 V3 接入条件
 
 | 条件 | 当前证据状态 |
 |---|---|
-| 主办方认可的 V3 测试网 RPC | 尚未确认 |
-| 测试网创世哈希、网络身份和运行时 | 尚未确认 |
-| faucet / 测试币领取路径 | 尚未确认 |
-| explorer / 浏览器或等效查询方式 | 尚未确认 |
-| 合约工具链、SDK 版本及 VM 接口 | 尚未确认 |
+| 官方 V3 RPC 与配置来源 | 已公布，端点实测失败；恢复后须重新只读核验 |
+| 测试网创世哈希、网络身份、运行时与 metadata | 尚未取得 |
+| EVM 实际 Chain ID 与账户映射 | 尚未取得链 ID 响应；映射尚未查询 |
+| 测试币领取路径 | 有日期的官方说明拟在 RPC 更新后手动分发；当前领取方式及到账未验证 |
+| explorer / 等效查询方式 | Node Explorer 已公布，查询能力未验证 |
+| 合约工具链、SDK 版本及 VM 接口 | Revive / Solidity 已有官方工作流，实际兼容与部署未验证 |
 
-正式写入必须回读全部接入条件。主网保持只读，拒绝已知主网创世哈希；测试网身份不符、能力未知或元数据不足也禁止写入。EVM 适配仅在官方接口确认并实测后加入，不从宣传或 legacy 主网反推活动配置。详细边界见[设计](design.md)。
+正式写入必须回读全部接入条件。主网保持只读，拒绝已知主网创世哈希；测试网身份不符、能力未知或元数据不足也禁止写入。Substrate 用于网络观测，Revive / Solidity 为待验证的合约候选，不要求同时实现 legacy WASM 与 EVM，也不把旧主网 rent-era Contracts / ink! 配置直接套用到 V3。跨 VM 可组合性尚未验证。
+
+原生账户与 H160 映射须以 `reviveApi.accountId` 的实际查询为依据；原生到 EVM 账户注资前必须先查询该映射，不能从已有 SS58 地址推定 EVM 部署者。完整边界见[设计](design.md)。
 
 ## 分层来源
 
@@ -46,4 +71,6 @@ RPC 列表声明有某方法，不等于方法已实际调用成功。本次只�
 - **官方公开链资料**：[Chain Info](https://portaldot-dev.readthedocs.io/en/latest/chain-info.html)，列出主网 WebSocket、SS58 42 和 POT 精度 14；该页面属于 Developer v1 文档，不等于本届 V3 测试网配置。
 - **官方 SDK 文档修正线索**：[DeveloperPlatform PR 1](https://github.com/portaldotVolunteer/DeveloperPlatform/pull/1)、[PR 2](https://github.com/portaldotVolunteer/DeveloperPlatform/pull/2)，作为后续版本适配核验入口，不代表本项目已验证该 SDK 可用。
 - **第三方 legacy WASM 参考**：[portaldot-contract-zero README](https://github.com/jonathan-moore58/portaldot-contract-zero#readme)，仅为第三方参考，不作为活动接入配置或本项目合约已部署的证据。
+- **官方 V3 指南**：[固定版本 README / FAQ](https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb)，用于上述文档配置与 Revive / Solidity 候选路径；运行态仍待验证。
+- **直接 V3 RPC 结果**：[失败只读记录](evidence/v3-readonly-20261009.json)，用于本次连接错误与 HTTP 502。
 - **直接 RPC 结果**：[成功主网记录](evidence/mainnet-readonly-20261009.json)，所有具体主网返回值以该观测为依据。

@@ -1,6 +1,8 @@
 # PortalPulse 未来验收标准
 
-状态日期：2026-10-09。以下是实施完成后必须逐项验证的标准，**全部尚未执行，不能视为通过的测试**。当前只读主网观测仅见[网络预检](network-preflight.md)，不满足探针或产品验收。标准对应[设计](design.md)的六个模块。
+状态日期：2026-10-09。以下是实施完成后必须逐项验证的标准，**全部尚未执行，不能视为通过的测试**。当前主网只读观测和失败的 V3 只读预检均见[网络预检](network-preflight.md)，不满足探针或产品验收。标准对应[设计](design.md)的六个模块。
+
+V3 指南已公布配置及 Revive / Solidity 工作流；这些只作为后续核验输入。实测 WebSocket 连接错误和 EVM `eth_chainId([])` HTTP 502 没有验证网络身份或合约能力。网络恢复后须取得创世哈希、运行时、metadata 与实际 EVM 链 ID，并验证所选合约工具链；原生到 EVM 账户注资前须查询 `reviveApi.accountId` 映射，不能由已有 SS58 地址推定 EVM 部署者。Substrate 仍为网络观测路径，Revive / Solidity 为待验证候选；不要求同时实现 legacy WASM 与 EVM，不宣称跨 VM 可组合性或编译器 / 运行时兼容已经通过。
 
 ## 十个验收场景
 

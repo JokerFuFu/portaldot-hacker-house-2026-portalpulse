@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "scope": "preparation-readonly",
+  "observedAt": "2026-10-09T08:49:30.897Z",
+  "source": "https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb",
+  "declared": {
+    "substrate": "wss://testnetv3-node.feso-apps.xyz",
+    "evm": "https://testnetv3-eth-rpc.feso-apps.xyz",
+    "chainId": 420420777,
+    "tokenSymbol": "tPOTv3",
+    "nativeTokenDecimals": 14
+  },
+  "signed": false,
+  "transactionsSubmitted": false,
+  "deploymentValidated": false,
+  "native": {
+    "endpoint": "wss://testnetv3-node.feso-apps.xyz",
+    "observedAt": "2026-10-09T08:49:30.898Z",
+    "connected": false,
+    "requests": [],
+    "connectionError": {
+      "name": "Error",
+      "message": "WebSocket connection error",
+      "code": null
+    },
+    "finishedAt": "2026-10-09T08:49:33.023Z"
+  },
+  "evm": {
+    "endpoint": "https://testnetv3-eth-rpc.feso-apps.xyz",
+    "observedAt": "2026-10-09T08:49:31.087Z",
+    "requests": [
+      {
+        "requestedAt": "2026-10-09T08:49:31.088Z",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "eth_chainId",
+          "params": []
+        },
+        "httpStatus": 502,
+        "bodyExcerpt": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!"
+      }
+    ],
+    "finishedAt": "2026-10-09T08:49:32.396Z"
+  }
+}
