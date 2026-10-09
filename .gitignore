@@ -1,0 +1,44 @@
+# Dependencies, builds and validation output
+node_modules/
+dist/
+build/
+out/
+target/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Local state and caches
+.cache/
+.local/
+local-state/
+.portalpulse/
+tmp/
+temp/
+
+# Environment and private credentials; a sanitized example may be published
+.env
+.env.*
+!.env.example
+secrets/
+secret/
+credentials/
+*.secret
+*.secrets
+*.key
+*.pem
+*.p12
+*.pfx
+keystore/
+keystores/
+*.keystore
+wallet-backup*/
+wallet-backup*
+wallet_backup*
+*.wallet
+
+# Logs, OS metadata and preparation scratch
+logs/
+*.log
+.DS_Store
+.superpowers/
