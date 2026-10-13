@@ -2,7 +2,7 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
-**2026-10-09 状态：准备阶段，实施尚未开始。** 本仓库提供项目设计、未来验收标准、参赛交付清单、公开主网只读观测及一次失败的官方 V3 测试网只读预检。尚无应用源码、探针合约、可运行演示或测试通过记录；没有安装或启动命令。核心代码计划主要在 2026-10-14 00:00 至 2026-11-06 12:00（Asia/Shanghai）的比赛开发期内产生。
+**2026-10-13 状态：准备阶段，实施尚未开始。** 本仓库提供项目设计、未来验收标准、参赛交付清单、公开主网只读观测及一次失败的官方 V3 测试网只读预检。尚无应用源码、探针合约、可运行演示或测试通过记录；没有安装或启动命令。核心代码计划主要在 2026-10-14 00:00 至 2026-11-06 12:00（Asia/Shanghai）的比赛开发期内产生。
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
@@ -23,6 +23,8 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 
 ## V3 接入准备状态
 
+**历史配置已失效，等待新的官方配置。** 2026-10-10 实际读取到主办方 Titus 于 10 月 9 日 17:40（北京时间）的[说明](https://discord.com/channels/1440212664751099996/1479446495643303997/1558051618581389395)：测试网正在升级，旧 RPC 信息不再可用，配置完成后将公布最新 RPC。下述指南地址仅保留为历史公布值，不能据此启用部署或写入。2026-10-13 指南 main 仍为下述版本；最新频道公告未在本次核验，不能据指南未变断言没有新配置。
+
 官方团队发布的 [V3 指南（固定版本）](https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb) 公布了 Substrate RPC `wss://testnetv3-node.feso-apps.xyz`、EVM RPC `https://testnetv3-eth-rpc.feso-apps.xyz`、Chain ID **420420777**、原生代币 **tPOTv3（精度 14）**及 [Node Explorer](https://node-console.feso-apps.xyz/)。这些是文档公布值。2026-10-09T08:49:30.897Z 开始的只读预检中，Substrate WebSocket 连接失败，EVM `eth_chainId([])` 返回 HTTP 502；未获得创世哈希、运行时、链 ID 响应或余额，也未验证部署或能力成功。完整记录与限制见[网络预检](docs/network-preflight.md)及[V3 只读证据](docs/evidence/v3-readonly-20261009.json)。
 
 Substrate 保留为网络观测路径；指南中的 Revive / Solidity 是网络恢复后待验证的探针合约候选，编译器和运行时兼容性尚未实测。官方 PDK / FailLens 已覆盖基础开发与失败诊断；PortalPulse 的重点是持续监测、执行—最终确认—状态回读时间线及可导出复核记录，见[设计](docs/design.md)。
@@ -36,6 +38,7 @@ Substrate 保留为网络观测路径；指南中的 Revive / Solidity 是网络
 - [Check-in 与最终提交清单](docs/submission-checklist.md)
 - [2026-10-09 主网只读观测](docs/evidence/mainnet-readonly-20261009.json)
 - [2026-10-09 V3 失败只读预检](docs/evidence/v3-readonly-20261009.json)
+- [2026-10-13 官方排期观察记录](docs/evidence/event-schedule-20261013.json)
 
 活动依据：[Portaldot V3.0 Hacker House 2026 详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及[官方赛道页](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。准备文档不计作比赛期要求的至少三次有效代码提交。现有主网观测也不能替代 V3 测试网部署与真实交互证据。
 

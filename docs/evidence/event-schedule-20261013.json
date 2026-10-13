@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "scope": "official-event-schedule-observation",
+  "source": "https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail#key-dates",
+  "observedAtUtc": "2026-10-13T02:10:54.310829+00:00",
+  "sourceTitle": "Portaldot Hacker house 2026 | Hackathon | DoraHacks",
+  "observationMethod": "rendered-page-readback",
+  "sourceTimeZone": "UTC",
+  "convertedTimeZone": "Asia/Shanghai",
+  "schedule": [
+    {
+      "id": "kickoff",
+      "name": "Kick-off Meeting & Workshop",
+      "startUtc": "2026-10-14T12:00:00Z",
+      "endUtc": "2026-10-14T14:00:00Z",
+      "beijing": "2026-10-14 20:00–22:00"
+    },
+    {
+      "id": "checkin",
+      "name": "Check-in Submission Deadline",
+      "deadlineUtc": "2026-10-24T12:00:00Z",
+      "beijing": "2026-10-24 20:00"
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback Results Announcement",
+      "atUtc": "2026-10-26T16:00:00Z",
+      "beijing": "2026-10-27 00:00"
+    },
+    {
+      "id": "officeApplication",
+      "name": "Office Hour Application Deadline",
+      "deadlineUtc": "2026-10-27T12:00:00Z",
+      "beijing": "2026-10-27 20:00"
+    },
+    {
+      "id": "officeHours",
+      "name": "Office Hours",
+      "utcDates": [
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "specificSessionTimeVerified": false
+    },
+    {
+      "id": "finalSubmission",
+      "name": "Final Submission Deadline / Code Freeze",
+      "deadlineUtc": "2026-11-06T04:00:00Z",
+      "beijing": "2026-11-06 12:00"
+    },
+    {
+      "id": "demoDay",
+      "name": "Live Demo Day",
+      "utcDates": [
+        "2026-11-08",
+        "2026-11-09"
+      ],
+      "specificSessionTimeVerified": false
+    },
+    {
+      "id": "communityVoting",
+      "name": "Community Choice Voting",
+      "startUtc": "2026-11-09T16:00:00Z",
+      "endUtc": "2026-11-10T16:00:00Z",
+      "beijing": "2026-11-10 00:00–2026-11-11 00:00"
+    },
+    {
+      "id": "winners",
+      "name": "Winners Announcement",
+      "utcDate": "2026-11-11",
+      "specificTimeVerified": false
+    },
+    {
+      "id": "winnerInformation",
+      "name": "Winner Information Collection",
+      "utcDates": [
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14"
+      ],
+      "specificTimeVerified": false
+    },
+    {
+      "id": "rewards",
+      "name": "Reward Distribution",
+      "atUtc": "2026-11-14T12:00:00Z",
+      "beijing": "2026-11-14 20:00"
+    }
+  ],
+  "limitations": [
+    "This records the page at the observation time; further official updates may supersede it.",
+    "Date-only UTC entries do not establish specific Beijing session times.",
+    "This evidence does not prove application implementation, testnet deployment or project submission."
+  ]
+}

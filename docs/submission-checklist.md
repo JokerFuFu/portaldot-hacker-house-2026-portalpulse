@@ -1,6 +1,6 @@
 # PortalPulse 参赛提交清单
 
-截至 2026-10-09，项目仅处准备阶段，以下事项均为未来交付检查项，未代表已经实现、部署、发布或提交。依据：[本届官方 V3 Hacker House 详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)，本轮已读取该页的时间、提交及代码要求；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。2026 年 4 月 Mini Hackathon 模板不作为本届 V3 提交规则。
+截至 2026-10-13，项目仅处准备阶段，以下事项均为未来交付检查项，未代表已经实现、部署、发布或提交。依据：[本届官方 V3 Hacker House 详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)，本轮已读取该页的时间、提交及代码要求；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。2026 年 4 月 Mini Hackathon 模板不作为本届 V3 提交规则。
 
 ## Check-in：2026-10-24 20:00 前（北京时间）
 
@@ -12,6 +12,14 @@
 - [ ] 在 DoraHacks 提交后回读材料、链接与提交状态，留存结果。
 
 官方 Check-in 不接受仅停留于概念设计的项目，因此当前准备仓库本身尚不满足该阶段交付。[Check-in 规则](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)。
+
+## Office Hours 申请：2026-10-27 20:00 前（北京时间）
+
+- [ ] 整理当前进度、公开 GitHub、已完成模块、测试网部署状态、可用时的演示链接，以及需要与导师讨论的具体问题。
+- [ ] 根据官方 Discord 的申请入口提交并回读申请状态；填写未验证的部署状态时如实说明。
+- [ ] Office Hours 当前安排为 10-28 至 10-29（UTC 日期），具体北京时间场次待确认。
+
+上述日期以 2026-10-13 [官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail#key-dates)为准，见[排期观察记录](evidence/event-schedule-20261013.json)。申请入口与场次以主办方正式公告为准。
 
 ## 最终提交：2026-11-06 12:00 前（北京时间）
 
@@ -33,6 +41,12 @@
 - [ ] 代码主要在 2026-10-14 至 2026-11-06 期间产生，比赛期间仓库保持公开，至少三次有效比赛期提交；准备文档提交不计入。
 - [ ] 保留 commit / PR 时间线；核心模块最终版本不能在最终截止前最后 24 小时集中一次性提交。
 - [ ] 冻结后不实质改变核心功能、架构或评审结果；严重缺陷如必须修复，向主办方报告并保留清楚修改记录。
-- [ ] 为 11-07 至 11-08（官方 UTC 日期）Demo Day 准备讲解和可运行演示，具体北京时间场次以官方排期为准。
+- [ ] 为 11-08 至 11-09（官方 UTC 日期）Demo Day 准备讲解和可运行演示，具体北京时间场次以官方排期为准。
+
+## 社区投票与结果核验
+
+- [ ] Community Choice Voting 当前为 11-10 00:00 至 11-11 00:00（北京时间）；按官方 Discord 的投票规则及实际页面核验。
+- [ ] 获奖结果计划 11-11（UTC 日期）公布；获奖后资料收集计划 11-12 至 11-14（UTC 日期），准确场次和字段另行核验。
+- [ ] 奖励计划 11-14 20:00（北京时间）分发；获奖及到账均需实证，计划日期不代表获得奖金。
 
 完整阶段安排见[时间线](roadmap.md)。活动网络信息尚未确认的内容见[网络预检](network-preflight.md)，不能填入猜测的地址、配置或交易记录。
