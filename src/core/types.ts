@@ -23,3 +23,14 @@ export interface ReadOnlyRpc {
   request(method:string,params?:unknown[],signal?:AbortSignal):Promise<unknown>;
   close():void;
 }
+export interface MonitorCheck {state:CheckStatus;reason:string;}
+export interface MonitorSummary {
+  reachability:MonitorCheck;identity:MonitorCheck;freshness:MonitorCheck;
+  bestProgress:MonitorCheck;finalizedProgress:MonitorCheck;
+  baselineMs:number|null;thresholdMs:number;latest:Sample|null;
+}
+export interface ReportPayload {
+  origin:EvidenceOrigin;network:Omit<NetworkConfig,'endpoint'>;
+  intervalMs:number;startedAt:string;endedAt:string;droppedSamples:number;samples:Sample[];
+}
+export interface SessionReport {schemaVersion:1;payload:ReportPayload;sha256:string;}
