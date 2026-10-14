@@ -1,3 +1,4 @@
+import {endpointRedactor, validateNetworkConfig} from './config.js';
 import type {NetworkConfig,Sample,EvidenceOrigin,SessionReport,ReportPayload} from './types.js';
 import {retainSamples} from './monitor.js';
 
@@ -112,36 +113,78 @@ async function digest(payload:ReportPayload):Promise<string> {
   const hash=await globalThis.crypto.subtle.digest('SHA-256',bytes);
   return Array.from(new Uint8Array(hash),byte=>byte.toString(16).padStart(2,'0')).join('');
 }
-function redact(value:unknown,endpoint:string|null,depth=0):unknown {
-  if(depth>16)invalid('redaction nesting limit');
-  if(typeof value==='string')return endpoint?value.split(endpoint).join('[endpoint]'):value;
-  if(Array.isArray(value)){array(value,Number.MAX_SAFE_INTEGER);return value.map(item=>redact(item,endpoint,depth+1));}
-  if(value&&typeof value==='object'){
-    if(Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)invalid('non-JSON evidence');
-    const entries=Object.entries(value).map(([key,item])=>[endpoint?key.split(endpoint).join('[endpoint]'):key,redact(item,endpoint,depth+1)] as const);
-    if(new Set(entries.map(([key])=>key)).size!==entries.length)invalid('redacted result keys collide');
+function redact(value: unknown, redactText: (text: string) => string, depth = 0): unknown {
+  if (depth > 16) invalid('redaction nesting limit');
+  if (typeof value === 'string') return redactText(value);
+  if (Array.isArray(value)) {
+    array(value, Number.MAX_SAFE_INTEGER);
+    return value.map(item => redact(item, redactText, depth + 1));
+  }
+  if (value && typeof value === 'object') {
+    if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) {
+      invalid('non-JSON evidence');
+    }
+    const entries = Object.entries(value).map(([key, item]) =>
+      [redactText(key), redact(item, redactText, depth + 1)] as const);
+    if (new Set(entries.map(([key]) => key)).size !== entries.length) {
+      invalid('redacted result keys collide');
+    }
     return Object.fromEntries(entries);
   }
   return value;
 }
 
-export async function createReport(config:NetworkConfig,samples:Sample[],options:{origin?:EvidenceOrigin;intervalMs?:number;droppedSamples?:number}={}):Promise<SessionReport> {
-  const {endpoint,...network}=config;
-  if(endpoint!==null){
-    if(typeof endpoint!=='string'||!endpoint.length)invalid('endpoint');
-    let url:URL;try{url=new URL(endpoint);}catch{invalid('endpoint');}
-    if(!['http:','https:','ws:','wss:'].includes(url.protocol)||url.username||url.password||url.search||url.hash)invalid('endpoint credentials or protocol');
-    if(JSON.stringify(network).includes(endpoint))invalid('configured endpoint in public network labels');
+// Count the complete compact UTF-8 envelope, including digest and separators.
+// Each sample is serialized once; evictions only remeasure the small envelope.
+function retainReportBytes(payload: ReportPayload): void {
+  const encoder = new TextEncoder();
+  const samples = payload.samples;
+  const sizes = samples.map(sample => encoder.encode(JSON.stringify(sample)).byteLength);
+  let sampleBytes = sizes.reduce((total, size) => total + size, 0);
+  let first = 0;
+  while (first < samples.length) {
+    payload.startedAt = samples[first]!.observedAt;
+    const envelope = {schemaVersion: 1, payload: {...payload, samples: []}, sha256: '0'.repeat(64)};
+    const bytes = encoder.encode(JSON.stringify(envelope)).byteLength +
+      sampleBytes + samples.length - first - 1;
+    if (bytes <= MAX_BYTES) {
+      payload.samples = samples.slice(first);
+      return;
+    }
+    sampleBytes -= sizes[first]!;
+    first++;
+    payload.droppedSamples++;
   }
-  number(options.droppedSamples??0,true);
-  array(samples,Number.MAX_SAFE_INTEGER);
-  const retained=retainSamples(samples);
-  const clean=redact(retained.samples,endpoint) as Sample[];
-  const payload:ReportPayload={origin:options.origin??clean[0]?.origin??'rpc',network:{...network,expectedGenesis:network.expectedGenesis?.toLowerCase()??null},intervalMs:options.intervalMs??10000,
-    startedAt:clean[0]?.observedAt??'',endedAt:clean.at(-1)?.observedAt??'',droppedSamples:(options.droppedSamples??0)+retained.dropped,samples:clean};
+  invalid('single sample exceeds report size limit');
+}
+
+export async function createReport(
+  config: NetworkConfig,
+  samples: Sample[],
+  options: {origin?: EvidenceOrigin; intervalMs?: number; droppedSamples?: number} = {},
+): Promise<SessionReport> {
+  const {endpoint, ...network} = validateNetworkConfig(config);
+  number(options.droppedSamples ?? 0, true);
+  array(samples, Number.MAX_SAFE_INTEGER);
+  const retained = retainSamples(samples);
+  const clean = redact(retained.samples, endpointRedactor(endpoint)) as Sample[];
+  const payload: ReportPayload = {
+    origin: options.origin ?? clean[0]?.origin ?? 'rpc',
+    network,
+    intervalMs: options.intervalMs ?? 10000,
+    startedAt: clean[0]?.observedAt ?? '',
+    endedAt: clean.at(-1)?.observedAt ?? '',
+    droppedSamples: (options.droppedSamples ?? 0) + retained.dropped,
+    samples: clean,
+  };
+  // Reject invalid evidence before retention or JSON serialization can hide it.
   validatePayload(payload);
-  const report:SessionReport={schemaVersion:1,payload,sha256:await digest(payload)};
-  if(new TextEncoder().encode(JSON.stringify(report)).byteLength>MAX_BYTES)invalid('report size limit');
+  retainReportBytes(payload);
+  number(payload.droppedSamples, true);
+  const report: SessionReport = {schemaVersion: 1, payload, sha256: await digest(payload)};
+  if (new TextEncoder().encode(JSON.stringify(report)).byteLength > MAX_BYTES) {
+    invalid('report size limit');
+  }
   return report;
 }
 

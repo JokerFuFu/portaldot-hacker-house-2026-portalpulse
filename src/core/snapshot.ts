@@ -1,3 +1,4 @@
+import {validateNetworkConfig} from './config.js';
 import {RpcError} from './rpc.js';
 import type {ReadOnlyRpc,NetworkConfig,Sample,EvidenceOrigin,RpcRecord,RuntimeInfo,BlockRef} from './types.js';
 
@@ -29,12 +30,15 @@ function header(value:unknown,pinnedHash:string):BlockRef {
   return {hash:pinnedHash,number:BigInt(data.number).toString(10),parentHash:hash(data.parentHash)};
 }
 function safeText(value:string,max=256):string {
-  return value.replace(/(?:https?|wss?):\/\/[^\s"'<>]+/gi,'[endpoint]').slice(0,max);
+  return value.slice(0, max);
 }
 // Evidence is intentionally small and never contains an unbounded node object.
 function summarize(value:unknown,depth=0):unknown {
   if(typeof value==='string')return safeText(value);
-  if(value===null||typeof value==='boolean'||typeof value==='number')return value;
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : '[nonfinite number: ' + String(value) + ']';
+  }
+  if (value === null || typeof value === 'boolean') return value;
   if(depth>=2)return '[summarized]';
   if(Array.isArray(value))return value.slice(0,8).map(item=>summarize(item,depth+1));
   if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).slice(0,16).map(([key,item])=>[safeText(key,128),summarize(item,depth+1)]));
@@ -50,13 +54,27 @@ function evidence(method:string,value:unknown):unknown {
 }
 
 export async function collectSample(rpc:ReadOnlyRpc,config:NetworkConfig,options:{origin?:EvidenceOrigin;signal?:AbortSignal}={}):Promise<Sample> {
+  config = validateNetworkConfig(config);
   const records:RpcRecord[]=[];
   async function read<T>(method:string,params:unknown[],validate:(value:unknown)=>T):Promise<T|null>{
     const record:RpcRecord={method,params,startedAt:new Date().toISOString(),durationMs:0,status:'abnormal'};
-    records.push(record);const started=performance.now();
-    try{const value=await rpc.request(method,params,options.signal);record.result=evidence(method,value);const result=validate(value);record.status='normal';return result;}
-    catch(error){record.error={code:error instanceof RpcError?safeText(error.code,64):'rpc',message:safeText(error instanceof Error?error.message:'Request failed',512)};return null;}
-    finally{record.durationMs=Math.max(0,performance.now()-started);}
+    records.push(record);
+    const started = performance.now();
+    try {
+      const value = await rpc.request(method, params, options.signal);
+      record.result = evidence(method, value);
+      const result = validate(value);
+      record.status = 'normal';
+      return result;
+    } catch (error) {
+      record.error = {
+        code: error instanceof RpcError ? safeText(error.code, 64) : 'rpc',
+        message: safeText(error instanceof Error ? error.message : 'Request failed', 512),
+      };
+      return null;
+    } finally {
+      record.durationMs = Math.max(0, performance.now() - started);
+    }
   }
   const chainName=await read('system_chain',[],boundedString);
   const genesisHash=await read('chain_getBlockHash',[0],hash);
@@ -86,5 +104,20 @@ export async function collectSample(rpc:ReadOnlyRpc,config:NetworkConfig,options
   const state=mismatch?'abnormal':!expectedInvalid&&expectedGenesis!==null&&complete?'normal':'unverified';
   let reason=mismatch?'Genesis does not match configured identity':expectedInvalid?'Invalid configured genesis':expectedGenesis===null?'No expected genesis configured':complete?'Configured genesis matched; readonly identity header checks passed':'Incomplete identity evidence';
   if(records.some(record=>record.error?.code==='unsupported'))reason+='; unsupported metadata version for header check';
-  return {observedAt:new Date().toISOString(),endpointAlias:safeText(config.endpointAlias,128),configId:safeText(config.id,128),origin:options.origin??'rpc',identity:{state,expectedGenesis,genesisHash,chainName,runtime,declaredMethods:declaredMethods??[],metadataVerified:metadata===true,reason,writeAllowed:false},best,finalized,rpc:records};
+  return {
+    observedAt: new Date().toISOString(),
+    endpointAlias: config.endpointAlias,
+    configId: config.id,
+    origin: options.origin ?? 'rpc',
+    identity: {
+      state, expectedGenesis, genesisHash, chainName, runtime,
+      declaredMethods: declaredMethods ?? [],
+      metadataVerified: metadata === true,
+      reason,
+      writeAllowed: false,
+    },
+    best,
+    finalized,
+    rpc: records,
+  };
 }

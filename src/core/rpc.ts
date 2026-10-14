@@ -1,3 +1,4 @@
+import {normalizeEndpoint} from './config.js';
 import type {ReadOnlyRpc} from './types.js';
 
 const READONLY_METHODS = new Set([
@@ -32,10 +33,12 @@ function parseResponse(text:string,id:number):unknown {
 }
 
 export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOnlyRpc {
-  let url:URL;
-  try {url=new URL(endpoint);}catch{throw new RpcError('endpoint','Invalid endpoint');}
-  if(!['http:','https:','ws:','wss:'].includes(url.protocol))throw new RpcError('endpoint','Unsupported endpoint protocol');
-  if(url.username||url.password||url.search||url.hash)throw new RpcError('endpoint','Endpoint credentials/query/fragment are forbidden');
+  let url: URL;
+  try {
+    url = normalizeEndpoint(endpoint);
+  } catch (error) {
+    throw new RpcError('endpoint', error instanceof Error ? error.message : 'Invalid endpoint');
+  }
   const timeoutMs=options.timeoutMs??8000;
   if(!Number.isFinite(timeoutMs)||timeoutMs<=0)throw new RpcError('timeout','Timeout must be positive and finite');
   const pending=new Set<(error:RpcError)=>void>();

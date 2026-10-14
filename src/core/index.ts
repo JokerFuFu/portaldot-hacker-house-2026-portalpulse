@@ -4,3 +4,4 @@ export {collectSample} from './snapshot.js';
 export type {MonitorCheck,MonitorSummary,ReportPayload,SessionReport} from './types.js';
 export {analyzeSamples,retainSamples} from './monitor.js';
 export {createReport,importReport} from './report.js';
+export {validateNetworkConfig} from './config.js';

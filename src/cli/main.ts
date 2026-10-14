@@ -1,3 +1,4 @@
+import {validateNetworkConfig} from '../core/config.js';
 import {open,mkdir,writeFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
@@ -44,21 +45,14 @@ async function readBounded(path:string,max:number):Promise<string> {
   try {const stat=await file.stat();if(!stat.isFile()||stat.size>max)throw new Error('Invalid input file or size limit');return await file.readFile({encoding:'utf8'});}finally{await file.close();}
 }
 async function readConfig(path:string):Promise<NetworkConfig> {
-  let value:unknown;try{value=JSON.parse(await readBounded(path,65536));}catch(error){if(error instanceof SyntaxError)throw new Error('Invalid config JSON');throw error;}
-  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Invalid network config');
-  const c=value as Record<string,unknown>;
-  const keys=['id','name','source','endpoint','endpointAlias','kind','expectedGenesis'];
-  if(Object.keys(c).length!==keys.length||keys.some(key=>!Object.hasOwn(c,key)))throw new Error('Invalid network config fields');
-  for(const [key,max] of [['id',128],['name',256],['source',512],['endpointAlias',128]] as const)if(typeof c[key]!=='string'||!c[key].length||c[key].length>max)throw new Error('Invalid config '+key);
-  if(typeof c.kind!=='string'||!['event-testnet','mainnet-readonly','custom-readonly'].includes(c.kind))throw new Error('Invalid config kind');
-  if(c.expectedGenesis!==null&&(typeof c.expectedGenesis!=='string'||!/^0x[0-9a-fA-F]{64}$/.test(c.expectedGenesis)))throw new Error('Invalid expectedGenesis');
-  if(c.endpoint!==null){
-    if(typeof c.endpoint!=='string'||c.endpoint.length>2048)throw new Error('Invalid endpoint');
-    let url:URL;try{url=new URL(c.endpoint);}catch{throw new Error('Invalid endpoint');}
-    if(!['http:','https:','ws:','wss:'].includes(url.protocol)||url.username||url.password||url.search||url.hash)throw new Error('Invalid endpoint protocol or credentials/query/fragment');
-    if(keys.filter(key=>key!=='endpoint').some(key=>typeof c[key]==='string'&&(c[key] as string).includes(c.endpoint as string)))throw new Error('Invalid config: endpoint must not appear in public labels');
+  let value: unknown;
+  try {
+    value = JSON.parse(await readBounded(path, 65536));
+  } catch (error) {
+    if (error instanceof SyntaxError) throw new Error('Invalid config JSON');
+    throw error;
   }
-  return {id:c.id as string,name:c.name as string,source:c.source as string,endpointAlias:c.endpointAlias as string,kind:c.kind as NetworkConfig['kind'],endpoint:c.endpoint as string|null,expectedGenesis:typeof c.expectedGenesis==='string'?c.expectedGenesis.toLowerCase():null};
+  return validateNetworkConfig(value);
 }
 function checks(monitoring:MonitorSummary){return [monitoring.reachability,monitoring.identity,monitoring.freshness,monitoring.bestProgress,monitoring.finalizedProgress];}
 function outputSummary(report:SessionReport,mode:'simulated'|'live'|'offline',interrupted=false,setupUnconfigured=false) {

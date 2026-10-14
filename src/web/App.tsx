@@ -1,3 +1,4 @@
+import {validateNetworkConfig} from '../core/config.js';
 import {useEffect,useRef,useState} from 'react';
 import type {FormEvent,ChangeEvent} from 'react';
 import type {NetworkConfig,SessionReport} from '../core/types.js';
@@ -35,17 +36,27 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
   const link=document.createElement('a');link.href=url;link.download='portalpulse-report.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   setNotice('已生成紧凑 JSON 下载；含原始采集时间与来源，不含配置端点。');
  }catch(e){setError('导出失败：'+(e instanceof Error?e.message:'无效报告'));}finally{setBusy(false);}}
- function start(event:FormEvent){event.preventDefault();revision.current++;setError(null);
-  try{
-   if(!config.id||!config.name||!config.source||!config.endpointAlias)throw new Error('请填写全部必填字段');
-   if(/(?:https?|wss?):\/\//i.test(config.id+config.endpointAlias))throw new Error('配置 ID 与端点别名须为不含 URL 的短标签');
-   if(config.id.length>128||config.name.length>256||config.source.length>512||config.endpointAlias.length>128)throw new Error('配置字段超过长度限制');
-   if(config.expectedGenesis&&!/^0x[0-9a-fA-F]{64}$/.test(config.expectedGenesis))throw new Error('预期创世哈希须为 0x 加 64 位十六进制；也可留空并标为未验证');
-   if(!config.endpoint)throw new Error('请填写只读端点');
-   if(JSON.stringify({...config,endpoint:null}).includes(config.endpoint))throw new Error('名称、来源与别名不能包含配置端点');
-   session.current?.start(config,r=>{setReport(r);setMode('live');setNow(Date.now());setError(null);setNotice('已完成一次只读观测；状态只代表保留的采样窗口。');},message=>setError('采集失败：'+message));
-   setReport(null);setMode('live');setRunning(true);setNotice('采集中；正在等待完整观测，未知项保持未验证。');
-  }catch(e){setRunning(false);setError(e instanceof Error?e.message:'配置无效');}
+ function start(event: FormEvent) {
+  event.preventDefault();
+  revision.current++;
+  setError(null);
+  try {
+   const validated = validateNetworkConfig(config);
+   session.current?.start(validated, r => {
+    setReport(r);
+    setMode('live');
+    setNow(Date.now());
+    setError(null);
+    setNotice('已完成一次只读观测；状态只代表保留的采样窗口。');
+   }, message => setError('采集失败：' + message));
+   setReport(null);
+   setMode('live');
+   setRunning(true);
+   setNotice('采集中；正在等待完整观测，未知项保持未验证。');
+  } catch (e) {
+   setRunning(false);
+   setError(e instanceof Error ? e.message : '配置无效');
+  }
  }
  const latest=vm?.summary.latest;
  const checks=vm?[
@@ -62,7 +73,7 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
      <div className="head-strip"><div><span>最新区块 · best</span><strong>{vm.best?.number??unknown}</strong><small>{vm.best?.hash??'区块哈希未知'}</small></div><div><span>最终确认 · finalized</span><strong>{vm.finalized?.number??unknown}</strong><small>{vm.finalized?.hash??'区块哈希未知'}</small></div></div>
      <dl className="identity"><dt>配置名称 / ID</dt><dd>{vm.network.name} / {vm.network.id}</dd><dt>端点别名</dt><dd>{vm.network.endpointAlias}</dd><dt>节点链名称</dt><dd>{latest?.identity.chainName??unknown}</dd><dt>预期创世哈希</dt><dd>{latest?.identity.expectedGenesis??'未知：没有预期身份依据'}</dd><dt>实际创世哈希</dt><dd>{latest?.identity.genesisHash??unknown}</dd><dt>运行时</dt><dd>{latest?.identity.runtime?`${latest.identity.runtime.specName} / spec ${latest.identity.runtime.specVersion} / tx ${latest.identity.runtime.transactionVersion}`:unknown}</dd><dt>元数据头</dt><dd>{latest?.identity.metadataVerified?'识别头版本（不证明完整 SCALE 能力）':'未验证'} / {latest?.identity.runtime?.metadataVersion??unknown}</dd></dl>
      <table className="status-table"><caption>独立状态与判断依据</caption><thead><tr><th>检查项</th><th>状态</th><th>依据</th></tr></thead><tbody>{checks.map(([label,check])=><tr key={label}><th scope="row">{label}</th><td><span className={`state ${check.state}`}>{stateLabel[check.state]}</span></td><td>{check.reason}</td></tr>)}</tbody></table>
-     <h3>采样窗口</h3><dl className="window"><dt>采集开始</dt><dd>{vm.startedAt}</dd><dt>最后完成 / 窗口结束</dt><dd>{vm.endedAt}</dd><dt>采样间隔 / 请求超时</dt><dd>{vm.intervalMs} ms / 8000 ms</dd><dt>保留观测 / 已丢弃</dt><dd>{vm.count} / {vm.dropped}（上限 2000；不代表全天可用性）</dd><dt>推进基线 / 告警阈值</dt><dd>{vm.summary.baselineMs===null?'未验证':vm.summary.baselineMs+' ms'} / {vm.summary.thresholdMs} ms</dd></dl>
+     <h3>采样窗口</h3><dl className="window"><dt>采集开始</dt><dd>{vm.startedAt}</dd><dt>最后完成 / 窗口结束</dt><dd>{vm.endedAt}</dd><dt>采样间隔 / 请求超时</dt><dd>{vm.intervalMs} ms / 8000 ms</dd><dt>保留观测 / 已丢弃</dt><dd>{vm.count} / {vm.dropped}（上限 2000 条 / 16 MiB；不代表全天可用性）</dd><dt>推进基线 / 告警阈值</dt><dd>{vm.summary.baselineMs===null?'未验证':vm.summary.baselineMs+' ms'} / {vm.summary.thresholdMs} ms</dd></dl>
      <h3>RPC 详情 · 最后完成的观测</h3><p className="hint">方法、参数、耗时与响应均是原始观测依据；元数据与方法列表保存摘要。</p><div className="rpc-records">{latest?.rpc.map((record,index)=><details key={index}><summary><code>{record.method}</code><span>{record.durationMs.toFixed(1)} ms</span><span className={`state ${record.status}`}>{stateLabel[record.status]}</span></summary><dl><dt>请求开始</dt><dd>{record.startedAt}</dd><dt>参数</dt><dd><pre>{JSON.stringify(record.params)}</pre></dd><dt>响应 / 错误</dt><dd><pre>{JSON.stringify({result:record.result,error:record.error},null,2)}</pre></dd></dl></details>)}</div>
      <h3>证据时间线</h3><div className="timeline">{report?.payload.samples.slice().reverse().map((sample,index)=><details key={`${sample.observedAt}-${index}`}><summary><time>{sample.observedAt}</time><span>best {sample.best?.number??unknown} / finalized {sample.finalized?.number??unknown}</span><span>{stateLabel[sample.identity.state]}</span></summary><p>{sample.identity.reason}</p><pre>{JSON.stringify(sample,null,2)}</pre></details>)}</div>
      <h3>报告完整性</h3><p className="digest">SHA-256 <code>{vm.sha256}</code></p><p className="hint">摘要只检测报告改动，不证明真实性、当前在线或独立共识。离线与模拟状态始终显示在来源栏。</p>
