@@ -22,9 +22,8 @@ export function endpointRedactor(endpoint: string | null): (text: string) => str
   if (endpoint === null) return text => text;
   const canonical = normalizeEndpoint(endpoint).href;
   return text => {
-    // Exact configured text is protected regardless of the URL spelling accepted above.
-    const exactRedacted = text.split(endpoint).join('[endpoint]').split(canonical).join('[endpoint]');
-    return exactRedacted.replace(URL_TEXT, candidate => {
+    // Compare whole URL tokens before a literal prefix replacement can split them.
+    const equivalentRedacted = text.replace(URL_TEXT, candidate => {
       try {
         if (new URL(candidate).href === canonical) return '[endpoint]';
         // Prose punctuation can follow a URL without being part of the endpoint.
@@ -33,6 +32,8 @@ export function endpointRedactor(endpoint: string | null): (text: string) => str
       } catch { /* Non-URL text is retained as evidence. */ }
       return candidate;
     });
+    // Always protect exact spellings, including text outside the token scanner.
+    return equivalentRedacted.split(endpoint).join('[endpoint]').split(canonical).join('[endpoint]');
   };
 }
 

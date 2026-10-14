@@ -6,14 +6,16 @@ import {createRpc, collectSample, createReport, importReport} from '../dist/core
 
 const hash = '0x' + '11'.repeat(32);
 const citation = 'https://public.example/evidence';
-async function fixture(t, {longEcho = false, collidingKeys = false} = {}) {
+async function fixture(t, {longEcho = false, collidingKeys = false, repeatedPath = false} = {}) {
   let requests = 0;
   const server = createServer(async (req, res) => {
     let body = '';
     for await (const chunk of req) body += chunk;
     const q = JSON.parse(body);
     requests++;
-    const compact = `HTTP:${req.headers.host}/private/../sensitive-path`;
+    const compact = repeatedPath
+      ? `http://${req.headers.host}/sensitive-path/../sensitive-path`
+      : `HTTP:${req.headers.host}/private/../sensitive-path`;
     const result = q.method === 'system_chain' ? (collidingKeys ? {[compact]: 'one', '[endpoint]': 'two'} : longEcho ? 'x'.repeat(245) + compact : compact)
       : q.method === 'state_getRuntimeVersion' ? {specName: 'fixture', specVersion: 1, transactionVersion: 1}
       : q.method === 'state_getMetadata' ? '0x6d6574610f00'
@@ -116,4 +118,51 @@ test('snapshot records a validation failure when redacted evidence keys collide'
   assert.equal(Object.hasOwn(observed.rpc[0], 'result'), false);
   const report = await createReport(f.config, [observed]);
   assert.deepEqual(await importReport(JSON.stringify(report)), report);
+});
+
+// Full-token equivalence must run before a literal endpoint can replace its prefix.
+test('composed endpoint equivalents redact completely before literal prefix fallback', () => {
+  for (const scheme of ['http', 'https', 'ws', 'wss']) {
+    const port = scheme === 'https' || scheme === 'wss' ? 443 : 80;
+    const standard = scheme + '://localhost/sensitive-path';
+    for (const endpoint of [standard, scheme + ':localhost/sensitive-path']) {
+      const redact = endpointRedactor(endpoint);
+      const equivalents = [
+        standard + '/../sensitive-path',
+        scheme + ':localhost/sensitive-path/../sensitive-path',
+        scheme.toUpperCase() + '://LOCALHOST:' + port + '/sensitive-path/../sensitive-path',
+        scheme.toUpperCase() + ':LOCALHOST:' + port + '/sensitive-path/.././sensitive-path',
+      ];
+      for (const echo of equivalents) {
+        assert.equal(new URL(echo).href, new URL(endpoint).href);
+        assert.equal(redact(echo), '[endpoint]', endpoint + ' <- ' + echo);
+        assert.equal(redact('Node: ' + echo + ', unavailable'), 'Node: [endpoint], unavailable');
+      }
+      assert.equal(redact(citation), citation);
+    }
+  }
+});
+
+for (const compactConfig of [false, true]) test('actual repeated-path echo is fully redacted with ' + (compactConfig ? 'compact' : 'standard') + ' config', async t => {
+  const f = await fixture(t, {repeatedPath: true});
+  const config = {...f.config, endpoint: compactConfig ? f.config.endpoint.replace('http://', 'http:') : f.config.endpoint};
+  const rpc = createRpc(config.endpoint);
+  t.after(() => rpc.close());
+  const observed = await collectSample(rpc, config);
+  assert.equal(observed.identity.state, 'normal');
+  const report = await createReport(config, [observed]);
+  assert.equal(report.payload.samples[0].identity.chainName, '[endpoint]');
+  assert.equal(report.payload.samples[0].rpc[0].result, '[endpoint]');
+  assert.equal(report.payload.network.source, citation);
+  assert.equal(f.requests, 9);
+  assert.deepEqual(await importReport(JSON.stringify(report)), report);
+});
+
+test('exact configured fallback remains unconditional for text outside token scanner', () => {
+  for (const endpoint of ['http:localhost/sensitive path', 'ht\ttp:localhost/sensitive-path']) {
+    const redact = endpointRedactor(endpoint);
+    assert.equal(redact('Configured: ' + endpoint), 'Configured: [endpoint]');
+    assert.equal(redact(new URL(endpoint).href), '[endpoint]');
+    assert.equal(redact(citation), citation);
+  }
 });
