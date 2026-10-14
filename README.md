@@ -2,7 +2,7 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
-**2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。提交 2f1a91e 已完成独立 Node 22.12 新目录安装与复现，以及实际浏览器模拟、下载 / 导入、篡改拒绝、390px 布局、打印 CSS 和非 RPC 失败 / Stop 检查。最终修复代码 49e6439 通过 188 项自动测试、类型检查与构建；本轮代码的浏览器重验、打印 PDF 分页、公开托管、远端最终代码回读、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
+**2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。提交 2f1a91e 已完成独立 Node 22.12 新目录安装与复现，以及实际浏览器模拟、下载 / 导入、篡改拒绝、390px 布局、打印 CSS 和非 RPC 失败 / Stop 检查。最终修复代码 49e6439 所在提交 6b24591 已通过独立 Node 22.12 新目录安装、188 项测试、类型检查、构建及 CLI demo / inspect，并完成空态、非法 URL 标识拒绝、模拟、非 RPC 失败和 Stop 的实际浏览器复验。下载 / 文件导入、390px 与打印 CSS 仍仅有 2f1a91e 的证据；打印 PDF 分页、公开托管、远端最终代码回读、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
@@ -23,7 +23,7 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 
 ## 本地运行
 
-需要 Node.js >=22.12 与 npm。实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22.12 新目录复现已验证到 2f1a91e，实际浏览器验证也对应此提交。每轮验证的提交、命令和范围见[开发证据](docs/development-evidence.md)。
+需要 Node.js >=22.12 与 npm。实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22.12 新目录复现已验证到 6b24591；浏览器证据按场景分别对应 2f1a91e 和 6b24591。每轮验证的提交、命令和范围见[开发证据](docs/development-evidence.md)。
 
 ~~~sh
 npm --userconfig /dev/null --cache /private/tmp/portalpulse-npm-cache --registry https://registry.npmjs.org ci --ignore-scripts
