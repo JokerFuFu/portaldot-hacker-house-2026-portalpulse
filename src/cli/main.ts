@@ -73,7 +73,7 @@ function outputSummary(report:SessionReport,mode:'simulated'|'live'|'offline',in
 async function save(report:SessionReport,path:string|undefined):Promise<void> {
   if(path===undefined)return;
   await mkdir(dirname(path),{recursive:true});
-  try{await writeFile(path,JSON.stringify(report,null,2)+'\n',{encoding:'utf8',flag:'wx'});}catch(error){if((error as NodeJS.ErrnoException).code==='EEXIST')throw new Error('Output exists; refusing overwrite');throw error;}
+  try{await writeFile(path,JSON.stringify(report),{encoding:'utf8',flag:'wx'});}catch(error){if((error as NodeJS.ErrnoException).code==='EEXIST')throw new Error('Output exists; refusing overwrite');throw error;}
 }
 async function collect(args:Args):Promise<number> {
   const config=await readConfig(args.options.get('--config')!);
