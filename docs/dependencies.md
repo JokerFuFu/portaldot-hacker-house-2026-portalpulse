@@ -1,6 +1,6 @@
 # 锁定依赖与来源
 
-2026-10-14 实际从官方 npm registry 安装并读取包内 package.json。直接依赖全部精确版本，无 caret；package-lock.json 记录传递依赖、resolved 地址与完整性摘要。要求 Node.js >=22.12（Vite 8.3.4 的 Node 22 最低要求）；实现者本机 Node 26.8.2 / npm 11.19.1。提交 2f1a91e 已使用独立 Node 22.12.0、干净 git archive 新目录与 npm ci --ignore-scripts 完成 176/176 测试、类型检查、构建和构建后 CLI demo / inspect，均退出 0。本轮未修改依赖版本。最终修复代码 49e6439 所在提交 6b24591 又经独立 Node 22.12.0 干净 git archive 新目录、同样的 npm ci --ignore-scripts、188/188 测试、类型检查、构建及构建后 CLI demo / inspect，全部退出 0。该提交在 Node 22 与 Node 26 生成的 index.html、JS 和 CSS 三个浏览器产物逐字节一致。
+2026-10-14 实际从官方 npm registry 安装并读取包内 package.json。直接依赖全部精确版本，无 caret；package-lock.json 记录传递依赖、resolved 地址与完整性摘要。要求 Node.js >=22.12（Vite 8.3.4 的 Node 22 最低要求）；实现者本机 Node 26.8.2 / npm 11.19.1。提交 2f1a91e 已使用独立 Node 22.12.0、干净 git archive 新目录与 npm ci --ignore-scripts 完成 176/176 测试、类型检查、构建和构建后 CLI demo / inspect，均退出 0。本轮未修改依赖版本。最终修复代码 49e6439 所在提交 6b24591 又经独立 Node 22.12.0 干净 git archive 新目录、同样的 npm ci --ignore-scripts、188/188 测试、类型检查、构建及构建后 CLI demo / inspect，全部退出 0。该提交在 Node 22 与 Node 26 生成的 index.html、JS 和 CSS 三个浏览器产物逐字节一致。紧凑端点补正后的 c6bf4a0 也已用官方校验过的 Node 22.12.0、全新 git archive 目录和 npm ci --ignore-scripts 复现：196/196 测试、类型检查、构建及构建后 CLI demo / inspect 全部退出 0，三个新版浏览器产物在 Node 22 / Node 26 间重新逐字节比对一致。依赖版本没有改变。
 
 | 包 | 锁定版本 | 用途 | 来源 | 许可 |
 | --- | --- | --- | --- | --- |

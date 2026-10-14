@@ -84,10 +84,22 @@ Node 22 与 Node 26 的三个生产浏览器产物逐字节一致：
 
 修复保留紧凑支持：配置原始字符串和规范化 URL 始终先处理，支持的 http / https / ws / wss 节点 URL token 再按相同规范化规则核对。快照字符串和键名在有界截断前脱敏，碰撞显示异常而不静默覆盖；报告继续处理身份字段及严格导入。无关公共来源链接、异常数值、byte window、依赖和 RPC 白名单未扩展。此逻辑仍是针对配置端点的保护，不是任意秘密发现。
 
-**1d31ded 尚待独立复核、Node 22 与浏览器复验。** 之前的独立 Node 22 / 限定浏览器证据只对应 6b24591，下载 / 文件导入、390px / print-media 仍只对应 2f1a91e。新版构建产物不能以旧版的逐字节一致结论替代复验。Task 4 的历史 RED 缺口没有补证或改写。
+**补正后的独立复验：c6bf4a04373e055929ffed0d5b6798b7cbe55209，执行代码 1d31ded。** 控制者于 **2026-10-14T07:11:48Z–07:12:07Z** 使用官方校验过的临时 Node 22.12.0，将该提交 git archive 到全新目录。npm ci --ignore-scripts、npm test（**196 tests / 196 pass / 0 fail / 0 cancelled / 0 skipped**）、npm run typecheck、npm run build、构建后 CLI demo --out 及 inspect --input 全部 **exit 0**。demo 保持 simulated / 6 条 / verifiedNetwork=false，inspect 保持 offline / 原始时间与摘要 / verifiedNetwork=false。安装日志为 added 27 packages、audited 28 packages、found 0 vulnerabilities。
+
+同一提交于 **2026-10-14T07:14:21Z**完成实际浏览器紧凑端点专项验证：输入紧凑 HTTP URL 连接人工本地 RPC 夹具，链名称及展开的 system_chain result 都显示 **[endpoint]**。未配置预期创世哈希，身份保持**未验证**；观察到 **4 条记录、夹具计量 36 次 RPC 请求**；Stop 后保留记录并显示 offline。此夹具明确**不是 Portaldot 网络**，不构成真实 V3 验证。专项没有重复下载、文件导入、390px 或打印检查。
+
+新版三个浏览器产物已在 Node 22 / Node 26 间重新比对，逐字节一致：
+
+| 产物 | 字节 | SHA-256 |
+| --- | --- | --- |
+| assets/index-B1MPIjXA.js | 254540 | ed4bbfbf36c91a7a01dbe42c5e2d3a145bcdc42cbe039f1c4a1805f2a92a2526 |
+| assets/index-CQUFryG3.css | 6119 | cc077c13a2cbaaf1b9d101444f56134ea4a1e3c7ef0badb321bae420dac318c2 |
+| index.html | 420 | c42207d96ca0d72106c10e80dd7ee7b787137b93f686ebac5170b7e4e7fbfc3c |
+
+独立源码复核仍待完成。浏览器专项只覆盖上述紧凑端点场景；6b24591 的其他限定浏览器证据及 2f1a91e 的下载 / 文件导入、390px / print-media 证据继续保留原提交归属。Task 4 的历史 RED 缺口没有补证或改写。
 
 ## 尚未验证及过程限制
 
-Node 22.12 新目录复现已更新到 **6b24591**，其限定浏览器复验范围如上；独立源码复核仍待控制者完成。A07 的下载 / 文件导入和篡改浏览器场景仍只有 **2f1a91e** 证据，不能自动扩大到最终修复版本。A09 仅补 **6b24591** 只读增量的干净环境复现及限定浏览器场景，完整产品仍未通过。A01 错误身份与 A02 实际超时的浏览器场景、完整键盘流、所有浏览器、真实 RPC CORS、打印 PDF 分页、公开托管和远端最终代码回读继续待验。
+Node 22.12 新目录复现已更新到 **c6bf4a0**，其紧凑端点专项浏览器复验范围如上；独立源码复核仍待控制者完成。A07 的下载 / 文件导入和篡改浏览器场景仍只有 **2f1a91e** 证据，不能自动扩大到最终修复版本。A09 仅补 **c6bf4a0** 只读增量的干净环境复现及按提交记录的限定浏览器场景，完整产品仍未通过。A01 错误身份与 A02 实际超时的浏览器场景、完整键盘流、所有浏览器、真实 RPC CORS、打印 PDF 分页、公开托管和远端最终代码回读继续待验。
 
 Task 4 的 view-model / live-session 历史上缺少实现前可执行的行为 RED；本轮新增真实 RED 不补证或改写那段历史。真实 V3、完整 SCALE 解码、探针、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 均仍待完成。A03–A08 的执行 / 探针场景和完整 A09 不能由 localhost 测试判通过。
