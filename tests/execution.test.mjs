@@ -56,3 +56,23 @@ test('parser accepts exactly 1MiB of valid JSON padded with whitespace',()=>{con
 test('parser validates nonfinite JSON exponent',()=>{const text=JSON.stringify(fixture()).replace('"transactionIndex":0','"transactionIndex":1e999');assert.throws(()=>parse(text));});
 test('terminal inclusion parent cannot cycle back to a finalized ancestor',()=>{const f=fixture();f.inclusion.block.parentHash=f.finality.finalized.hash;f.finality.ancestry[1].parentHash=f.finality.finalized.hash;assert.equal(evaluate(f).checks.finality.state,'abnormal');});
 test('one-block finality cannot use a self-parent cycle',()=>{const f=fixture();f.inclusion.block.parentHash=f.inclusion.block.hash;f.finality.finalized={...f.inclusion.block};f.finality.ancestry=[{...f.inclusion.block}];f.readback.blockHash=f.inclusion.block.hash;assert.equal(evaluate(f).checks.finality.state,'abnormal');});
+test('contradictory inclusion remains abnormal without submitted evidence',()=>{
+  const f=fixture();
+  f.submitted=null;
+  f.inclusion.transactions[0]=hash('f');
+  const r=evaluate(f);
+  assert.equal(r.checks.submission.state,'unverified');
+  assert.equal(r.checks.inclusion.state,'abnormal');
+  assert.equal(r.status,'abnormal');
+  assert.equal(r.evidenceComplete,false);
+  assert.equal(r.observedSequence,'9007199254740993');
+  for(const key of ['execution','finality','state'])assert.notEqual(r.checks[key].state,'normal');
+});
+test('consistent inclusion remains unverified without submitted evidence',()=>{
+  const f=fixture();
+  f.submitted=null;
+  const r=evaluate(f);
+  assert.equal(r.checks.inclusion.state,'unverified');
+  assert.equal(r.status,'unverified');
+  assert.equal(r.evidenceComplete,false);
+});

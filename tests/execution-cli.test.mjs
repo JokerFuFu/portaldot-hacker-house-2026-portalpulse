@@ -14,3 +14,24 @@ test('execution CLI invalid schema has no stdout',async t=>{const file=await inp
 test('execution CLI enforces 1MiB file limit',async t=>{const file=await input(t);await writeFile(file,' '.repeat(1048577));const r=run('execution-inspect','--input',file);assert.equal(r.status,1);assert.equal(r.stdout,'');assert.match(r.stderr,/size|limit/i);});
 for(const args of [[],['--input'],['--input','x','--input','y'],['--input','x','--unknown','y'],['--out','x'],['extra']])test('execution CLI rejects missing/duplicate/unknown arguments '+args.join(' '),()=>{const r=run('execution-inspect',...args);assert.equal(r.status,1);assert.equal(r.stdout,'');assert.ok(r.stderr.length>0);});
 test('execution command is discoverable in CLI help',()=>{const r=run('--help');assert.equal(r.status,0);assert.match(r.stdout,/execution-inspect --input path/);assert.match(r.stdout,/offline/i);});
+test('execution CLI contradictory inclusion without submission exits one as abnormal',async t=>{
+  const file=await input(t,f=>{f.submitted=null;f.inclusion.transactions[0]='0x'+'f'.repeat(64);});
+  const r=run('execution-inspect','--input',file);
+  assert.equal(r.status,1,r.stderr);
+  const s=JSON.parse(r.stdout);
+  assert.equal(s.checks.submission.state,'unverified');
+  assert.equal(s.checks.inclusion.state,'abnormal');
+  assert.equal(s.status,'abnormal');
+  assert.equal(s.evidenceComplete,false);
+  assert.equal(s.mode,'offline');
+  assert.equal(s.fullVerification,false);
+});
+test('execution CLI consistent inclusion without submission exits two as unverified',async t=>{
+  const file=await input(t,f=>f.submitted=null);
+  const r=run('execution-inspect','--input',file);
+  assert.equal(r.status,2,r.stderr);
+  const s=JSON.parse(r.stdout);
+  assert.equal(s.checks.inclusion.state,'unverified');
+  assert.equal(s.status,'unverified');
+  assert.equal(s.evidenceComplete,false);
+});
