@@ -1,0 +1,9 @@
+{
+  "id": "custom-readonly",
+  "name": "User configured readonly profile",
+  "source": "Replace with independently trusted public identity source",
+  "endpoint": null,
+  "endpointAlias": "user-readonly",
+  "kind": "custom-readonly",
+  "expectedGenesis": null
+}
