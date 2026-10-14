@@ -47,7 +47,7 @@ node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
 
 ## V3 接入准备状态
 
-**历史配置已失效，等待新的官方配置。** 2026-10-10 实际读取到主办方 Titus 于 10 月 9 日 17:40（北京时间）的[说明](https://discord.com/channels/1440212664751099996/1479446495643303997/1558051618581389395)：测试网正在升级，旧 RPC 信息不再可用，配置完成后将公布最新 RPC。下述指南地址仅保留为历史公布值，不能据此启用部署或写入。2026-10-13 指南 main 仍为下述版本；最新频道公告未在本次核验，不能据指南未变断言没有新配置。
+**历史配置已失效，等待新的官方配置。** 2026-10-10 实际读取到主办方 Titus 于 10 月 9 日 17:40（北京时间）的[说明](https://discord.com/channels/1440212664751099996/1479446495643303997/1558051618581389395)：测试网正在升级，旧 RPC 信息不再可用，配置完成后将公布最新 RPC。下述指南地址仅保留为历史公布值，不能据此启用部署或写入。2026-10-14 上午核对的指南 main 仍为下述版本。同日已读取官方频道，并于北京时间 14:40 再次核对：当前读取到的[官方人员 LevelMax 于 10:15 的回复](https://discord.com/channels/1440212664751099996/1497976354157887680/1559751380879544332)尚未确认替代 RPC、恢复时间、首批 tPOT V3 发放，以及可推荐的官方本地节点 binary 或 chain spec。此状态只代表上述核验时点；旧地址不作为现行配置，本轮未重新探测旧 RPC，也未验证真实 V3 网络身份。
 
 官方团队发布的 [V3 指南（固定版本）](https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb) 公布了 Substrate RPC `wss://testnetv3-node.feso-apps.xyz`、EVM RPC `https://testnetv3-eth-rpc.feso-apps.xyz`、Chain ID **420420777**、原生代币 **tPOTv3（精度 14）**及 [Node Explorer](https://node-console.feso-apps.xyz/)。这些是文档公布值。2026-10-09T08:49:30.897Z 开始的只读预检中，Substrate WebSocket 连接失败，EVM `eth_chainId([])` 返回 HTTP 502；未获得创世哈希、运行时、链 ID 响应或余额，也未验证部署或能力成功。完整记录与限制见[网络预检](docs/network-preflight.md)及[V3 只读证据](docs/evidence/v3-readonly-20261009.json)。
 
