@@ -148,3 +148,31 @@ Sites 初始**版本 1**部署于 **2026-10-14T08:19:10Z** 成功，最初为 ow
 Node 22.12 新目录复现已更新到 **d58e695**，其完整等价 URL 脱敏专项浏览器复验范围如上；该提交的独立限定源码复核已通过，发布准备结论仅适用于只读 M1 源码。A07 的下载 / 文件导入和篡改浏览器场景仍只有 **2f1a91e** 证据，不能自动扩大到最终修复版本。A09 仅补 **d58e695** 只读增量的干净环境复现及按提交记录的限定浏览器场景，完整产品仍未通过。A01 错误身份与 A02 实际超时的浏览器场景、完整键盘流、所有浏览器、真实 RPC CORS和打印 PDF 分页继续待验。源码 55b9c47 与 Sites 版本 1 的有限发布 / 回读范围见上文；后续版本不自动算作已发布或已回读。
 
 Task 4 的 view-model / live-session 历史上缺少实现前可执行的行为 RED；本轮新增真实 RED 不补证或改写那段历史。真实 V3、完整 SCALE 解码、探针、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 均仍待完成。A03–A08 的执行 / 探针场景和完整 A09 不能由 localhost 测试判通过。
+
+## M2A 离线执行证据增量：实现者验证
+
+**2026-10-14，代码 revision=a79281b4b0f2eec2f1bb5bfdaaa0d20299bb2a80，baseline=c333e57920f1af5a21dd11d815880636ba234902。** 本轮实现严格执行证据格式、纯离线六项校验、execution-inspect CLI、人工固定示例与行为测试。未修改依赖、M1 报告验证或 RPC 白名单；未接入钱包、网络采集或真实运行时。当前独立审查、公开源码发布及线上更新尚未执行，不能继承 M1 的发布状态。[格式与边界](execution.md)。
+
+实现者实际使用官方已校验的临时 **Node.js 22.12.0（macOS arm64）**与已安装的锁定依赖。以下均为本轮真实执行，不复制此前 200 项作为本轮总数。
+
+| 实际命令 / 步骤 | 实际结果 |
+| --- | --- |
+| npm run build:core（添加测试，尚未实现） | exit 0 |
+| node --test tests/execution*.test.mjs（修正测试的缺失 API 门槛后，尚未实现） | **110 tests / 8 pass / 102 fail**，exit 1；缺少公开 evaluator/parser API，以及 CLI 未知命令；8 个原有拒绝输入行为已通过，不记为新功能 RED |
+| node --test tests/execution*.test.mjs（初次实现） | **110 pass / 0 fail**，exit 0 |
+| node --test --test-name-pattern='cycle back\|self-parent' tests/execution.test.mjs（新增终端 parent cycle 回归，修复前） | **2 tests / 0 pass / 2 fail**，exit 1；终端回指祖先与单块自指环错误地 normal |
+| npm run build:core；node --test tests/execution*.test.mjs（终端 cycle 修复后） | 两命令 exit 0；**112 tests / 112 pass / 0 fail** |
+| npm test（受限 sandbox） | exit 1；**312 tests / 225 pass / 87 fail**；87 项为 localhost listener 的 listen EPERM 环境拒绝，完整输出保留 |
+| npm test（授权 localhost fixture listener 后） | exit 0；**312 tests / 312 pass / 0 fail / 0 cancelled / 0 skipped** |
+| npm run typecheck | 两个 tsc 检查 exit 0 |
+| npm run build | exit 0；Vite 8.3.4，24 modules transformed |
+| node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json | exit 0；offline / simulated / evidenceComplete=true / status=normal；verifiedNetwork=false、writeAllowed=false、fullVerification=false；expected/observedSequence=9007199254740993 |
+| node dist/cli/main.js demo --out （新的本地私有文件） | exit 0；simulated，6 条，verifiedNetwork=false；原始固定时间与摘要保留 |
+| node dist/cli/main.js inspect --input （上述文件） | exit 0；offline，verifiedNetwork=false；采集历史陈旧仍显式 abnormal，离线有效导入不等于当前健康 |
+| git diff --check | exit 0，无空白错误 |
+
+RED/GREEN 的完整原始输出、sandbox 失败与后续成功输出均保存于忽略的本地实施证据区，未删除或改写最初的试运行。最初测试夹具生成遇到系统 Python/Xcode license 环境错误，已改用同一 Node 22.12 生成；缺失 API 导致负向 assert.throws 可能误过的测试在生产实现前增加公开 API 存在检查，并再次真实运行上述确认 RED。
+
+新增测试覆盖逐阶段缺失、错误/缺失 genesis、主网/自定义网络拒绝、已知主网伪装 testnet、交易 / 索引 / 区块关联、失败执行不被后续读回覆盖、ancestry 链接 / 高度 / 精确两端 / 重复 / cycle、同块 finality、读回上下文与值、uint64 上界 / JS 精度边界 / 零、严格结构 / 非有限值 / 数组与字符串上限 / canonical 时间 / 时间倒退 / 大小写 / 非变异，以及真实 CLI 文件输入、退出码、错误输出与参数拒绝。所有执行事实均为人工构造，既有 HTTP/WS 测试仅运行命名 localhost 夹具。
+
+此证据只确认离线内部一致性和本地行为。真实 V3 身份、完整运行时解码、探针部署与更新、钱包签名、live inclusion / execution / finality、固定最终区块状态回读、网页执行集成、统一执行报告、实链 A03–A08 / 完整 A09、Check-in、视频、Deck 与最终提交继续待完成。历史已知主网 genesis 仅作拒绝值，没有补造未知 V3 身份允许名单。
