@@ -40,7 +40,7 @@ SIGINT aborts a pending RPC or interval wait, closes the transport, and writes r
 
 ## Output and exit codes
 
-Every successful command emits one compact JSON summary to stdout, including origin, mode, status, verifiedNetwork, interrupted, report metadata and monitoring checks. The report summary contains schema version, digest, public network labels, original collection start/end dates, sample count, interval and dropped-sample count. --out saves the full versioned report with RPC parameters, duration, result/error evidence, samples and SHA-256. The configured endpoint URL and its URL-normalized equivalents are excluded/redacted by shared report code; this is not general secret discovery. Errors and unverified setup messages go to stderr.
+Monitoring commands (demo, collect, inspect) emit one compact JSON summary to stdout, including origin, mode, status, verifiedNetwork, interrupted, report metadata and monitoring checks. The report summary contains schema version, digest, public network labels, original collection start/end dates, sample count, interval and dropped-sample count. --out saves the full versioned report with RPC parameters, duration, result/error evidence, samples and SHA-256. The configured endpoint URL and its URL-normalized equivalents are excluded/redacted by shared report code; this is not general secret discovery. Errors and unverified setup messages go to stderr.
 
 | Command/result | Exit | Meaning |
 | --- | --- | --- |
@@ -53,6 +53,14 @@ Every successful command emits one compact JSON summary to stdout, including ori
 
 Inspect always sets mode to offline and verifiedNetwork to false, preserves original origin and collection times, and evaluates freshness against the current clock. A valid imported report can show abnormal/stale monitoring and still exit 0. Inputs are limited to 16 MiB and go through the shared strict report validator and digest check. Collection retains the newest window fitting both 2,000 observations and the complete compact UTF-8 report budget, including the envelope and digest. Wide legal observations can therefore produce fewer than 2,000 saved samples: droppedSamples counts all discarded observations, while startedAt / endedAt describe the actual retained window. CLI output saves this importable window; the live collector continues from that same window. A matching SHA-256 detects changes to the payload; it does not establish source authenticity, an independent trust anchor, or network consensus. A configured genesis match only checks the identity selected by the operator.
 
+## Offline execution evidence
+
+~~~sh
+node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
+~~~
+
+This separate M2A command accepts exactly `--input path`, limits input to 1 MiB of UTF-8, and uses the strict execution validator/evaluator. A well-formed input emits six checks with expected/observed sequence, origin and trust labels. Complete offline evidence exits 0, unverified evidence 2, abnormal evidence 1. Malformed/oversized input and missing/duplicate/unknown flags exit 1 with stderr and no stdout. All summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAllowed: false`, `fullVerification: false`, even for `origin: rpc`. The fixed example is entirely simulated. It performs no RPC, signing, or deployment and does not use the M1 SHA-256 report envelope. See [execution format and limitations](execution.md).
+
 ## Development status
 
-This is a partial readonly monitoring increment. Localhost HTTP/WS tests and the simulated demo do not count as real Portaldot V3 validation or acceptance of A03-A08/full A09. Probe contract deployment, transaction execution/finality/state readback, real V3 validation, Check-in, final submission, video and deck remain outstanding. Reports stay local until separately reviewed for publication.
+This is a partial readonly monitoring increment. Localhost HTTP/WS tests and the simulated demo do not count as real Portaldot V3 validation or acceptance of A03-A08/full A09. The offline evaluator is implemented; probe contract deployment, live transaction execution/finality/state readback, real V3 validation, Check-in, final submission, video and deck remain outstanding. Reports stay local until separately reviewed for publication.

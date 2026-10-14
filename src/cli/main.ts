@@ -2,7 +2,7 @@ import {validateNetworkConfig} from '../core/config.js';
 import {open,mkdir,writeFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
-import {createRpc,collectSample,analyzeSamples,createReport,importReport,RpcError} from '../core/index.js';
+import {createRpc,collectSample,analyzeSamples,createReport,importReport,RpcError,parseExecutionEvidence,evaluateExecutionEvidence} from '../core/index.js';
 import type {NetworkConfig,Sample,SessionReport,MonitorSummary} from '../core/index.js';
 import {makeDemoSession} from '../demo/session.js';
 
@@ -11,13 +11,15 @@ const help=[
   '  demo [--out path]                                  Explicit simulated local data',
   '  collect --config path [--samples N] [--interval-ms ms] [--out path]',
   '  inspect --input path                              Offline schema + digest inspection',
+  '  execution-inspect --input path                    Offline execution evidence (1 MiB)',
+  'Execution exit: complete offline=0; unverified=2; abnormal/malformed=1; never full verification.',
   'Defaults: samples=4 (1..2000), interval-ms=10000 (1..3600000), request timeout=8000 ms.',
   'Output: one compact JSON summary; --out saves the complete local report without overwrite.',
   'Exit: demo/valid offline import=0 (not current network verification); collect normal=0,',
   '      collect unverified=2; abnormal collection/invalid input/tampering/output error=1.',
   'No default live endpoint. SIGINT stops collection and preserves completed/failed evidence.','',
 ].join('\n');
-interface Args {command:'demo'|'collect'|'inspect';options:Map<string,string>;samples:number;intervalMs:number;}
+interface Args {command:'demo'|'collect'|'inspect'|'execution-inspect';options:Map<string,string>;samples:number;intervalMs:number;}
 function boundedInteger(value:string|undefined,fallback:number,max:number,label:string):number {
   if(value===undefined)return fallback;
   if(!/^[0-9]+$/.test(value)||!Number.isSafeInteger(Number(value))||Number(value)<1||Number(value)>max)throw new Error('Invalid '+label+' range: 1..'+max);
@@ -26,8 +28,8 @@ function boundedInteger(value:string|undefined,fallback:number,max:number,label:
 function parse(args:string[]):Args|null {
   if(args.length===0||args.length===1&&['--help','-h'].includes(args[0]!))return null;
   const command=args[0];
-  if(command!=='demo'&&command!=='collect'&&command!=='inspect')throw new Error('Unknown command; use --help');
-  const allowed=command==='demo'?['--out']:command==='inspect'?['--input']:['--config','--samples','--interval-ms','--out'];
+  if(command!=='demo'&&command!=='collect'&&command!=='inspect'&&command!=='execution-inspect')throw new Error('Unknown command; use --help');
+  const allowed=command==='demo'?['--out']:(command==='inspect'||command==='execution-inspect')?['--input']:['--config','--samples','--interval-ms','--out'];
   const options=new Map<string,string>();
   for(let i=1;i<args.length;i+=2){
     const key=args[i]!;
@@ -37,7 +39,7 @@ function parse(args:string[]):Args|null {
     options.set(key,value);
   }
   if(command==='collect'&&!options.has('--config'))throw new Error('--config is required');
-  if(command==='inspect'&&!options.has('--input'))throw new Error('--input is required');
+  if((command==='inspect'||command==='execution-inspect')&&!options.has('--input'))throw new Error('--input is required');
   return {command,options,samples:boundedInteger(options.get('--samples'),4,2000,'samples'),intervalMs:boundedInteger(options.get('--interval-ms'),10000,3600000,'interval-ms')};
 }
 async function readBounded(path:string,max:number):Promise<string> {
@@ -98,6 +100,11 @@ async function main():Promise<number> {
   const args=parse(process.argv.slice(2));
   if(!args){process.stdout.write(help);return 0;}
   if(args.command==='collect')return collect(args);
+  if(args.command==='execution-inspect'){
+    const summary=evaluateExecutionEvidence(parseExecutionEvidence(await readBounded(args.options.get('--input')!,1024*1024)));
+    process.stdout.write(JSON.stringify(summary)+'\n');
+    return summary.status==='abnormal'?1:summary.evidenceComplete?0:2;
+  }
   if(args.command==='inspect'){
     const report=await importReport(await readBounded(args.options.get('--input')!,16*1024*1024));
     process.stdout.write(JSON.stringify(outputSummary(report,'offline'))+'\n');return 0;

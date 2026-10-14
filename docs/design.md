@@ -1,6 +1,10 @@
 # PortalPulse 产品设计
 
-设计日期：2026-10-09；只读增量更新：2026-10-14。赛道：Node Operations & Tooling。六模块目标保留，当前已实现本地身份观测、监控、CLI 和只读报告界面；执行回读与探针仍待实施。交付状态见[时间线](roadmap.md)，验证条件见[验收标准](acceptance.md)。
+设计日期：2026-10-09；只读增量更新：2026-10-14。赛道：Node Operations & Tooling。六模块目标保留，当前已实现本地身份观测、监控、CLI 和只读报告界面；M2A 已实现离线执行证据格式、六项校验与 CLI；真实执行采集、运行时解码、探针和网页执行流程仍待实施。交付状态见[时间线](roadmap.md)，验证条件见[验收标准](acceptance.md)。
+
+## 当前离线执行增量
+
+[离线执行格式](execution.md)独立于 M1 监测报告。校验 supplied facts 的网络、提交、纳入、执行、最终确认 ancestry 与状态回读；缺失前置证据不由后续记录补齐，明确失败保留异常。全部检查正常只产生 `evidenceComplete=true`，永久保持 offline、verifiedNetwork=false、writeAllowed=false、fullVerification=false。此增量只包含核心与 CLI，人工事实不构成真实 V3 部署、独立共识或完整产品验收。
 
 ## 当前只读界面
 

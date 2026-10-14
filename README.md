@@ -10,6 +10,8 @@
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
+M2A 另提供本地[离线执行证据校验](docs/execution.md)：六项独立检查关联网络、提交、纳入、执行、最终确认路径和状态回读。固定示例与测试完全人工合成；正常只代表所给事实内部一致，始终 `mode=offline`、`verifiedNetwork=false`、`writeAllowed=false`、`fullVerification=false`。真实运行时解码、探针、签名、RPC 执行采集、实链读回与网页执行界面仍待完成；公开只读 M1 网站不会因此自动更新。
+
 ## 计划交付的六个模块
 
 | 模块 | 计划行为 |
@@ -43,6 +45,7 @@ npm run dev
 node dist/cli/main.js demo
 node dist/cli/main.js demo --out /private/tmp/portalpulse-demo-report.json
 node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
+node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
 ~~~
 
 输出路径必须不存在。模拟会话显示人工数据及固定采集日期；导入 JSON 永远显示离线与原始采集时间。网页默认未连接，按“加载模拟会话”查看示例，或“导入 JSON”检查记录。自定义只读配置填完后须手动开始；停止、修改配置和离开界面都会中止旧请求。身份缺少预期创世哈希时保持未验证。HTTP 端点须允许 CORS，HTTPS 页面还受浏览器混合内容规则限制。
@@ -60,6 +63,7 @@ Substrate 保留为网络观测路径；指南中的 Revive / Solidity 是网络
 ## 项目文档
 
 - [产品流程与架构](docs/design.md)
+- [离线执行证据与 CLI](docs/execution.md)
 - [未来验收标准](docs/acceptance.md)
 - [阶段与时间线](docs/roadmap.md)
 - [网络预检与待确认条件](docs/network-preflight.md)
