@@ -109,7 +109,7 @@ function check(present:boolean,defect:string|null,prerequisites:MonitorCheck[],s
 }
 function ancestryDefect(e:ExecutionEvidence):string|null {
   const f=e.finality!;
-  if(e.network.observedGenesis!==null&&!equalHash(f.genesisHash,e.network.observedGenesis))return 'Finality genesis mismatch';
+  if([e.network.expectedGenesis,e.network.observedGenesis].some(h=>h!==null&&!equalHash(f.genesisHash,h)))return 'Finality genesis mismatch';
   const path=f.ancestry;
   if(path.length===0)return 'Finality ancestry path absent';
   if(!equalBlock(path[0]!,f.finalized))return 'Ancestry must begin with exact finalized block';
@@ -133,9 +133,9 @@ export function evaluateExecutionEvidence(value:unknown):ExecutionSummary {
   const inclusionMismatch=i!==null&&(!equalHash(i.transactionHash,i.transactions[i.transactionIndex]!)||
     s!==null&&(!equalHash(i.transactionHash,s.transactionHash)||!equalHash(i.transactions[i.transactionIndex]!,s.transactionHash)));
   const inclusion=check(i!==null,inclusionMismatch?'Inclusion transaction or indexed transaction list mismatch':null,[network,submission],'Submitted hash matches inclusion and indexed transaction');
-  const execution=check(x!==null,x?.outcome==='failure'?'Execution failure: '+x.failureReason:x&&i&&(!equalHash(x.transactionHash,i.transactionHash)||!equalHash(x.blockHash,i.block.hash)||x.transactionIndex!==i.transactionIndex)?'Execution transaction, block or index mismatch':null,[network,submission,inclusion],'Successful execution correlated to exact inclusion');
+  const execution=check(x!==null,x?.outcome==='failure'?'Execution failure: '+x.failureReason:x&&(s&&!equalHash(x.transactionHash,s.transactionHash)||i&&(!equalHash(x.transactionHash,i.transactionHash)||!equalHash(x.blockHash,i.block.hash)||x.transactionIndex!==i.transactionIndex))?'Execution transaction, block or index mismatch':null,[network,submission,inclusion],'Successful execution correlated to exact inclusion');
   const finality=check(f!==null,f?ancestryDefect(e):null,[network,submission,inclusion,execution],'Linked ancestry from finalized block to exact inclusion');
-  const state=check(r!==null,r&&(n.observedGenesis!==null&&!equalHash(r.genesisHash,n.observedGenesis)||f&&!equalHash(r.blockHash,f.finalized.hash)||!equalAddress(r.contract,e.intent.contract)||!equalAddress(r.caller,e.intent.caller)||r.sequence!==e.intent.expectedSequence)?'Readback genesis, finalized block, contract, caller or sequence mismatch':null,[network,submission,inclusion,execution,finality],'Finalized readback context and uint64 sequence match');
+  const state=check(r!==null,r&&([n.expectedGenesis,n.observedGenesis,f?.genesisHash??null].some(h=>h!==null&&!equalHash(r.genesisHash,h))||f&&!equalHash(r.blockHash,f.finalized.hash)||!equalAddress(r.contract,e.intent.contract)||!equalAddress(r.caller,e.intent.caller)||r.sequence!==e.intent.expectedSequence)?'Readback genesis, finalized block, contract, caller or sequence mismatch':null,[network,submission,inclusion,execution,finality],'Finalized readback context and uint64 sequence match');
   const checks={network,submission,inclusion,execution,finality,state},all=Object.values(checks);
   const evidenceComplete=all.every(c=>c.state==='normal');
   return {mode:'offline',origin:e.origin,verifiedNetwork:false,writeAllowed:false,fullVerification:false,evidenceComplete,status:all.some(c=>c.state==='abnormal')?'abnormal':evidenceComplete?'normal':'unverified',trust:e.origin==='simulated'?'Offline simulated facts only; no Portaldot observations or consensus proof':'Offline RPC-supplied facts; source authenticity, current network and independent consensus are not verified',checks,expectedSequence:e.intent.expectedSequence,observedSequence:r?.sequence??null};

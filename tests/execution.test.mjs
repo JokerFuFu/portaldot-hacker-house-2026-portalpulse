@@ -76,3 +76,55 @@ test('consistent inclusion remains unverified without submitted evidence',()=>{
   assert.equal(r.status,'unverified');
   assert.equal(r.evidenceComplete,false);
 });
+const partialIdentityCases=[
+  ['execution versus submission without inclusion','execution',f=>{f.inclusion=null;f.execution.transactionHash=hash('f');}],
+  ['finality versus expected genesis without observed genesis','finality',f=>{f.network.observedGenesis=null;f.finality.genesisHash=hash('f');}],
+  ['finality versus observed genesis without expected genesis','finality',f=>{f.network.expectedGenesis=null;f.finality.genesisHash=hash('f');}],
+  ['readback versus expected genesis without observed genesis or finality','state',f=>{f.network.observedGenesis=null;f.finality=null;f.readback.genesisHash=hash('f');}],
+  ['readback versus observed genesis without expected genesis or finality','state',f=>{f.network.expectedGenesis=null;f.finality=null;f.readback.genesisHash=hash('f');}],
+  ['readback versus finality without observed genesis','state',f=>{f.network.observedGenesis=null;f.readback.genesisHash=hash('f');}],
+  ['readback versus finality without either network genesis','state',f=>{f.network.expectedGenesis=null;f.network.observedGenesis=null;f.readback.genesisHash=hash('f');}],
+  ['expected versus observed genesis without finality or readback','network',f=>{f.finality=null;f.readback=null;f.network.observedGenesis=hash('f');}],
+];
+for(const [name,key,change] of partialIdentityCases)test('partial identity contradiction: '+name,()=>{
+  const f=fixture();change(f);
+  const r=evaluate(f);
+  assert.equal(r.checks[key].state,'abnormal');
+  assert.equal(r.status,'abnormal');
+  assert.equal(r.evidenceComplete,false);
+  assert.equal(r.mode,'offline');
+  for(const flag of ['verifiedNetwork','writeAllowed','fullVerification'])assert.equal(r[flag],false);
+  assert.equal(r.expectedSequence,'9007199254740993');
+  assert.equal(r.observedSequence,f.readback===null?null:'9007199254740993');
+  for(const downstream of ['inclusion','execution','finality','state'])assert.notEqual(r.checks[downstream].state,'normal');
+});
+const partialIdentityControls=[
+  ['inclusion',f=>f.inclusion=null],
+  ['observed genesis',f=>f.network.observedGenesis=null],
+  ['expected genesis',f=>f.network.expectedGenesis=null],
+  ['observed genesis and finality',f=>{f.network.observedGenesis=null;f.finality=null;}],
+  ['expected genesis and finality',f=>{f.network.expectedGenesis=null;f.finality=null;}],
+  ['both network genesis values',f=>{f.network.expectedGenesis=null;f.network.observedGenesis=null;}],
+  ['finality and readback',f=>{f.finality=null;f.readback=null;}],
+];
+for(const [name,change] of partialIdentityControls)test('matching identities stay unverified with missing '+name,()=>{
+  const f=fixture();change(f);
+  // Available identities may differ only in hex letter case.
+  f.submitted.transactionHash=hash('B');
+  if(f.network.expectedGenesis!==null)f.network.expectedGenesis=hash('A');
+  if(f.finality)f.finality.genesisHash=hash('A');
+  const r=evaluate(f);
+  assert.equal(r.status,'unverified');
+  assert.equal(r.evidenceComplete,false);
+  assert.equal(r.mode,'offline');
+  for(const flag of ['verifiedNetwork','writeAllowed','fullVerification'])assert.equal(r[flag],false);
+  for(const key of ['finality','state'])assert.equal(r.checks[key].state,'unverified');
+});
+test('explicit failure reason takes precedence over direct transaction mismatch without inclusion',()=>{
+  const f=fixture();f.inclusion=null;f.execution.transactionHash=hash('f');f.execution.outcome='failure';f.execution.failureReason='Synthetic explicit failure';
+  const r=evaluate(f);
+  assert.equal(r.checks.execution.state,'abnormal');
+  assert.match(r.checks.execution.reason,/Synthetic explicit failure/);
+  assert.equal(r.status,'abnormal');
+  assert.equal(r.evidenceComplete,false);
+});
