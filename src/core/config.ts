@@ -1,6 +1,6 @@
 import type {NetworkConfig} from './types.js';
 
-const URL_TEXT = /[a-z][a-z\d+.-]*:\/\/[^\s"'<>]+/gi;
+const URL_TEXT = /(?:https?|wss?):[^\s"'<>]+/gi;
 
 export function normalizeEndpoint(endpoint: string): URL {
   let url: URL;
@@ -22,8 +22,9 @@ export function endpointRedactor(endpoint: string | null): (text: string) => str
   if (endpoint === null) return text => text;
   const canonical = normalizeEndpoint(endpoint).href;
   return text => {
-    if (!text.includes('://')) return text;
-    const equivalentUrls = text.replace(URL_TEXT, candidate => {
+    // Exact configured text is protected regardless of the URL spelling accepted above.
+    const exactRedacted = text.split(endpoint).join('[endpoint]').split(canonical).join('[endpoint]');
+    return exactRedacted.replace(URL_TEXT, candidate => {
       try {
         if (new URL(candidate).href === canonical) return '[endpoint]';
         // Prose punctuation can follow a URL without being part of the endpoint.
@@ -32,7 +33,6 @@ export function endpointRedactor(endpoint: string | null): (text: string) => str
       } catch { /* Non-URL text is retained as evidence. */ }
       return candidate;
     });
-    return equivalentUrls.split(endpoint).join('[endpoint]').split(canonical).join('[endpoint]');
   };
 }
 

@@ -1,4 +1,4 @@
-import {validateNetworkConfig} from './config.js';
+import {endpointRedactor, validateNetworkConfig} from './config.js';
 import {RpcError} from './rpc.js';
 import type {ReadOnlyRpc,NetworkConfig,Sample,EvidenceOrigin,RpcRecord,RuntimeInfo,BlockRef} from './types.js';
 
@@ -29,32 +29,48 @@ function header(value:unknown,pinnedHash:string):BlockRef {
   const digest=object(data.digest);if(!Array.isArray(digest.logs)||digest.logs.length>256||!digest.logs.every(log=>typeof log==='string'&&/^0x(?:[0-9a-fA-F]{2})*$/.test(log)&&log.length<=4098))invalid('Invalid header digest');
   return {hash:pinnedHash,number:BigInt(data.number).toString(10),parentHash:hash(data.parentHash)};
 }
-function safeText(value:string,max=256):string {
-  return value.slice(0, max);
+type TextRedactor = (text: string) => string;
+function safeText(value: string, max: number, redactText: TextRedactor): string {
+  // Redact before truncation, so a recognized URL cannot be reduced to an exposed fragment.
+  return redactText(value).slice(0, max);
 }
 // Evidence is intentionally small and never contains an unbounded node object.
-function summarize(value:unknown,depth=0):unknown {
-  if(typeof value==='string')return safeText(value);
+function summarize(value: unknown, redactText: TextRedactor, depth = 0): unknown {
+  if (typeof value === 'string') return safeText(value, 256, redactText);
   if (typeof value === 'number') {
     return Number.isFinite(value) ? value : '[nonfinite number: ' + String(value) + ']';
   }
   if (value === null || typeof value === 'boolean') return value;
   if(depth>=2)return '[summarized]';
-  if(Array.isArray(value))return value.slice(0,8).map(item=>summarize(item,depth+1));
-  if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).slice(0,16).map(([key,item])=>[safeText(key,128),summarize(item,depth+1)]));
+  if (Array.isArray(value)) {
+    return value.slice(0, 8).map(item => summarize(item, redactText, depth + 1));
+  }
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value).slice(0, 16).map(([key, item]) =>
+      [safeText(key, 128, redactText), summarize(item, redactText, depth + 1)] as const);
+    if (new Set(entries.map(([key]) => key)).size !== entries.length) {
+      invalid('Redacted evidence keys collide');
+    }
+    return Object.fromEntries(entries);
+  }
   return '[unavailable]';
 }
-function evidence(method:string,value:unknown):unknown {
+function evidence(method: string, value: unknown, redactText: TextRedactor): unknown {
   if(method==='state_getMetadata'){
     const hex=typeof value==='string'?value:'';
-    return {prefix:hex.slice(0,10),byteCount:/^0x(?:[0-9a-fA-F]{2})*$/.test(hex)?(hex.length-2)/2:null,version:/^0x[0-9a-fA-F]{10}/.test(hex)?parseInt(hex.slice(10,12),16):null};
+    return {
+      prefix: safeText(hex, 10, redactText),
+      byteCount: /^0x(?:[0-9a-fA-F]{2})*$/.test(hex) ? (hex.length - 2) / 2 : null,
+      version: /^0x[0-9a-fA-F]{10}/.test(hex) ? parseInt(hex.slice(10, 12), 16) : null,
+    };
   }
   if(method==='rpc_methods')return {methodCount:value&&typeof value==='object'&&Array.isArray((value as Record<string,unknown>).methods)?((value as Record<string,unknown>).methods as unknown[]).length:null};
-  return summarize(value);
+  return summarize(value, redactText);
 }
 
 export async function collectSample(rpc:ReadOnlyRpc,config:NetworkConfig,options:{origin?:EvidenceOrigin;signal?:AbortSignal}={}):Promise<Sample> {
   config = validateNetworkConfig(config);
+  const redactText = endpointRedactor(config.endpoint);
   const records:RpcRecord[]=[];
   async function read<T>(method:string,params:unknown[],validate:(value:unknown)=>T):Promise<T|null>{
     const record:RpcRecord={method,params,startedAt:new Date().toISOString(),durationMs:0,status:'abnormal'};
@@ -62,14 +78,14 @@ export async function collectSample(rpc:ReadOnlyRpc,config:NetworkConfig,options
     const started = performance.now();
     try {
       const value = await rpc.request(method, params, options.signal);
-      record.result = evidence(method, value);
+      record.result = evidence(method, value, redactText);
       const result = validate(value);
       record.status = 'normal';
       return result;
     } catch (error) {
       record.error = {
-        code: error instanceof RpcError ? safeText(error.code, 64) : 'rpc',
-        message: safeText(error instanceof Error ? error.message : 'Request failed', 512),
+        code: error instanceof RpcError ? safeText(error.code, 64, redactText) : 'rpc',
+        message: safeText(error instanceof Error ? error.message : 'Request failed', 512, redactText),
       };
       return null;
     } finally {
