@@ -6,7 +6,7 @@ import type {NetworkConfig,Sample,SessionReport,MonitorSummary} from '../core/in
 import {makeDemoSession} from '../demo/session.js';
 
 const help=[
-  'PortalPulse readonly CLI (Node >=22)',
+  'PortalPulse readonly CLI (Node >=22.12)',
   '  demo [--out path]                                  Explicit simulated local data',
   '  collect --config path [--samples N] [--interval-ms ms] [--out path]',
   '  inspect --input path                              Offline schema + digest inspection',
