@@ -1,6 +1,6 @@
 # Readonly CLI
 
-Use Node.js 22 or later. This increment has been tested on Node.js 26.8.2; final dependency/engine alignment is tracked separately. Build before invoking the CLI:
+Use Node.js >=22.12. This increment has been tested locally on Node.js 26.8.2 / npm 11.19.1; independent Node 22 and browser reproduction remain pending. Direct dependencies are exactly pinned: TypeScript 7.0.2, ws 8.22.0, React/react-dom 19.3.0, Vite 8.3.4 and official types (@types/node 22.20.5; @types/react and @types/react-dom 19.3.0). See dependencies.md for source and license details. Build before invoking the CLI:
 
 ~~~sh
 npm --userconfig /dev/null --cache /private/tmp/portalpulse-npm-cache --registry https://registry.npmjs.org ci --ignore-scripts

@@ -2,7 +2,7 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
-**2026-10-13 状态：准备阶段，实施尚未开始。** 本仓库提供项目设计、未来验收标准、参赛交付清单、公开主网只读观测及一次失败的官方 V3 测试网只读预检。尚无应用源码、探针合约、可运行演示或测试通过记录；没有安装或启动命令。核心代码计划主要在 2026-10-14 00:00 至 2026-11-06 12:00（Asia/Shanghai）的比赛开发期内产生。
+**2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。真实浏览器操作、新环境 Node 22 复现、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
@@ -17,9 +17,33 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 | 报告与复核 | 导出带来源与 SHA-256 摘要的版本化 JSON 和可打印报告，支持重新导入 |
 | 命令行工具 | 本机监测网络、输出相同结构报告，并区分失败、超时和未验证 |
 
-首版计划提供 TypeScript / React / Vite 网页和 Node.js 22+ 命令行。合约开发版本、SDK 与具体依赖将在活动 V3 环境确认后核验并锁定，届时补齐安装、运行、部署和来源说明。探针只保存测试序号，不涉及资产转移、托管或质押。官方主网保持只读；部署和调用必须通过测试网身份与能力检查。
+当前只读增量提供 TypeScript 7.0.2 / React 19.3.0 / Vite 8.3.4 网页和 Node.js >=22.12 命令行，依赖已锁定，见[依赖来源与许可](docs/dependencies.md)。合约工具链与 SDK 仍待活动 V3 环境确认后核验。探针只保存测试序号，不涉及资产转移、托管或质押。官方主网保持只读；部署和调用必须通过测试网身份与能力检查。
 
-浏览器无法连接 RPC 时，计划支持导入真实命令行记录；导入显示原始采集时间与来源，不能作为实时在线监测。单一 RPC 的记录受提供者可信度限制，不能当作独立轻客户端共识证明。
+浏览器支持导入命令行记录；导入显示原始采集时间与来源，不能作为实时在线监测。单一 RPC 的记录受提供者可信度限制，不能当作独立轻客户端共识证明。
+
+## 本地运行
+
+需要 Node.js >=22.12 与 npm。当前实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22 与真实浏览器复现由后续验收补充。
+
+~~~sh
+npm --userconfig /dev/null --cache /private/tmp/portalpulse-npm-cache --registry https://registry.npmjs.org ci --ignore-scripts
+npm test
+npm run typecheck
+npm run build
+npm run dev
+~~~
+
+开发服务在终端显示 localhost 地址。生产预览用 npm run preview；浏览器产物为 dist/site，构建保留 dist/cli、dist/core 和 dist/demo。以上命令只生成本地文件，不发布网站。
+
+~~~sh
+node dist/cli/main.js demo
+node dist/cli/main.js demo --out /private/tmp/portalpulse-demo-report.json
+node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
+~~~
+
+输出路径必须不存在。模拟会话显示人工数据及固定采集日期；导入 JSON 永远显示离线与原始采集时间。网页默认未连接，按“加载模拟会话”查看示例，或“导入 JSON”检查记录。自定义只读配置填完后须手动开始；停止、修改配置和离开界面都会中止旧请求。身份缺少预期创世哈希时保持未验证。HTTP 端点须允许 CORS，HTTPS 页面还受浏览器混合内容规则限制。
+
+导出紧凑 JSON 与导入都限 16 MiB；错误不会丢弃已有有效报告。SHA-256 只检测改动，不证明来源真实或单一 RPC 之外的共识。数据留在本机，刷新前先导出；端点 URL 不写入报告。见[本地开发证据](docs/development-evidence.md)与[CLI 用法](docs/cli.md)。
 
 ## V3 接入准备状态
 
@@ -42,4 +66,4 @@ Substrate 保留为网络观测路径；指南中的 Revive / Solidity 是网络
 
 活动依据：[Portaldot V3.0 Hacker House 2026 详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及[官方赛道页](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。准备文档不计作比赛期要求的至少三次有效代码提交。现有主网观测也不能替代 V3 测试网部署与真实交互证据。
 
-许可：[MIT](LICENSE)，2026 PortalPulse contributors。当前仅有准备文档与公开 RPC 只读预检；后续使用的官方 SDK、框架及第三方依赖必须分别披露来源与许可。
+许可：[MIT](LICENSE)，2026 PortalPulse contributors。当前包含准备文档、历史只读预检与本地只读监测代码；已用依赖见来源清单，后续 SDK 与合约工具链须继续披露。
