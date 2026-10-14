@@ -2,7 +2,7 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
-**2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。真实浏览器操作、新环境 Node 22 复现、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
+**2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。提交 2f1a91e 已完成独立 Node 22.12 新目录安装与复现，以及实际浏览器模拟、下载 / 导入、篡改拒绝、390px 布局、打印 CSS 和非 RPC 失败 / Stop 检查。最终修复代码 49e6439 通过 188 项自动测试、类型检查与构建；本轮代码的浏览器重验、打印 PDF 分页、公开托管、远端最终代码回读、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
@@ -23,7 +23,7 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 
 ## 本地运行
 
-需要 Node.js >=22.12 与 npm。当前实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22 与真实浏览器复现由后续验收补充。
+需要 Node.js >=22.12 与 npm。实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22.12 新目录复现已验证到 2f1a91e，实际浏览器验证也对应此提交。每轮验证的提交、命令和范围见[开发证据](docs/development-evidence.md)。
 
 ~~~sh
 npm --userconfig /dev/null --cache /private/tmp/portalpulse-npm-cache --registry https://registry.npmjs.org ci --ignore-scripts
@@ -43,7 +43,7 @@ node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
 
 输出路径必须不存在。模拟会话显示人工数据及固定采集日期；导入 JSON 永远显示离线与原始采集时间。网页默认未连接，按“加载模拟会话”查看示例，或“导入 JSON”检查记录。自定义只读配置填完后须手动开始；停止、修改配置和离开界面都会中止旧请求。身份缺少预期创世哈希时保持未验证。HTTP 端点须允许 CORS，HTTPS 页面还受浏览器混合内容规则限制。
 
-导出紧凑 JSON 与导入都限 16 MiB；错误不会丢弃已有有效报告。SHA-256 只检测改动，不证明来源真实或单一 RPC 之外的共识。数据留在本机，刷新前先导出；端点 URL 不写入报告。见[本地开发证据](docs/development-evidence.md)与[CLI 用法](docs/cli.md)。
+导出紧凑 JSON 与导入都限 16 MiB；采集同时按 2,000 条和完整 UTF-8 报告字节预算保留最新观测，并显示累计丢弃条数及实际窗口时间。错误不会丢弃已有有效报告。SHA-256 只检测改动，不证明来源真实或单一 RPC 之外的共识。数据留在本机，刷新前先导出；配置端点原文及 URL 规范化等价形式不写入报告；ID / 别名中的 URL 会在请求前拒绝，其他公共来源链接保留。见[本地开发证据](docs/development-evidence.md)与[CLI 用法](docs/cli.md)。
 
 ## V3 接入准备状态
 
