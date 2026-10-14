@@ -4,7 +4,7 @@
 
 **2026-10-14 状态：已实现本地只读监测增量。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。提交 2f1a91e 已完成独立 Node 22.12 新目录安装与复现，以及实际浏览器模拟、下载 / 导入、篡改拒绝、390px 布局、打印 CSS 和非 RPC 失败 / Stop 检查。最终修复代码 49e6439 所在提交 6b24591 已通过独立 Node 22.12 新目录安装、188 项测试、类型检查、构建及 CLI demo / inspect，并完成空态、非法 URL 标识拒绝、模拟、非 RPC 失败和 Stop 的实际浏览器复验。下载 / 文件导入、390px 与打印 CSS 仍仅有 2f1a91e 的证据；打印 PDF 分页、公开托管、远端最终代码回读、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试与构建不构成测试网部署或公开演示证据。
 
-随后发现并补正了已接受的紧凑端点写法（如 http:localhost/path）与脱敏扫描不一致的问题。代码 1d31ded 在原文及规范化等价形式处理、摘要截断前脱敏上新增回归，Node 26 本机全套 **196/196**、类型检查和构建通过；该补正所在提交 c6bf4a0 随后通过独立 Node 22.12 新目录安装、196/196 测试、类型检查、构建及 CLI demo / inspect。实际浏览器使用人工本地 RPC 夹具验证紧凑端点输入：链名称及展开的 system_chain 结果均显示 [endpoint]，没有预期创世哈希时身份保持未验证，4 条观测 / 36 次夹具 RPC，Stop 后离线。此夹具明确不是 Portaldot 网络；独立源码复核仍待完成。
+最新端点补正代码 **d58e695** 先识别完整 URL token，再无条件处理配置原文及规范化字符串，避免重复路径的等价 URL 留下残片。该提交已通过独立 Node 22.12 新目录安装、**200/200** 测试、类型检查、构建及 CLI demo / inspect。实际浏览器使用明确非 Portaldot 的人工本地 RPC 夹具，验证含重复路径和 .. 的完整等价回显：链名称和 system_chain 结果都仅为 [endpoint]；缺少预期创世哈希时身份未验证，测得 27 次夹具 RPC，Stop 后离线并恢复模拟。本次未重验下载、文件导入、390px、打印或控制台错误；独立源码复核仍待完成。
 
 PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他们判断网络是否推进、调用在哪一阶段失败，以及执行后保存的状态是否与预期一致。它将分别展示 RPC 可达、区块推进、交易纳入、执行结果、最终确认和状态回读，并导出能按网络、交易和区块重新核对的记录。
 
@@ -25,7 +25,7 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 
 ## 本地运行
 
-需要 Node.js >=22.12 与 npm。实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22.12 新目录复现已验证到 c6bf4a0；浏览器证据按场景分别对应 2f1a91e、6b24591 和 c6bf4a0。每轮验证的提交、命令和范围见[开发证据](docs/development-evidence.md)。
+需要 Node.js >=22.12 与 npm。实现者本机为 Node 26.8.2 / npm 11.19.1；独立 Node 22.12 新目录复现已验证到 d58e695；浏览器证据按场景分别对应 2f1a91e、6b24591、c6bf4a0 和 d58e695。每轮验证的提交、命令和范围见[开发证据](docs/development-evidence.md)。
 
 ~~~sh
 npm --userconfig /dev/null --cache /private/tmp/portalpulse-npm-cache --registry https://registry.npmjs.org ci --ignore-scripts

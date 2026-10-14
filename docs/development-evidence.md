@@ -82,7 +82,7 @@ Node 22 与 Node 26 的三个生产浏览器产物逐字节一致：
 
 先在重新编译的 bb82862 基线上运行 node --test tests/endpoint-closing.test.mjs，实际 **7 fail / 0 pass**，覆盖原文 / 规范化形式、节点紧凑等价回显、请求前公共字段拒绝、真实 localhost 传输到报告导入、摘要截断前保护和键名碰撞。最小修复后同样 7 项 **7 pass / 0 fail**；另补快照键名碰撞的异常记录测试，最终 npm test 为 **196 tests / 196 pass / 0 fail / 0 cancelled / 0 skipped**。npm run typecheck、npm run build、git diff --check 均退出 0，环境仍为实现者 Node 26.8.2 / npm 11.19.1。
 
-修复保留紧凑支持：配置原始字符串和规范化 URL 始终先处理，支持的 http / https / ws / wss 节点 URL token 再按相同规范化规则核对。快照字符串和键名在有界截断前脱敏，碰撞显示异常而不静默覆盖；报告继续处理身份字段及严格导入。无关公共来源链接、异常数值、byte window、依赖和 RPC 白名单未扩展。此逻辑仍是针对配置端点的保护，不是任意秘密发现。
+1d31ded 当时先处理原始 / 规范化字符串，再核对支持 scheme 的 URL token；该顺序后来被发现会拆断完整等价 URL，已由下文 d58e695 的 round 1 调整。快照字符串和键名在有界截断前脱敏，碰撞显示异常而不静默覆盖；报告继续处理身份字段及严格导入。无关公共来源链接、异常数值、byte window、依赖和 RPC 白名单未扩展。此逻辑仍是针对配置端点的保护，不是任意秘密发现。
 
 **补正后的独立复验：c6bf4a04373e055929ffed0d5b6798b7cbe55209，执行代码 1d31ded。** 控制者于 **2026-10-14T07:11:48Z–07:12:07Z** 使用官方校验过的临时 Node 22.12.0，将该提交 git archive 到全新目录。npm ci --ignore-scripts、npm test（**196 tests / 196 pass / 0 fail / 0 cancelled / 0 skipped**）、npm run typecheck、npm run build、构建后 CLI demo --out 及 inspect --input 全部 **exit 0**。demo 保持 simulated / 6 条 / verifiedNetwork=false，inspect 保持 offline / 原始时间与摘要 / verifiedNetwork=false。安装日志为 added 27 packages、audited 28 packages、found 0 vulnerabilities。
 
@@ -98,8 +98,28 @@ Node 22 与 Node 26 的三个生产浏览器产物逐字节一致：
 
 独立源码复核仍待完成。浏览器专项只覆盖上述紧凑端点场景；6b24591 的其他限定浏览器证据及 2f1a91e 的下载 / 文件导入、390px / print-media 证据继续保留原提交归属。Task 4 的历史 RED 缺口没有补证或改写。
 
+## 端点处理顺序补正 round 1
+
+独立复核发现 1d31ded 的字面替换前置会把完整等价 URL 拆成残片，例如路径末尾再次出现相同配置路径时。代码 **d58e6951c2308a0935675232a30032a271f8cccd** 改为先核对完整支持 scheme 的 URL token，再无条件进行原文 / 规范化字符串 fallback；保留紧凑写法、截断前保护、碰撞检查和无关 citation。
+
+在重新编译的 **0d58b71** 基线上，端点测试 **12 项 / 9 pass / 3 fail**，三个预期失败为直接组合等价形式，以及标准 / 紧凑配置的真实传输报告往返。修复后同一文件 **12/12**；全部模块为 **200/200**，typecheck / build 均通过。新增的精确 fallback 防回退检查初始即通过，没有被记作 RED。
+
+**独立 Node 22.12：2026-10-14T07:34:06Z–07:34:23Z，revision=d58e695。** 官方校验的临时运行时、新 git archive 目录和 npm ci --ignore-scripts；install、npm test（**200 tests / 200 pass / 0 fail / 0 cancelled / 0 skipped**）、typecheck、build、构建后 CLI demo --out / inspect --input 全部 **exit 0**。安装 added 27 / audited 28 / found 0 vulnerabilities。CLI demo 保持 simulated / 6 条 / verifiedNetwork=false；inspect 保持 offline、原始时间和摘要、verifiedNetwork=false。
+
+**实际浏览器：2026-10-14T07:45:24Z，revision=d58e695。** 人工本地 RPC 夹具明确不是 Portaldot；它回显含重复配置路径和 .. 的完整规范化等价 URL，界面链名称与展开的 system_chain result 都仅显示 **[endpoint]**。未提供 expected genesis，身份保持未验证；夹具计量 **27 次 RPC**。Stop 后 offline，并成功恢复模拟。该回执没有观测条数，不由请求次数推算条数；本次未复验控制台错误，也未重跑下载、文件导入、390px 或打印。
+
+该版本 Node 22 / Node 26 的三个浏览器产物重新逐字节比对一致：
+
+| 产物 | 字节 | SHA-256 |
+| --- | --- | --- |
+| assets/index-DK3QPmmH.js | 254540 | c22c2c5ddc24913057e596bbd0ade031baa925575c47a50b803ff9e3024573bb |
+| assets/index-CQUFryG3.css | 6119 | cc077c13a2cbaaf1b9d101444f56134ea4a1e3c7ef0badb321bae420dac318c2 |
+| index.html | 420 | 32b1a1267116dd170e3dc6b0a9a7bfbcc50385719bc3cd33859390746e7142b9 |
+
+独立源码复核仍待完成。新证据只覆盖上述 revision 和场景；旧浏览器下载 / 导入、390px、print-media 以及既有控制台观察均保留原来的提交归属。
+
 ## 尚未验证及过程限制
 
-Node 22.12 新目录复现已更新到 **c6bf4a0**，其紧凑端点专项浏览器复验范围如上；独立源码复核仍待控制者完成。A07 的下载 / 文件导入和篡改浏览器场景仍只有 **2f1a91e** 证据，不能自动扩大到最终修复版本。A09 仅补 **c6bf4a0** 只读增量的干净环境复现及按提交记录的限定浏览器场景，完整产品仍未通过。A01 错误身份与 A02 实际超时的浏览器场景、完整键盘流、所有浏览器、真实 RPC CORS、打印 PDF 分页、公开托管和远端最终代码回读继续待验。
+Node 22.12 新目录复现已更新到 **d58e695**，其完整等价 URL 脱敏专项浏览器复验范围如上；独立源码复核仍待控制者完成。A07 的下载 / 文件导入和篡改浏览器场景仍只有 **2f1a91e** 证据，不能自动扩大到最终修复版本。A09 仅补 **d58e695** 只读增量的干净环境复现及按提交记录的限定浏览器场景，完整产品仍未通过。A01 错误身份与 A02 实际超时的浏览器场景、完整键盘流、所有浏览器、真实 RPC CORS、打印 PDF 分页、公开托管和远端最终代码回读继续待验。
 
 Task 4 的 view-model / live-session 历史上缺少实现前可执行的行为 RED；本轮新增真实 RED 不补证或改写那段历史。真实 V3、完整 SCALE 解码、探针、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 均仍待完成。A03–A08 的执行 / 探针场景和完整 A09 不能由 localhost 测试判通过。
