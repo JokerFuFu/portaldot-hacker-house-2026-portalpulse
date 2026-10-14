@@ -28,6 +28,7 @@ function date(value:unknown):number {
 }
 function array(value:unknown,max:number):unknown[] {
   if(!Array.isArray(value)||value.length>max)invalid('array limit');
+  for(let index=0;index<value.length;index++)if(!Object.hasOwn(value,index))invalid('sparse array');
   return value;
 }
 function jsonValue(value:unknown,depth=0,budget={remaining:4096}):void {
@@ -114,7 +115,7 @@ async function digest(payload:ReportPayload):Promise<string> {
 function redact(value:unknown,endpoint:string|null,depth=0):unknown {
   if(depth>16)invalid('redaction nesting limit');
   if(typeof value==='string')return endpoint?value.split(endpoint).join('[endpoint]'):value;
-  if(Array.isArray(value))return value.map(item=>redact(item,endpoint,depth+1));
+  if(Array.isArray(value)){array(value,Number.MAX_SAFE_INTEGER);return value.map(item=>redact(item,endpoint,depth+1));}
   if(value&&typeof value==='object'){
     if(Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)invalid('non-JSON evidence');
     const entries=Object.entries(value).map(([key,item])=>[endpoint?key.split(endpoint).join('[endpoint]'):key,redact(item,endpoint,depth+1)] as const);
@@ -133,6 +134,7 @@ export async function createReport(config:NetworkConfig,samples:Sample[],options
     if(JSON.stringify(network).includes(endpoint))invalid('configured endpoint in public network labels');
   }
   number(options.droppedSamples??0,true);
+  array(samples,Number.MAX_SAFE_INTEGER);
   const retained=retainSamples(samples);
   const clean=redact(retained.samples,endpoint) as Sample[];
   const payload:ReportPayload={origin:options.origin??clean[0]?.origin??'rpc',network:{...network,expectedGenesis:network.expectedGenesis?.toLowerCase()??null},intervalMs:options.intervalMs??10000,

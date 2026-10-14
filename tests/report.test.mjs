@@ -29,3 +29,15 @@ test('payload and nested key order do not alter canonical digest or import accep
 test('impossible head relationship is preserved as evidence for the analyzer',async()=>{const s=sample();s.finalized.number='9007199254740994';const report=await create([s]);const imported=await core.importReport(JSON.stringify(report));assert.equal(imported.payload.samples[0].finalized.number,'9007199254740994');assert.equal(core.analyzeSamples(imported.payload.samples,base+100).bestProgress.state,'abnormal');});
 test('UTF8 byte bound applies even when the character count is under 16 MiB',async()=>{await assert.rejects(core.importReport('"'+'😃'.repeat(5*1024*1024)+'"'),/size|limit/i);});
 test('endpoint replacement key collisions fail closed without losing evidence',async()=>{const s=sample();s.rpc[0].result={[config.endpoint]:'one','[endpoint]':'two'};await assert.rejects(create([s]),/collide|invalid/i);});
+const sparseCases=[
+ ['result',s=>{s.rpc[0].result=new Array(1);} ],
+ ['nested result',s=>{s.rpc[0].result={rows:[{cells:new Array(2)}]};} ],
+ ['params',s=>{s.rpc[0].params=new Array(1);} ],
+ ['nested params',s=>{s.rpc[0].params=[{values:new Array(1)}];} ],
+ ['declared methods',s=>{s.identity.declaredMethods=new Array(1);} ],
+ ['RPC records',s=>{s.rpc=new Array(1);} ],
+];
+for(const[name,mutate]of sparseCases)test(`createReport rejects sparse ${name} before hashing without null conversion`,async()=>{const s=sample();mutate(s);await assert.rejects(create([s]),/sparse|invalid.*array/i);});
+test('createReport rejects sparse source samples even when retention would drop the hole',async()=>{const samples=Array.from({length:2001},(_,i)=>sample(i));delete samples[0];await assert.rejects(create(samples),/sparse|invalid.*array/i);assert.equal(Object.hasOwn(samples,0),false);});
+test('inherited array index cannot conceal a missing own result observation',async()=>{const s=sample(),result=new Array(1);Object.setPrototypeOf(result,Object.assign(Object.create(Array.prototype),{0:'inherited'}));s.rpc[0].result=result;await assert.rejects(create([s]),/sparse|invalid.*array/i);assert.equal(Object.hasOwn(result,0),false);});
+test('explicit null array results and params still round trip without changing their evidence',async()=>{const s=sample();s.rpc[0].result=[null,{nested:[null]}];s.rpc[0].params=[null];const report=await create([s]);const imported=await core.importReport(JSON.stringify(report));assert.deepEqual(imported.payload.samples[0].rpc[0].result,[null,{nested:[null]}]);assert.deepEqual(imported.payload.samples[0].rpc[0].params,[null]);});
