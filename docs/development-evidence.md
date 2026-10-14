@@ -176,3 +176,28 @@ RED/GREEN 的完整原始输出、sandbox 失败与后续成功输出均保存�
 新增测试覆盖逐阶段缺失、错误/缺失 genesis、主网/自定义网络拒绝、已知主网伪装 testnet、交易 / 索引 / 区块关联、失败执行不被后续读回覆盖、ancestry 链接 / 高度 / 精确两端 / 重复 / cycle、同块 finality、读回上下文与值、uint64 上界 / JS 精度边界 / 零、严格结构 / 非有限值 / 数组与字符串上限 / canonical 时间 / 时间倒退 / 大小写 / 非变异，以及真实 CLI 文件输入、退出码、错误输出与参数拒绝。所有执行事实均为人工构造，既有 HTTP/WS 测试仅运行命名 localhost 夹具。
 
 此证据只确认离线内部一致性和本地行为。真实 V3 身份、完整运行时解码、探针部署与更新、钱包签名、live inclusion / execution / finality、固定最终区块状态回读、网页执行集成、统一执行报告、实链 A03–A08 / 完整 A09、Check-in、视频、Deck 与最终提交继续待完成。历史已知主网 genesis 仅作拒绝值，没有补造未知 V3 身份允许名单。
+
+## M2A 矛盾缺项修复与验证检查点
+
+**2026-10-14T15:12:12Z 验证检查点：M2A 公开发布在此检查点仍待控制者执行。** 上述 a79281b 的 112 / 312 结果及当时审查、发布待办保留原归属。本节补录两个实际修复版本；此检查点尚未完成最终限定复审、源码推送或远端回读，也没有上线执行界面。
+
+**第一轮修复 revision=cc13082030ece14fb7c56f97634f724197d141ab，实际 commit 时间 2026-10-14T22:51:15+08:00。** 纳入记录自身的 transactionHash 与 transactions[index] 对比不再依赖 submitted 存在。既有完整原始输出和实际子进程退出回执记录：重新编译基线 exit 0；focused RED **116 tests / 114 pass / 2 fail，exit 1**（API 错误地 unverified、CLI 错误地 exit 2）；修复后的 focused GREEN **116/116，exit 0**；完整 npm test **316 tests / 316 pass / 0 fail / 0 cancelled / 0 skipped，exit 0**；typecheck、build 与构建后模拟样例均 exit 0。这些是第一轮实现者记录的运行，按 execution.ts SHA-256 `0a01796e6b5db4229b9965d29800e3afb4f9de1a11f7b4a6dba5428b4ceb12c2` 关联到 cc13082，不表述为本节新执行。
+
+**最终修复代码 revision=83bae1a095b625e9ca0797f98ef50ceb021c7311，实际 commit 时间 2026-10-14T23:11:37+08:00，baseline=cc13082。** 已有 submission / execution 直接比较交易身份；finality 与已有 expected / observed genesis 分别比较，readback 与已有 expected / observed / finality genesis 分别比较。缺少中间证据不能掩盖可直接证明的矛盾；一致的缺项保持 unverified。没有推定缺失 identity / inclusion / finality，明确执行失败仍优先保留，既有索引、ancestry / cycle 和 expected / observedSequence 行为保持。
+
+| 本次实际命令 | 时间（UTC，2026-10-14） | 实际结果 |
+| --- | --- | --- |
+| npm run build:core（新增测试，生产修复前） | 15:08:47–15:08:48 | exit 0 |
+| node --test tests/execution.test.mjs tests/execution-cli.test.mjs（RED） | 15:08:48–15:08:51 | **147 tests / 137 pass / 10 fail / 0 cancelled / 0 skipped，exit 1**；5 项 API 为 unverified 而非 abnormal，5 项实际 CLI 为 2 而非 1 |
+| npm run build:core（修复后） | 15:09:22–15:09:23 | exit 0 |
+| node --test tests/execution.test.mjs tests/execution-cli.test.mjs（GREEN） | 15:09:23–15:09:27 | **147 tests / 147 pass / 0 fail / 0 cancelled / 0 skipped，exit 0** |
+| npm test（授权 localhost 夹具监听） | 15:09:46–15:10:21 | **347 tests / 347 pass / 0 fail / 0 cancelled / 0 skipped，exit 0** |
+| npm run typecheck | 15:10:15–15:10:16 | 两个 tsc 检查 exit 0 |
+| npm run build | 15:10:16–15:10:18 | exit 0；24 modules transformed，既有 M1 网页资产名称保持 |
+| node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json | 15:10:18 | exit 0；offline / simulated，六项 normal，evidenceComplete=true，三个验证 / 写入标志均 false，expected / observedSequence=9007199254740993 |
+| 构建后 CLI 的两个原始重现场景及各自一致缺项控制 | 15:12:12 | 缺少 inclusion 的交易矛盾、缺少 observed genesis 的回读矛盾均实际 exit 1 / abnormal；对应一致缺项均实际 exit 2 / unverified，evidenceComplete=false，三个标志均 false |
+| git diff --check | 15:11:37 | exit 0 |
+
+上述 GREEN / 完整测试 / typecheck / build / 样例与提交的 execution.ts SHA-256 均为 `548c5713290d5a1f9ce4dce30e7336c49eb84b71bb745a1b93d820f5ade79b36`；测试文件也逐字节关联到同一代码提交，运行后没有修改生产代码或测试。typecheck / build / 样例在完整测试结束前运行，源代码与测试保持同一版本；完整日志和实际退出回执保存在私有实施证据区。新增 31 项行为检查覆盖全部已有 genesis 身份对、缺项一致控制、大小写和执行失败优先级；没有以实现计算预期结果。原始 RED / GREEN / 完整输出与全部历史证据均保留。
+
+M1 发布事实仍独立归属：2026-10-14 的源码 c333e579 及 43 个远端文件回读、Sites 版本 2 的公开访问、匿名 HTML / JS / CSS 匹配和限定浏览器空态 / 模拟 / 待办文案检查已完成。本轮只纠正 design / roadmap 的过期待办措辞，没有进行新的线上核验或部署。M2A 仅离线 API / CLI；真实 V3、运行时解码、探针、钱包、执行采集、实链最终确认 / 状态回读与完整产品验收继续待完成。
