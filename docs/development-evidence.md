@@ -201,3 +201,33 @@ RED/GREEN 的完整原始输出、sandbox 失败与后续成功输出均保存�
 上述 GREEN / 完整测试 / typecheck / build / 样例与提交的 execution.ts SHA-256 均为 `548c5713290d5a1f9ce4dce30e7336c49eb84b71bb745a1b93d820f5ade79b36`；测试文件也逐字节关联到同一代码提交，运行后没有修改生产代码或测试。typecheck / build / 样例在完整测试结束前运行，源代码与测试保持同一版本；完整日志和实际退出回执保存在私有实施证据区。新增 31 项行为检查覆盖全部已有 genesis 身份对、缺项一致控制、大小写和执行失败优先级；没有以实现计算预期结果。原始 RED / GREEN / 完整输出与全部历史证据均保留。
 
 M1 发布事实仍独立归属：2026-10-14 的源码 c333e579 及 43 个远端文件回读、Sites 版本 2 的公开访问、匿名 HTML / JS / CSS 匹配和限定浏览器空态 / 模拟 / 待办文案检查已完成。本轮只纠正 design / roadmap 的过期待办措辞，没有进行新的线上核验或部署。M2A 仅离线 API / CLI；真实 V3、运行时解码、探针、钱包、执行采集、实链最终确认 / 状态回读与完整产品验收继续待完成。
+
+## M2B 版本化执行报告：实现者当前记录（2026-10-15）
+
+代码 revision=**117a84cdc71d8f4640526cebb0b9d2deeb10366b**，baseline=**7945a2a2fb556e4c809a242ac2358cd202ebc4fb**。新增严格执行报告创建 / 导入、已验证 detached evidence API、共享 M1 canonical / digest 内部帮助函数和离线 CLI 导出 / 双格式检查；依赖 / 锁文件、M2A schema / evaluator 语义、M1 校验 / 容量 / 保留规则及网页源码保持不变。这里是本地实现者验证，独立审查、M2B 源码公开发布与匿名远端 / archive 字节回读待控制者执行。没有部署或改动公开 M1 网站。
+
+使用已校验的 Node.js **22.12.0 macOS arm64**及既有锁定依赖，Homebrew Git；没有安装依赖、接受系统许可或读取个人全局 Git 身份。下列所有构建、测试、类型检查、样例和回执写入均**顺序**执行，前一子进程与其原始日志 / 回执写完后才启动下一命令。完整输出保存为独立 stdout / stderr 文件；各 JSON 回执记录命令、UTC 起止时间、实际子进程 exit / signal、TAP counts、全部源 / 测试文件 SHA-256 及日志 SHA-256。
+
+| 实际步骤 / 命令 | 实际时间（UTC） | 实际结果 |
+| --- | --- | --- |
+| baseline-build: npm run build:core | 2026-10-15T02:20:38.271Z – 2026-10-15T02:20:38.967Z | exit 0; signal null; no TAP |
+| baseline-golden: fixed M1 demo payload/digest capture | 2026-10-15T02:20:46.829Z – 2026-10-15T02:20:46.885Z | exit 0; signal null; no TAP |
+| red: node --test tests/execution-report.test.mjs tests/execution-report-cli.test.mjs tests/report.test.mjs | 2026-10-15T02:22:06.158Z – 2026-10-15T02:22:08.669Z | exit 1; signal null; 134 tests / 77 pass / 57 fail / 0 cancelled / 0 skipped |
+| red-confirmed: node --test tests/execution-report.test.mjs tests/execution-report-cli.test.mjs tests/report.test.mjs | 2026-10-15T02:22:51.221Z – 2026-10-15T02:22:53.019Z | exit 1; signal null; 134 tests / 64 pass / 70 fail / 0 cancelled / 0 skipped |
+| green-build: npm run build:core | 2026-10-15T02:23:36.834Z – 2026-10-15T02:23:37.525Z | exit 0; signal null; no TAP |
+| green: node --test tests/execution-report.test.mjs tests/execution-report-cli.test.mjs tests/report.test.mjs | 2026-10-15T02:23:43.771Z – 2026-10-15T02:23:46.770Z | exit 0; signal null; 134 tests / 134 pass / 0 fail / 0 cancelled / 0 skipped |
+| full: npm test | 2026-10-15T02:24:11.205Z – 2026-10-15T02:24:37.194Z | exit 0; signal null; 419 tests / 419 pass / 0 fail / 0 cancelled / 0 skipped |
+| typecheck: npm run typecheck | 2026-10-15T02:24:45.270Z – 2026-10-15T02:24:45.981Z | exit 0; signal null; no TAP |
+| build: npm run build | 2026-10-15T02:24:51.828Z – 2026-10-15T02:24:52.900Z | exit 0; signal null; no TAP |
+| sample-export: built execution-report | 2026-10-15T02:24:59.540Z – 2026-10-15T02:24:59.611Z | exit 0; signal null; no TAP |
+| sample-inspect: built execution-inspect | 2026-10-15T02:25:04.900Z – 2026-10-15T02:25:04.973Z | exit 0; signal null; no TAP |
+| partial-fixture: write synthetic execution=null fixture | 2026-10-15T02:25:13.780Z – 2026-10-15T02:25:13.841Z | exit 0; signal null; no TAP |
+| partial-export: built execution-report | 2026-10-15T02:25:19.920Z – 2026-10-15T02:25:20.034Z | exit 2; signal null; no TAP |
+| partial-inspect: built execution-inspect | 2026-10-15T02:25:27.564Z – 2026-10-15T02:25:27.650Z | exit 2; signal null; no TAP |
+| diff-check: git diff --check | 2026-10-15T02:25:37.889Z – 2026-10-15T02:25:37.903Z | exit 0; signal null; no TAP |
+
+生产修改前，保存了固定 M1 demo 的完整 payload 与 literal digest `6bbce53e82846430f03f661a9c3b54ff5d0255e9dc86e018b5a1475d0a12a661`；新回归在 RED 与 GREEN 均通过，未用抽出的 production helper 计算预期值。第一轮 RED 的部分 CLI 负向测试仅因未知命令而通过；生产实现前加强为明确 schema / byte-limit / write / option 错误，并保留两轮真实日志：确认 RED 为 **134 tests / 64 pass / 70 fail**，缺少 API 的负向测试有存在门槛，M1 测试与固定摘要回归均通过。随后聚焦 GREEN **134/134**，当前完整套件仅运行一次，**419/419** 通过。没有重写 a79281b / cc13082 / 83bae1a 的历史结果。
+
+完整样例的实际命令为 `node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out <fresh ignored private path>`，然后 `node dist/cli/main.js execution-inspect --input <same path>`，均 exit 0 / signal null；expected / observedSequence 保持 `9007199254740993`，digest 同为 `8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81`，summary stdout 字节一致。仅把 execution 设为 null 的样例，导出与检查均 exit 2 / signal null，摘要字节一致，digest `446aa7118fdde1c2be8d4e59844bfc93011788a363b182f8ae949fdd3059f68f`；完整信封实际保留，未补齐阶段或改动原始时间。全部为 simulated / offline，verifiedNetwork / writeAllowed / fullVerification 全 false。
+
+新增 72 项真实 API / CLI 行为测试涵盖同步 detached snapshot、await 期间来源 / 对象 / 数组变异、递归键序与数组顺序、非有限值 / accessor / sparse / 未知字段在序列化前拒绝、严格信封 / 版本 / hash、伪造状态 / 验证标志、payload / digest / origin 篡改、带 Unicode 的完整 imported text 恰好 1 MiB 与 +1 byte、异常 / 缺项事实保留、原始与信封检查语义及 0/2/1 退出、紧凑完整保存、禁止覆盖的字节回读、写入失败、参数和 M1 格式拒绝。没有新增网络 / 钱包 / 签名 / live 行为。SHA-256 只检测内容改变，不能证明来源真实性、可信部署、当前在线或真实 V3 工作；真实链验收及可打印执行报告 / 网页集成、Check-in、视频、Deck、最终提交继续待完成。

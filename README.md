@@ -12,6 +12,8 @@ PortalPulse 面向 Portaldot 节点运营者与 DApp 开发者，计划帮助他
 
 M2A 另提供本地[离线执行证据校验](docs/execution.md)：六项独立检查关联网络、提交、纳入、执行、最终确认路径和状态回读。固定示例与测试完全人工合成；正常只代表所给事实内部一致，始终 `mode=offline`、`verifiedNetwork=false`、`writeAllowed=false`、`fullVerification=false`。真实运行时解码、探针、签名、RPC 执行采集、实链读回与网页执行界面仍待完成；公开只读 M1 网站不会因此自动更新。
 
+2026-10-15 的 M2B 本地核心 / CLI 新增版本化执行报告：`execution-report --input path --out path` 导出完整事实，`execution-inspect --input path` 兼容原始证据与严格校验摘要后的执行报告。来源、固定采集时间、缺失 / 失败阶段与大整数序号原样保留；导出完整紧凑 JSON 与导入全文各限 **1 MiB UTF-8**，不截断执行事实。SHA-256 仅检查内容改动，不证明来源真实或实链执行；网页执行集成和可打印执行报告仍待完成。当前代码本地测试 **419/419**、类型检查与构建通过，独立审查 / M2B 源码发布与远端回读待控制者执行；公开 M1 网站保持原发布版本。详见[执行报告](docs/execution.md)与[当前修订证据](docs/development-evidence.md)。
+
 ## 计划交付的六个模块
 
 | 模块 | 计划行为 |
@@ -46,15 +48,19 @@ node dist/cli/main.js demo
 node dist/cli/main.js demo --out /private/tmp/portalpulse-demo-report.json
 node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
 node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
+node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out /private/tmp/portalpulse-execution-report.json
+node dist/cli/main.js execution-inspect --input /private/tmp/portalpulse-execution-report.json
 ~~~
 
 输出路径必须不存在。模拟会话显示人工数据及固定采集日期；导入 JSON 永远显示离线与原始采集时间。网页默认未连接，按“加载模拟会话”查看示例，或“导入 JSON”检查记录。自定义只读配置填完后须手动开始；停止、修改配置和离开界面都会中止旧请求。身份缺少预期创世哈希时保持未验证。HTTP 端点须允许 CORS，HTTPS 页面还受浏览器混合内容规则限制。
 
-导出紧凑 JSON 与导入都限 16 MiB；采集同时按 2,000 条和完整 UTF-8 报告字节预算保留最新观测，并显示累计丢弃条数及实际窗口时间。错误不会丢弃已有有效报告。SHA-256 只检测改动，不证明来源真实或单一 RPC 之外的共识。数据留在本机，刷新前先导出；配置端点原文及 URL 规范化等价形式不写入报告；ID / 别名中的 URL 会在请求前拒绝，其他公共来源链接保留。见[本地开发证据](docs/development-evidence.md)与[CLI 用法](docs/cli.md)。
+M1 监测报告导出紧凑 JSON 与导入都限 16 MiB；采集同时按 2,000 条和完整 UTF-8 报告字节预算保留最新观测，并显示累计丢弃条数及实际窗口时间。错误不会丢弃已有有效报告。SHA-256 只检测改动，不证明来源真实或单一 RPC 之外的共识。数据留在本机，刷新前先导出；配置端点原文及 URL 规范化等价形式不写入报告；ID / 别名中的 URL 会在请求前拒绝，其他公共来源链接保留。见[本地开发证据](docs/development-evidence.md)与[CLI 用法](docs/cli.md)。
 
 ## V3 接入准备状态
 
 **历史配置已失效，等待新的官方配置。** 2026-10-10 实际读取到主办方 Titus 于 10 月 9 日 17:40（北京时间）的[说明](https://discord.com/channels/1440212664751099996/1479446495643303997/1558051618581389395)：测试网正在升级，旧 RPC 信息不再可用，配置完成后将公布最新 RPC。下述指南地址仅保留为历史公布值，不能据此启用部署或写入。2026-10-14 上午核对的指南 main 仍为下述版本。同日已读取官方频道，并于北京时间 14:40 再次核对：当前读取到的[官方人员 LevelMax 于 10:15 的回复](https://discord.com/channels/1440212664751099996/1497976354157887680/1559751380879544332)尚未确认替代 RPC、恢复时间、首批 tPOT V3 发放，以及可推荐的官方本地节点 binary 或 chain spec。此状态只代表上述核验时点；旧地址不作为现行配置，本轮未重新探测旧 RPC，也未验证真实 V3 网络身份。
+
+2026-10-15 09:43（北京时间）的[官方回复](https://discord.com/channels/1440212664751099996/1497976354157887680/1560105814705049772)仍未确认新的 EVM RPC / Chain ID / WebSocket、领币频道及地址格式、浏览器。此为该时点的资料状态，旧配置继续只作历史记录。
 
 官方团队发布的 [V3 指南（固定版本）](https://github.com/ItsCogumellum/portaldot-v3-testnet-guide/tree/d671a32758573f4d9ab00d891b2dd6a48f36bcbb) 公布了 Substrate RPC `wss://testnetv3-node.feso-apps.xyz`、EVM RPC `https://testnetv3-eth-rpc.feso-apps.xyz`、Chain ID **420420777**、原生代币 **tPOTv3（精度 14）**及 [Node Explorer](https://node-console.feso-apps.xyz/)。这些是文档公布值。2026-10-09T08:49:30.897Z 开始的只读预检中，Substrate WebSocket 连接失败，EVM `eth_chainId([])` 返回 HTTP 502；未获得创世哈希、运行时、链 ID 响应或余额，也未验证部署或能力成功。完整记录与限制见[网络预检](docs/network-preflight.md)及[V3 只读证据](docs/evidence/v3-readonly-20261009.json)。
 

@@ -1,19 +1,21 @@
 # Offline execution evidence
 
-The M2A increment validates and evaluates supplied execution facts locally. It does not connect to RPC, decode SCALE/events, use a wallet, deploy a probe, sign a call, or collect new execution facts. `origin: rpc` describes the supplied provenance and is not source authentication. The supplied JSON has no endpoint field. This format is separate from the M1 monitoring report and its SHA-256 envelope; it is not accepted by the existing monitoring report importer or web UI.
+The M2A increment validates and evaluates supplied execution facts locally; M2B adds detached versioned execution report creation/import and CLI export. It does not connect to RPC, decode SCALE/events, use a wallet, deploy a probe, sign a call, or collect new execution facts. `origin: rpc` describes the supplied provenance and is not source authentication. The supplied JSON has no endpoint field. This format is separate from the M1 monitoring report and its SHA-256 envelope; it is not accepted by the existing monitoring report importer or web UI.
 
 Build with Node.js >=22.12, then run:
 
 ~~~sh
 npm run build:core
 node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
+node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out /private/tmp/portalpulse-execution-report.json
+node dist/cli/main.js execution-inspect --input /private/tmp/portalpulse-execution-report.json
 ~~~
 
 The example is entirely synthetic, including its addresses, hashes, heights and fixed 2026-10-14 timestamps. It declares expected/read sequence `9007199254740993`, stored and compared as a decimal string beyond JavaScript's safe integer boundary. Its result is `mode: offline`, `origin: simulated`, `status: normal`, `evidenceComplete: true`, `verifiedNetwork: false`, `writeAllowed: false`, `fullVerification: false`. No fact in the example is claimed as a Portaldot observation. A zero value can be read and compared, but cannot establish that an update executed successfully.
 
 ## API and strict structure
 
-The public core exports `parseExecutionEvidence(text: string): ExecutionEvidence` and `evaluateExecutionEvidence(value: unknown): ExecutionSummary`, plus their types. Parsing limits actual UTF-8 input to **1 MiB**, uses concise JSON errors, and validates the complete structure. Direct evaluation validates unknown objects and creates detached data before analysis. Neither API mutates the input or retains caller-owned references in its result.
+The public core exports `parseExecutionEvidence(text: string): ExecutionEvidence`, `validateExecutionEvidence(value: unknown): ExecutionEvidence` and `evaluateExecutionEvidence(value: unknown): ExecutionSummary`, plus their types. The validator returns a detached clone; parser/evaluator reuse that same validator. Parsing limits actual UTF-8 input to **1 MiB**, uses concise JSON errors, and validates the complete structure. Direct evaluation validates unknown objects and creates detached data before analysis. Neither API mutates the input or retains caller-owned references in its result.
 
 All fields are required and unknown fields are rejected at every object level. The five stage fields may each be `null`; later stages never supply a missing earlier stage.
 
@@ -50,6 +52,26 @@ The historical mainnet genesis `0x83b5212c69f85f3996f8696bb35bf913af51b176a5f53d
 
 `evidenceComplete` is true only when all six checks are normal. Aggregate `status` is abnormal if any check is abnormal, otherwise normal if all pass, otherwise unverified. `expectedSequence` and nullable `observedSequence` remain visible even on failure. Every result contains offline/provenance/trust labels and permanently false `verifiedNetwork`, `writeAllowed`, and `fullVerification`. A normal result establishes internal consistency of supplied facts, not independent finality/consensus or source authenticity.
 
-The CLI emits one compact summary JSON for well-formed evidence: complete offline flow exits **0**, partial/unverified flow **2**, abnormal flow **1**. Malformed input, unreadable/oversized files, and missing/duplicate/unknown arguments exit **1** with an error on stderr and no stdout. Only `--input path` is accepted; there is no output overwrite, network collection or signing flag.
+Raw inspection emits one compact summary JSON for well-formed evidence: complete offline flow exits **0**, partial/unverified flow **2**, abnormal flow **1**. Malformed input, unreadable/oversized files, and missing/duplicate/unknown arguments exit **1** with an error on stderr and no stdout. Only `--input path` is accepted; there is no output overwrite, network collection or signing flag.
 
-Runtime-specific decoding, trusted real V3 identity, probe deployment/update, wallet signatures, live inclusion/execution/finality collection, pinned-block readback, unified execution reports and browser integration remain pending. The synthetic tests do not satisfy real-chain A03–A08 or full A09 acceptance. Verification records and their actual revisions appear in [development evidence](development-evidence.md).
+## Versioned execution reports (M2B)
+
+The core exports `createExecutionReport(value: unknown): Promise<ExecutionReport>` and `importExecutionReport(text: string): Promise<ExecutionReport>`. The envelope has exactly three own JSON fields:
+
+~~~ts
+interface ExecutionReport {
+  executionReportVersion: 1;
+  payload: ExecutionEvidence;
+  sha256: string; // exactly 64 lowercase hexadecimal characters
+}
+~~~
+
+Creation validates unknown evidence before any serialization, detaches every network/intent/stage object and array before the first await, then hashes only that validated payload. M1's exact canonical serializer and byte digest implementation are shared internally: object keys sort recursively, array order is preserved, and normal JSON primitives retain their values. No summary, mode or current timestamp is stored. The M2A evidence schema/evaluator and M1 version-1 digest/retention semantics remain unchanged.
+
+Both the complete compact exported envelope and the complete imported text are limited to **1048576 UTF-8 bytes**, inclusive; imported whitespace counts. Oversize execution facts are rejected, never truncated. Import checks the bound, parses the exact envelope/version/hash structure, validates/clones its payload, verifies SHA-256, and returns detached evidence. Unknown fields, forged status/verification fields and tampering fail. Structurally valid abnormal or partial evidence remains importable for diagnosis.
+
+Consumers must call `evaluateExecutionEvidence(report.payload)` after import. Matching integrity cannot establish normal status, source authenticity, current liveness, independent consensus or real V3 work. Changing origin while retaining the previous digest is detected; a person who changes facts and recomputes the digest has not authenticated those facts.
+
+`execution-report --input path --out path` saves the complete compact envelope to a new file, then prints the recomputed summary with `report: {executionReportVersion: 1, sha256, integrity: 'sha256-content-only; not source authenticity'}`. Partial/abnormal evidence is saved even with exits 2/1. Missing/duplicate/unknown flags, malformed inputs, existing outputs and write errors fail with no successful stdout. `execution-inspect --input path` accepts raw evidence or an envelope; an explicit own version field selects strict report import without fallback. It emits the same report metadata only for envelopes. See [CLI behavior](cli.md).
+
+Runtime-specific decoding, trusted real V3 identity, probe deployment/update, wallet signatures, live inclusion/execution/finality collection, pinned-block readback, printable execution reports and browser integration remain pending. The synthetic tests do not satisfy real-chain A03–A08 or full A09 acceptance. Verification records and their actual revisions appear in [development evidence](development-evidence.md).

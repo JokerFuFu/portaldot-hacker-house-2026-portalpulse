@@ -53,13 +53,21 @@ Monitoring commands (demo, collect, inspect) emit one compact JSON summary to st
 
 Inspect always sets mode to offline and verifiedNetwork to false, preserves original origin and collection times, and evaluates freshness against the current clock. A valid imported report can show abnormal/stale monitoring and still exit 0. Inputs are limited to 16 MiB and go through the shared strict report validator and digest check. Collection retains the newest window fitting both 2,000 observations and the complete compact UTF-8 report budget, including the envelope and digest. Wide legal observations can therefore produce fewer than 2,000 saved samples: droppedSamples counts all discarded observations, while startedAt / endedAt describe the actual retained window. CLI output saves this importable window; the live collector continues from that same window. A matching SHA-256 detects changes to the payload; it does not establish source authenticity, an independent trust anchor, or network consensus. A configured genesis match only checks the identity selected by the operator.
 
-## Offline execution evidence
+## Offline execution evidence and reports
 
 ~~~sh
 node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
+node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out /private/tmp/portalpulse-execution-report.json
+node dist/cli/main.js execution-inspect --input /private/tmp/portalpulse-execution-report.json
 ~~~
 
-This separate M2A command accepts exactly `--input path`, limits input to 1 MiB of UTF-8, and uses the strict execution validator/evaluator. A well-formed input emits six checks with expected/observed sequence, origin and trust labels. Complete offline evidence exits 0, unverified evidence 2, abnormal evidence 1. Malformed/oversized input and missing/duplicate/unknown flags exit 1 with stderr and no stdout. All summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAllowed: false`, `fullVerification: false`, even for `origin: rpc`. The fixed example is entirely simulated. It performs no RPC, signing, or deployment and does not use the M1 SHA-256 report envelope. See [execution format and limitations](execution.md).
+Use a fresh output path: export requires exactly `--input path --out path` and refuses existing files, including the input itself. It accepts raw M2A execution evidence only, writes the complete compact execution envelope without newline/indentation, then emits one evaluator summary. Partial and abnormal evidence is also saved for diagnosis; missing stages, failed facts, origin, original collection times and decimal sequences are preserved.
+
+`execution-inspect` accepts exactly `--input path`. An explicit own `executionReportVersion` field selects strict envelope validation and SHA-256 verification; unsupported versions, digest tampering and mixed raw/envelope fields fail without falling back to raw parsing. Other roots use the existing strict raw evidence parser. A validated report is evaluated again; no stored status is trusted. Both report commands include `report: {executionReportVersion: 1, sha256, integrity: 'sha256-content-only; not source authenticity'}` in their summaries; raw inspection retains its previous summary shape.
+
+Raw inputs, complete compact exported envelopes and full imported text (including whitespace) each have a **1 MiB / 1048576 UTF-8 byte** limit, inclusive. Execution facts are never evicted to fit. Complete offline evidence exits **0**, partial/unverified evidence **2**, abnormal evidence **1**. Malformed/oversized/tampered inputs, missing/duplicate/unknown flags, existing outputs and write errors exit **1** with stderr and no successful stdout. Malformed inputs do not create a report file.
+
+All execution summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAllowed: false`, `fullVerification: false`, including `origin: rpc`. The fixed example is entirely simulated. Neither command performs RPC, signing or deployment. The execution envelope is distinct from M1 monitoring reports; existing `inspect` and the M1 web UI do not accept it. SHA-256 detects content changes, not source authenticity, trusted deployment or real V3 execution. See [execution format and limitations](execution.md).
 
 ## Development status
 
