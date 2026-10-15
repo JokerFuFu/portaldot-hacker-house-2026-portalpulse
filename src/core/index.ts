@@ -5,5 +5,7 @@ export type {MonitorCheck,MonitorSummary,ReportPayload,SessionReport} from './ty
 export {analyzeSamples,retainSamples} from './monitor.js';
 export {createReport,importReport} from './report.js';
 export {validateNetworkConfig} from './config.js';
-export {parseExecutionEvidence,evaluateExecutionEvidence} from './execution.js';
+export {parseExecutionEvidence,validateExecutionEvidence,evaluateExecutionEvidence} from './execution.js';
 export type {ExecutionEvidence,ExecutionSummary} from './execution.js';
+export {createExecutionReport,importExecutionReport} from './execution-report.js';
+export type {ExecutionReport} from './execution-report.js';

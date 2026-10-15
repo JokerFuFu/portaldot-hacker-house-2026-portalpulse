@@ -2,8 +2,8 @@ import {validateNetworkConfig} from '../core/config.js';
 import {open,mkdir,writeFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
-import {createRpc,collectSample,analyzeSamples,createReport,importReport,RpcError,parseExecutionEvidence,evaluateExecutionEvidence} from '../core/index.js';
-import type {NetworkConfig,Sample,SessionReport,MonitorSummary} from '../core/index.js';
+import {createRpc,collectSample,analyzeSamples,createReport,importReport,RpcError,parseExecutionEvidence,evaluateExecutionEvidence,createExecutionReport,importExecutionReport} from '../core/index.js';
+import type {NetworkConfig,Sample,SessionReport,MonitorSummary,ExecutionReport} from '../core/index.js';
 import {makeDemoSession} from '../demo/session.js';
 
 const help=[
@@ -11,7 +11,8 @@ const help=[
   '  demo [--out path]                                  Explicit simulated local data',
   '  collect --config path [--samples N] [--interval-ms ms] [--out path]',
   '  inspect --input path                              Offline schema + digest inspection',
-  '  execution-inspect --input path                    Offline execution evidence (1 MiB)',
+  '  execution-inspect --input path                    Offline raw evidence or execution report (1 MiB)',
+  '  execution-report --input path --out path           Export offline execution report (1 MiB)',
   'Execution exit: complete offline=0; unverified=2; abnormal/malformed=1; never full verification.',
   'Defaults: samples=4 (1..2000), interval-ms=10000 (1..3600000), request timeout=8000 ms.',
   'Output: one compact JSON summary; --out saves the complete local report without overwrite.',
@@ -19,7 +20,7 @@ const help=[
   '      collect unverified=2; abnormal collection/invalid input/tampering/output error=1.',
   'No default live endpoint. SIGINT stops collection and preserves completed/failed evidence.','',
 ].join('\n');
-interface Args {command:'demo'|'collect'|'inspect'|'execution-inspect';options:Map<string,string>;samples:number;intervalMs:number;}
+interface Args {command:'demo'|'collect'|'inspect'|'execution-inspect'|'execution-report';options:Map<string,string>;samples:number;intervalMs:number;}
 function boundedInteger(value:string|undefined,fallback:number,max:number,label:string):number {
   if(value===undefined)return fallback;
   if(!/^[0-9]+$/.test(value)||!Number.isSafeInteger(Number(value))||Number(value)<1||Number(value)>max)throw new Error('Invalid '+label+' range: 1..'+max);
@@ -28,8 +29,8 @@ function boundedInteger(value:string|undefined,fallback:number,max:number,label:
 function parse(args:string[]):Args|null {
   if(args.length===0||args.length===1&&['--help','-h'].includes(args[0]!))return null;
   const command=args[0];
-  if(command!=='demo'&&command!=='collect'&&command!=='inspect'&&command!=='execution-inspect')throw new Error('Unknown command; use --help');
-  const allowed=command==='demo'?['--out']:(command==='inspect'||command==='execution-inspect')?['--input']:['--config','--samples','--interval-ms','--out'];
+  if(command!=='demo'&&command!=='collect'&&command!=='inspect'&&command!=='execution-inspect'&&command!=='execution-report')throw new Error('Unknown command; use --help');
+  const allowed=command==='execution-report'?['--input','--out']:command==='demo'?['--out']:(command==='inspect'||command==='execution-inspect')?['--input']:['--config','--samples','--interval-ms','--out'];
   const options=new Map<string,string>();
   for(let i=1;i<args.length;i+=2){
     const key=args[i]!;
@@ -39,7 +40,8 @@ function parse(args:string[]):Args|null {
     options.set(key,value);
   }
   if(command==='collect'&&!options.has('--config'))throw new Error('--config is required');
-  if((command==='inspect'||command==='execution-inspect')&&!options.has('--input'))throw new Error('--input is required');
+  if((command==='inspect'||command==='execution-inspect'||command==='execution-report')&&!options.has('--input'))throw new Error('--input is required');
+  if(command==='execution-report'&&!options.has('--out'))throw new Error('--out is required');
   return {command,options,samples:boundedInteger(options.get('--samples'),4,2000,'samples'),intervalMs:boundedInteger(options.get('--interval-ms'),10000,3600000,'interval-ms')};
 }
 async function readBounded(path:string,max:number):Promise<string> {
@@ -66,7 +68,7 @@ function outputSummary(report:SessionReport,mode:'simulated'|'live'|'offline',in
   const status=setupUnconfigured?'unverified':failed||checks(monitoring).some(c=>c.state==='abnormal')?'abnormal':checks(monitoring).every(c=>c.state==='normal')?'normal':'unverified';
   return {origin:p.origin,mode,status,verifiedNetwork:mode==='live'&&status==='normal'&&!interrupted,interrupted,integrity:'schema-and-sha256-valid; not source authenticity',report:{schemaVersion:report.schemaVersion,sha256:report.sha256,network:p.network,sampleCount:p.samples.length,intervalMs:p.intervalMs,startedAt:p.startedAt,endedAt:p.endedAt,droppedSamples:p.droppedSamples},monitoring:compactMonitoring};
 }
-async function save(report:SessionReport,path:string|undefined):Promise<void> {
+async function save(report:SessionReport|ExecutionReport,path:string|undefined):Promise<void> {
   if(path===undefined)return;
   await mkdir(dirname(path),{recursive:true});
   try{await writeFile(path,JSON.stringify(report),{encoding:'utf8',flag:'wx'});}catch(error){if((error as NodeJS.ErrnoException).code==='EEXIST')throw new Error('Output exists; refusing overwrite');throw error;}
@@ -100,9 +102,20 @@ async function main():Promise<number> {
   const args=parse(process.argv.slice(2));
   if(!args){process.stdout.write(help);return 0;}
   if(args.command==='collect')return collect(args);
-  if(args.command==='execution-inspect'){
-    const summary=evaluateExecutionEvidence(parseExecutionEvidence(await readBounded(args.options.get('--input')!,1024*1024)));
-    process.stdout.write(JSON.stringify(summary)+'\n');
+  if(args.command==='execution-report'||args.command==='execution-inspect'){
+    const text=await readBounded(args.options.get('--input')!,1024*1024);
+    let report:ExecutionReport|undefined;
+    if(args.command==='execution-report'){
+      report=await createExecutionReport(parseExecutionEvidence(text));
+    }else{
+      let root:unknown;
+      try{root=JSON.parse(text);}catch{throw new Error('Invalid execution evidence JSON');}
+      if(root!==null&&typeof root==='object'&&Object.hasOwn(root,'executionReportVersion'))report=await importExecutionReport(text);
+    }
+    const summary=evaluateExecutionEvidence(report?.payload??parseExecutionEvidence(text));
+    if(args.command==='execution-report')await save(report!,args.options.get('--out'));
+    const output=report?{...summary,report:{executionReportVersion:report.executionReportVersion,sha256:report.sha256,integrity:'sha256-content-only; not source authenticity'}}:summary;
+    process.stdout.write(JSON.stringify(output)+'\n');
     return summary.status==='abnormal'?1:summary.evidenceComplete?0:2;
   }
   if(args.command==='inspect'){

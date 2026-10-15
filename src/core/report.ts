@@ -1,3 +1,4 @@
+import {canonical,digestBytes} from './integrity.js';
 import {endpointRedactor, validateNetworkConfig} from './config.js';
 import type {NetworkConfig,Sample,EvidenceOrigin,SessionReport,ReportPayload} from './types.js';
 import {retainSamples} from './monitor.js';
@@ -100,18 +101,10 @@ function validatePayload(value:unknown):asserts value is ReportPayload {
   }
   if(start!==date((samples[0] as Obj).observedAt)||end!==date((samples.at(-1) as Obj).observedAt))invalid('session start/end mismatch');
 }
-// Sorted keys at every object depth; only validated JSON values reach this serializer.
-function canonical(value:unknown):string {
-  if(value===null||typeof value!=='object')return JSON.stringify(value);
-  if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';
-  const data=value as Obj;
-  return '{'+Object.keys(data).sort().map(key=>JSON.stringify(key)+':'+canonical(data[key])).join(',')+'}';
-}
 async function digest(payload:ReportPayload):Promise<string> {
   const bytes=new TextEncoder().encode(canonical(payload));
   if(bytes.byteLength>MAX_BYTES)invalid('report size limit');
-  const hash=await globalThis.crypto.subtle.digest('SHA-256',bytes);
-  return Array.from(new Uint8Array(hash),byte=>byte.toString(16).padStart(2,'0')).join('');
+  return digestBytes(bytes);
 }
 function redact(value: unknown, redactText: (text: string) => string, depth = 0): unknown {
   if (depth > 16) invalid('redaction nesting limit');

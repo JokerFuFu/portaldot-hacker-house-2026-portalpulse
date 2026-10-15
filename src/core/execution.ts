@@ -71,7 +71,7 @@ function block(value:unknown,field:string):BlockRef {
   const v=object(value,['hash','number','parentHash'],field);
   return {hash:hash(v.hash,field+'.hash'),number:decimal(v.number,309,field+'.number'),parentHash:hash(v.parentHash,field+'.parentHash')};
 }
-function validate(value:unknown):ExecutionEvidence {
+export function validateExecutionEvidence(value:unknown):ExecutionEvidence {
   const v=object(value,['executionSchemaVersion','origin','network','intent','submitted','inclusion','execution','finality','readback'],'root');
   if(v.executionSchemaVersion!==1)invalid('executionSchemaVersion');
   if(v.origin!=='rpc'&&v.origin!=='simulated')invalid('origin');
@@ -96,7 +96,7 @@ export function parseExecutionEvidence(text:string):ExecutionEvidence {
   if(typeof text!=='string'||new TextEncoder().encode(text).byteLength>MAX_BYTES)invalid('input exceeds 1 MiB');
   let value:unknown;
   try {value=JSON.parse(text);}catch{throw new Error('Invalid execution evidence JSON');}
-  return validate(value);
+  return validateExecutionEvidence(value);
 }
 const equalHash=(a:string,b:string)=>a.toLowerCase()===b.toLowerCase();
 const equalBlock=(a:BlockRef,b:BlockRef)=>equalHash(a.hash,b.hash)&&a.number===b.number&&equalHash(a.parentHash,b.parentHash);
@@ -127,7 +127,7 @@ function ancestryDefect(e:ExecutionEvidence):string|null {
 }
 export function evaluateExecutionEvidence(value:unknown):ExecutionSummary {
   // Validate and detach first; no caller-owned objects are used by a past result.
-  const e=validate(value),n=e.network,s=e.submitted,i=e.inclusion,x=e.execution,f=e.finality,r=e.readback;
+  const e=validateExecutionEvidence(value),n=e.network,s=e.submitted,i=e.inclusion,x=e.execution,f=e.finality,r=e.readback;
   const network:MonitorCheck=n.kind!=='event-testnet'||[n.expectedGenesis,n.observedGenesis].some(h=>h!==null&&equalHash(h,KNOWN_MAINNET))?{state:'abnormal',reason:'Execution requires event-testnet; known historical mainnet identity is blocked'}:n.expectedGenesis===null||n.observedGenesis===null?{state:'unverified',reason:'Expected or observed genesis absent'}:!equalHash(n.expectedGenesis,n.observedGenesis)?{state:'abnormal',reason:'Observed genesis does not match expected genesis'}:{state:'normal',reason:'Offline configured event-testnet genesis match; no current network verification'};
   const submission=check(s!==null,null,[network],'Submission hash recorded');
   const inclusionMismatch=i!==null&&(!equalHash(i.transactionHash,i.transactions[i.transactionIndex]!)||
