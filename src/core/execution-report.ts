@@ -33,6 +33,8 @@ export async function importExecutionReport(text:string):Promise<ExecutionReport
   const sha256=report.sha256;
   if(typeof sha256!=='string'||!/^[0-9a-f]{64}$/.test(sha256))invalid('digest');
   const payload=validateExecutionEvidence(report.payload);
+  // Parsed JSON is safe to serialize; validation must not erase changed field values.
+  if(canonical(report.payload)!==canonical(payload))invalid('noncanonical payload values');
   if(await digestBytes(payloadBytes(payload))!==sha256)throw new Error('Execution report digest integrity mismatch');
   // Integrity says nothing about source authenticity; consumers must evaluate these facts.
   return {executionReportVersion:1,payload,sha256};

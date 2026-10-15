@@ -15,3 +15,42 @@ for(const args of [[],['--input','x'],['--out','y'],['--input'],['--input','x','
 for(const [name,mutate] of [['digest',r=>r.sha256='0'.repeat(64)],['origin',r=>r.payload.origin='rpc'],['unsupported version',r=>r.executionReportVersion=2],['mixed raw fields',r=>r.origin='simulated'],['missing envelope fields',r=>delete r.sha256]])test('execution-inspect rejects '+name+' envelope without raw fallback',async t=>{const {input,out}=await setup(t);const created=run('execution-report','--input',input,'--out',out);assert.equal(created.status,0,created.stderr);const r=JSON.parse(await readFile(out,'utf8'));mutate(r);await writeFile(out,JSON.stringify(r));const inspected=run('execution-inspect','--input',out);assert.equal(inspected.status,1);assert.equal(inspected.stdout,'');assert.ok(inspected.stderr);});
 test('execution-inspect rejects distinct M1 report; existing M1 inspect still accepts it',async t=>{const {out}=await setup(t);assert.equal(run('demo','--out',out).status,0);const r=run('execution-inspect','--input',out);assert.equal(r.status,1);assert.equal(r.stdout,'');assert.equal(run('inspect','--input',out).status,0);});
 test('export command consumes raw evidence only, never an envelope as raw facts',async t=>{const {input,out,dir}=await setup(t);assert.equal(run('execution-report','--input',input,'--out',out).status,0);const second=join(dir,'second.json'),r=run('execution-report','--input',out,'--out',second);assert.equal(r.status,1);assert.equal(r.stdout,'');await assert.rejects(access(second));});
+
+
+test('CLI raw uppercase genesis inspection and canonical export retain compatible summaries', async t => {
+  const {input, out, e} = await setup(t, evidence => {
+    evidence.network.expectedGenesis = '0x' + 'A'.repeat(64);
+  });
+  const raw = summary(run('execution-inspect', '--input', input), 0, 'normal');
+  const exported = summary(run('execution-report', '--input', input, '--out', out), 0, 'normal');
+  const saved = await readFile(out, 'utf8');
+  const report = JSON.parse(saved);
+
+  assert.deepEqual(exported, {...raw, report: exported.report});
+  assert.equal(report.payload.network.expectedGenesis, '0x' + 'a'.repeat(64));
+  assert.equal(report.sha256, '8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81');
+  assert.deepEqual(report.payload, {...e, network: {...e.network, expectedGenesis: '0x' + 'a'.repeat(64)}});
+  assert.deepEqual(summary(run('execution-inspect', '--input', out), 0, 'normal'), exported);
+  assert.equal(await readFile(out, 'utf8'), saved);
+  assert.equal(JSON.parse(await readFile(input, 'utf8')).network.expectedGenesis, '0x' + 'A'.repeat(64));
+});
+
+test('CLI rejects same-digest changed-case envelope and preserves the saved report', async t => {
+  const {input, out, dir} = await setup(t);
+  summary(run('execution-report', '--input', input, '--out', out), 0, 'normal');
+  const saved = await readFile(out, 'utf8');
+  const report = JSON.parse(saved);
+  report.payload.network.expectedGenesis = '0x' + 'A'.repeat(64);
+  const tampered = join(dir, 'changed-case.json');
+  const text = JSON.stringify(report);
+  await writeFile(tampered, text);
+
+  const result = run('execution-inspect', '--input', tampered);
+  assert.equal(result.status, 1, result.stdout);
+  assert.equal(result.signal, null);
+  assert.equal(result.error, undefined);
+  assert.equal(result.stdout, '');
+  assert.match(result.stderr, /integrity|invalid/i);
+  assert.equal(await readFile(out, 'utf8'), saved);
+  assert.equal(await readFile(tampered, 'utf8'), text);
+});

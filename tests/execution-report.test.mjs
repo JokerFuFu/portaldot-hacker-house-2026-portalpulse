@@ -30,3 +30,42 @@ test('complete imported text counts UTF-8 bytes inclusively at 1 MiB',async()=>{
 test('malformed JSON, non-text and distinct M1 envelope fail execution report import',async()=>{api();for(const text of ['{','null','[]','{}',null])await assert.rejects(core.importExecutionReport(text),/invalid|JSON|limit/i);const {config,samples}=makeDemoSession();await assert.rejects(core.importExecutionReport(JSON.stringify(await core.createReport(config,samples))),/invalid/i);});
 for(const [name,status,mutate] of [['missing execution','unverified',e=>e.execution=null],['missing prior submission','unverified',e=>e.submitted=null],['failed execution','abnormal',e=>{e.execution.outcome='failure';e.execution.failureReason='Synthetic failure';}],['readback mismatch','abnormal',e=>e.readback.sequence='42'],['contradictory inclusion without submission','abnormal',e=>{e.submitted=null;e.inclusion.transactions[0]='0x'+'f'.repeat(64);}]] )test('diagnostic report retains '+name,async()=>{api();const e=fresh();mutate(e);const r=await core.importExecutionReport(JSON.stringify(await core.createExecutionReport(e)));assert.deepEqual(r.payload,e);offline(core.evaluateExecutionEvidence(r.payload),status);});
 test('rpc-origin evidence retains origin while every verification flag stays false',async()=>{api();const e=fresh();e.origin='rpc';const r=await core.importExecutionReport(JSON.stringify(await core.createExecutionReport(e)));assert.equal(r.payload.origin,'rpc');offline(core.evaluateExecutionEvidence(r.payload),'normal');});
+
+
+test('report import rejects changed expectedGenesis casing with the original digest', async () => {
+  const report = await core.createExecutionReport(fresh());
+  report.payload.network.expectedGenesis = '0x' + 'A'.repeat(64);
+
+  await assert.rejects(
+    core.importExecutionReport(JSON.stringify(report)),
+    /integrity|invalid/i,
+  );
+});
+
+test('report import rejects noncanonical payload values even with a recomputed digest', async () => {
+  const report = await core.createExecutionReport(fresh());
+  report.payload.network.expectedGenesis = '0x' + 'A'.repeat(64);
+  const text = resign(report);
+  assert.notEqual(report.sha256, '8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81');
+
+  await assert.rejects(
+    core.importExecutionReport(text),
+    /invalid.*canonical.*values/i,
+  );
+});
+
+test('raw uppercase expectedGenesis retains normalization and exports a canonical roundtrip', async () => {
+  const evidence = fresh();
+  evidence.network.expectedGenesis = '0x' + 'A'.repeat(64);
+
+  const validated = core.validateExecutionEvidence(evidence);
+  assert.deepEqual(validated, fixture);
+  assert.deepEqual(core.parseExecutionEvidence(JSON.stringify(evidence)), fixture);
+  assert.deepEqual(core.evaluateExecutionEvidence(evidence), core.evaluateExecutionEvidence(fixture));
+
+  const report = await core.createExecutionReport(evidence);
+  assert.deepEqual(report.payload, fixture);
+  assert.equal(report.sha256, '8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81');
+  assert.equal(evidence.network.expectedGenesis, '0x' + 'A'.repeat(64));
+  assert.deepEqual(await core.importExecutionReport(JSON.stringify(report)), report);
+});
