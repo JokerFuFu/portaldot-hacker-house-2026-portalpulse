@@ -231,3 +231,26 @@ M1 发布事实仍独立归属：2026-10-14 的源码 c333e579 及 43 个远端�
 完整样例的实际命令为 `node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out <fresh ignored private path>`，然后 `node dist/cli/main.js execution-inspect --input <same path>`，均 exit 0 / signal null；expected / observedSequence 保持 `9007199254740993`，digest 同为 `8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81`，summary stdout 字节一致。仅把 execution 设为 null 的样例，导出与检查均 exit 2 / signal null，摘要字节一致，digest `446aa7118fdde1c2be8d4e59844bfc93011788a363b182f8ae949fdd3059f68f`；完整信封实际保留，未补齐阶段或改动原始时间。全部为 simulated / offline，verifiedNetwork / writeAllowed / fullVerification 全 false。
 
 新增 72 项真实 API / CLI 行为测试涵盖同步 detached snapshot、await 期间来源 / 对象 / 数组变异、递归键序与数组顺序、非有限值 / accessor / sparse / 未知字段在序列化前拒绝、严格信封 / 版本 / hash、伪造状态 / 验证标志、payload / digest / origin 篡改、带 Unicode 的完整 imported text 恰好 1 MiB 与 +1 byte、异常 / 缺项事实保留、原始与信封检查语义及 0/2/1 退出、紧凑完整保存、禁止覆盖的字节回读、写入失败、参数和 M1 格式拒绝。没有新增网络 / 钱包 / 签名 / live 行为。SHA-256 只检测内容改变，不能证明来源真实性、可信部署、当前在线或真实 V3 工作；真实链验收及可打印执行报告 / 网页集成、Check-in、视频、Deck、最终提交继续待完成。
+
+
+## M2B canonical payload integrity correction — 2026-10-15
+
+Code/test/docs revision: `3e7b6071019adcd91d6f84a9f8c927257f449b2f` (parent `efe6e1fe6ca17ec0b9acbbaa6045c676aa56f31b`). The earlier 419-test and 134-test records above remain historical. The importer now rejects a parsed payload if recursively sorted-key canonical JSON differs from its validated detached representation, before digest calculation. This prevents expectedGenesis normalization from erasing a changed saved string. Shared M1/M2A validation, schema and evaluation behavior are unchanged. Raw uppercase expectedGenesis remains accepted and exports lowercase; envelopes require canonical field values even with a recomputed digest. JSON key order and whitespace equivalence are retained.
+
+All commands below ran strictly sequentially with Node **v22.12.0**. Each has separate preserved raw stdout/stderr and a private receipt containing command, start/end, actual exit, null signal/error, runtime version, raw-log SHA-256 and all **29 tracked source/test hashes**. No unchanged full-suite rerun was made.
+
+| Run / exact command | UTC start – end | Actual result |
+|---|---|---|
+| fix-baseline-build: `npm run build:core` | 2026-10-15T02:44:19.075Z – 2026-10-15T02:44:19.657Z | exit 0; signal null; error null; no TAP |
+| fix-red: `node --test tests/execution-report.test.mjs tests/execution-report-cli.test.mjs tests/report.test.mjs` | 2026-10-15T02:44:22.084Z – 2026-10-15T02:44:25.092Z | exit 1; signal null; error null; 139 tests / 136 pass / 3 fail |
+| fix-green-build: `npm run build:core` | 2026-10-15T02:44:51.717Z – 2026-10-15T02:44:52.180Z | exit 0; signal null; error null; no TAP |
+| fix-green: `node --test tests/execution-report.test.mjs tests/execution-report-cli.test.mjs tests/report.test.mjs` | 2026-10-15T02:44:54.748Z – 2026-10-15T02:44:57.163Z | exit 0; signal null; error null; 139 tests / 139 pass / 0 fail |
+| fix-full: `npm test` | 2026-10-15T02:45:07.121Z – 2026-10-15T02:45:27.634Z | exit 0; signal null; error null; 424 tests / 424 pass / 0 fail |
+| fix-typecheck: `npm run typecheck` | 2026-10-15T02:45:44.595Z – 2026-10-15T02:45:45.516Z | exit 0; signal null; error null; no TAP |
+| fix-build: `npm run build` | 2026-10-15T02:45:48.600Z – 2026-10-15T02:45:49.521Z | exit 0; signal null; error null; no TAP |
+
+The new tests were written before the production fix. RED **139 / 136 pass / 3 fail** reproduced core acceptance of a same-digest changed-case envelope (Missing expected rejection) and real built CLI acceptance (normal, exit 0 rather than 1). For an independently recomputed uppercase-payload digest, baseline already rejected with digest mismatch; its new regression failed because the required noncanonical-value rejection was absent. Raw uppercase compatibility tests passed during RED. The minimal importer correction then produced focused GREEN **139/139**, full **424/424** (zero failed/cancelled/skipped/todo), and successful core/web typecheck and core/Vite build.
+
+Five readable new regressions cover original-digest casing rejection, canonical-value rejection even with an independently recomputed digest, raw uppercase validator/parser/evaluator compatibility and creator roundtrip, real CLI uppercase raw inspection/export/canonical roundtrip, and changed-case CLI rejection with empty stdout, useful invalid/integrity stderr and unchanged saved bytes. Existing coverage still checks reordered keys/whitespace, abnormal/partial diagnostic retention, origin/times/sequence `9007199254740993`, M1 literal digest `6bbce53e82846430f03f661a9c3b54ff5d0255e9dc86e018b5a1475d0a12a661`, and all three verification/write flags false. The canonical synthetic execution digest remains `8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81`.
+
+This correction remains local offline content integrity. It does not authenticate sources or establish real V3 execution. The full suite includes existing localhost transport tests. No live RPC, wallet, signing, deployment, Site update or source publication was performed by this fix wave; real-chain and competition delivery milestones remain outstanding.
