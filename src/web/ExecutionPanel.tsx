@@ -9,6 +9,20 @@ import {stateLabel} from './view-model.js';
 
 const unknown='未提供/未验证';
 
+export interface ExecutionNotice {report:ExecutionReport|null;message:string;}
+
+// A prior clear/download outcome belongs to its report, not a later load.
+export function executionStatus(state:ExecutionSessionState,exporting:boolean,notice:ExecutionNotice):string {
+ if(state.busy)return '复核中；保留上一次有效报告。';
+ if(exporting)return '正在导出执行报告。';
+ if(state.error)return state.report?'复核失败；保留上一次有效执行报告。修正 JSON 或重新选择文件后重试。':'复核失败；暂无有效执行报告。修正 JSON 或重新选择文件后重试。';
+ if(state.report&&notice.report!==state.report) {
+  const completed=state.inputKind==='simulated'?'已加载模拟执行':state.inputKind==='report'?'已导入执行报告':'已复核原始执行证据';
+  return completed+'；离线事实一致性复核已完成。来源真实性及实链执行仍未验证。可查看当前复核结果。';
+ }
+ return notice.message;
+}
+
 export function ExecutionReportView({report,inputKind}:{report:ExecutionReport;inputKind:ExecutionInputKind}) {
  const vm=makeExecutionViewModel(report,inputKind),e=report.payload;
  const stages=[
@@ -19,7 +33,7 @@ export function ExecutionReportView({report,inputKind}:{report:ExecutionReport;i
   ['finality','最终确认',e.finality],
   ['state','状态回读',e.readback],
  ] as const;
- return <article className="execution-report" aria-label="执行事实复核报告">
+ return <article className="execution-report" id="execution-report-result" tabIndex={-1} aria-label="离线执行事实复核报告">
   <section className="source-banner" aria-label="执行来源">
    <strong>{vm.modeLabel}</strong><span>{vm.originLabel}</span><p>{vm.inputLabel} · {e.network.source}</p>
   </section>
@@ -54,7 +68,7 @@ export function ExecutionReportView({report,inputKind}:{report:ExecutionReport;i
 
 export function ExecutionPanel() {
  const [state,setState]=useState<ExecutionSessionState>({report:null,inputKind:null,busy:false,error:null});
- const [text,setText]=useState(''),[exporting,setExporting]=useState(false),[notice,setNotice]=useState('执行证据仅在本机离线复核；导入上限 1 MiB UTF-8。');
+ const [text,setText]=useState(''),[exporting,setExporting]=useState(false),[notice,setNotice]=useState<ExecutionNotice>({report:null,message:'执行证据仅在本机离线复核；导入上限 1 MiB UTF-8。'});
  const session=useRef<ReturnType<typeof createExecutionSession>|null>(null);
  const currentReport=useRef<ExecutionReport|null>(null),exportRevision=useRef(0);
  useEffect(()=>{
@@ -89,18 +103,18 @@ export function ExecutionPanel() {
     const link=document.createElement('a');link.href=url;link.download='portalpulse-execution-report.json';link.click();
    } finally {setTimeout(()=>URL.revokeObjectURL(url),1000);}
    if(token===exportRevision.current&&currentReport.current===report)
-    setNotice('已生成执行报告下载；保留来源与原始阶段时间。SHA-256 仅检查内容。');
+    setNotice({report,message:'已生成执行报告下载；保留来源与原始阶段时间。SHA-256 仅检查内容。'});
   } catch(error) {
    if(token===exportRevision.current&&currentReport.current===report)
-    setNotice('导出失败：'+(error instanceof Error?error.message:'无效执行报告'));
+    setNotice({report,message:'导出失败：'+(error instanceof Error?error.message:'无效执行报告')});
   } finally {if(token===exportRevision.current)setExporting(false);}
  }
  function clear() {
-  session.current?.clear();setText('');setNotice('已清空执行记录；未连接网络。');
+  session.current?.clear();setText('');setNotice({report:null,message:'已清空执行记录；未连接网络。'});
  }
  return <div className="execution-panel">
   <div className="execution-editor">
-   <h2>执行复核</h2><p className="hint">始终离线。支持原始执行证据或版本化执行报告；没有自动网络连接、签名或交易操作。</p>
+   <h2>执行复核</h2><button disabled={!state.report||busy} onClick={()=>document.getElementById('execution-report-result')?.focus()}>查看当前复核结果</button><p className="hint">始终离线。支持原始执行证据或版本化执行报告；没有自动网络连接、签名或交易操作。</p>
    <div className="actions">
     <button disabled={busy} onClick={()=>void session.current?.simulated()}>加载模拟执行</button>
     <label className={'file-button '+(busy?'disabled':'')}>导入执行JSON<input type="file" accept=".json,application/json" aria-label="导入执行JSON" disabled={busy} onChange={e=>void imported(e)}/></label>
@@ -114,7 +128,7 @@ export function ExecutionPanel() {
    <button disabled={busy||!state.report} onClick={()=>window.print()}>打印执行报告</button>
    <button disabled={!state.report&&!busy&&!text} onClick={clear}>清空执行记录</button>
   </div>
-  <p className="notice" role="status" aria-live="polite">{state.busy?'复核中；保留上一次有效报告。':exporting?'正在导出执行报告。':notice}</p>
+  <p className="notice" role="status" aria-live="polite">{executionStatus(state,exporting,notice)}</p>
   {state.error?<p className="error" role="alert">{state.error}。已有有效执行报告会保留；修正 JSON 或重新选择文件后重试。</p>:null}
   {state.report&&state.inputKind?<ExecutionReportView report={state.report} inputKind={state.inputKind}/>:<div className="empty execution-empty"><h3>尚无执行证据</h3><p>加载模拟执行，或导入 / 粘贴执行JSON。所有缺失事实保持未提供/未验证。</p><p>当前网络未验证 · 禁止写入 · 完整验证未完成。</p></div>}
  </div>;

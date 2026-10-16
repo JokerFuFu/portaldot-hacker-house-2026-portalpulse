@@ -96,3 +96,59 @@ test('React escapes imported source, alias, caller and failure reason and RPC st
  assert.ok(!html.includes('<script>'));assert.ok(!html.includes('<img'));assert.ok(!html.includes('<svg'));
  assert.match(html,/RPC/);assert.match(html,/离线执行复核/);assert.match(html,/当前网络未验证/);
 });
+
+
+async function sessionFeedback() {
+ assert.equal(typeof ui.executionStatus,'function','production executionStatus must be available');
+ const {createExecutionSession}=await import('../dist/web/execution-session.js');
+ let state={report:null,inputKind:null,busy:false,error:null};
+ const session=createExecutionSession(next=>{state=next;});
+ return {session,get state(){return state;},status:notice=>ui.executionStatus(state,false,notice)};
+}
+test('first simulated load announces its current offline result instead of the initial input hint',async()=>{
+ const flow=await sessionFeedback();
+ const initial={report:null,message:'执行证据仅在本机离线复核；导入上限 1 MiB UTF-8。'};
+ await flow.session.simulated();
+ const status=flow.status(initial);
+ assert.match(status,/已加载模拟执行/);assert.match(status,/离线/);assert.match(status,/真实性|实链/);
+});
+test('clear then simulate cannot announce that the newly loaded report is cleared',async()=>{
+ const flow=await sessionFeedback();await flow.session.simulated();flow.session.clear();
+ const cleared={report:null,message:'已清空执行记录；未连接网络。'};
+ assert.equal(flow.status(cleared),cleared.message);
+ await flow.session.simulated();const status=flow.status(cleared);
+ assert.match(status,/已加载模拟执行/);assert.doesNotMatch(status,/已清空/);
+});
+for(const kind of ['raw','report'])test('export then valid '+kind+' import replaces the previous download outcome',async()=>{
+ const flow=await sessionFeedback();await flow.session.simulated();
+ const previous=flow.state.report,download={report:previous,message:'已生成执行报告下载；保留来源与原始阶段时间。SHA-256 仅检查内容。'};
+ assert.equal(flow.status(download),download.message);
+ const text=JSON.stringify(kind==='raw'?fixture:previous);
+ await flow.session.load(async()=>text);
+ assert.notEqual(flow.state.report,previous);assert.equal(flow.state.inputKind,kind);
+ const status=flow.status(download);
+ assert.match(status,kind==='raw'?/已复核原始执行证据/:/已导入执行报告/);
+ assert.match(status,/离线/);assert.doesNotMatch(status,/已生成.*下载|已清空/);
+});
+test('latest failed import announces retained previous result and retry while preserving report',async()=>{
+ const flow=await sessionFeedback();await flow.session.simulated();
+ const previous=flow.state.report,download={report:previous,message:'已生成执行报告下载'};
+ await flow.session.load(async()=>'{');
+ assert.equal(flow.state.report,previous);assert.match(flow.state.error,/导入失败/);
+ const status=flow.status(download);
+ assert.match(status,/复核失败/);assert.match(status,/保留.*有效/);assert.match(status,/重试/);
+ assert.doesNotMatch(status,/已生成.*下载|已清空/);
+});
+test('current download notice and busy state remain accurate for the same report',async()=>{
+ const flow=await sessionFeedback();await flow.session.simulated();
+ const notice={report:flow.state.report,message:'已生成执行报告下载；SHA-256 仅检查内容。'};
+ assert.equal(flow.status(notice),notice.message);
+ assert.match(ui.executionStatus(flow.state,true,notice),/正在导出/);
+ assert.match(ui.executionStatus({...flow.state,busy:true},false,notice),/复核中/);
+});
+test('execution result has a keyboard focus target and a visible entry from the editor',async()=>{
+ const report=await createExecutionReport(fixture),html=render({report,inputKind:'simulated'});
+ assert.match(html,/<article[^>]*id="execution-report-result"[^>]*tabindex="-1"/i);
+ const empty=renderToStaticMarkup(createElement(ui.ExecutionPanel));
+ assert.match(empty,/<button[^>]*disabled=""[^>]*>查看当前复核结果<\/button>/);
+});
