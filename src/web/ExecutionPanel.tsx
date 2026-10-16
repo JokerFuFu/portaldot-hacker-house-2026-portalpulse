@@ -109,12 +109,17 @@ export function ExecutionPanel() {
     setNotice({report,message:'导出失败：'+(error instanceof Error?error.message:'无效执行报告')});
   } finally {if(token===exportRevision.current)setExporting(false);}
  }
+ function showResult() {
+  const target=document.getElementById('execution-report-result');
+  target?.focus({preventScroll:true});
+  target?.scrollIntoView({block:'start'});
+ }
  function clear() {
   session.current?.clear();setText('');setNotice({report:null,message:'已清空执行记录；未连接网络。'});
  }
  return <div className="execution-panel">
   <div className="execution-editor">
-   <h2>执行复核</h2><button disabled={!state.report||busy} onClick={()=>document.getElementById('execution-report-result')?.focus()}>查看当前复核结果</button><p className="hint">始终离线。支持原始执行证据或版本化执行报告；没有自动网络连接、签名或交易操作。</p>
+   <h2>执行复核</h2><button disabled={!state.report||busy} onClick={showResult}>查看当前复核结果</button><p className="hint">始终离线。支持原始执行证据或版本化执行报告；没有自动网络连接、签名或交易操作。</p>
    <div className="actions">
     <button disabled={busy} onClick={()=>void session.current?.simulated()}>加载模拟执行</button>
     <label className={'file-button '+(busy?'disabled':'')}>导入执行JSON<input type="file" accept=".json,application/json" aria-label="导入执行JSON" disabled={busy} onChange={e=>void imported(e)}/></label>
