@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:11,000
+PortalPulse is a node-operations toolkit in development. This walkthrough uses real prototype snapshots, not a continuous recording.
+
+2
+00:00:11,000 --> 00:00:23,000
+The supplied synthetic facts are internally consistent. The report still says the current network is unverified and writes are prohibited.
+
+3
+00:00:23,000 --> 00:00:35,000
+Six stages keep their original facts and timestamps: identity, submission, inclusion, execution, finality, and state readback.
+
+4
+00:00:35,000 --> 00:00:47,000
+Missing finality or readback stays unverified. A supplied execution failure stays abnormal; the failure reason is retained.
+
+5
+00:00:47,000 --> 00:00:59,000
+The digest detects content changes. It does not authenticate the source or prove consensus. All three verification flags remain false.
+
+6
+00:00:59,000 --> 00:01:10,000
+Print acceptance covered five synthetic scenarios and 26 A4 pages. A 65-block ancestry fixture spans 14 pages, ending with readback and limits.
+
+7
+00:01:10,000 --> 00:01:21,000
+Next: confirm official V3 configuration and network identity, then use user-approved signing for the probe, exact execution, finality and readback.
+
+8
+00:01:21,000 --> 00:01:32,000
+Explore the public prototype and source. The Node Operations & Tooling project remains an offline prototype while official V3 integration is pending.

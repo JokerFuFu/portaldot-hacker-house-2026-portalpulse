@@ -2,6 +2,8 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
+**2026-10-16 当前进度：离线原型的实际打印验收和 Check-in 材料已准备。** 五种合成场景共 26 页 A4 报告已检查，其中 65 块连续祖先链为 14 页；一次控制 WebCrypto 摘要延迟的浏览器导出→清空→释放测试没有触发旧下载。八页英文 Deck（PDF / 可编辑 PPTX）、92 秒无声英文字幕原型截图讲解和报告样例见[参赛材料索引](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/materials/)及[材料与验收范围](docs/checkin-materials.md)。视频由真实 UI 截图和实际 PDF 组成，不是连续操作录屏或实链演示。认可 V3 配置、探针部署、真实执行与回读、Check-in 和最终提交仍待完成。
+
 **[打开公开只读 M1 演示](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site)**，进入后点击“加载模拟会话”。这是人工模拟数据演示，没有默认网络连接，不是已验证的真实 V3。源码已在 [GitHub](https://github.com/JokerFuFu/portaldot-hacker-house-2026-portalpulse) 公开。
 
 **2026-10-14 状态：只读 M1 源码与公开原型已发布。** TypeScript 核心、CLI、人工模拟会话、报告验证与 React 控制台已完成本机单元 / SSR / localhost 测试及构建。提交 2f1a91e 已完成独立 Node 22.12 新目录安装与复现，以及实际浏览器模拟、下载 / 导入、篡改拒绝、390px 布局、打印 CSS 和非 RPC 失败 / Stop 检查。最终修复代码 49e6439 所在提交 6b24591 已通过独立 Node 22.12 新目录安装、188 项测试、类型检查、构建及 CLI demo / inspect，并完成空态、非法 URL 标识拒绝、模拟、非 RPC 失败和 Stop 的实际浏览器复验。下载 / 文件导入、390px 与打印 CSS 仍仅有 2f1a91e 的证据；打印 PDF 分页、真实 V3 接入、探针合约、交易执行 / 最终确认 / 状态回读、Check-in、最终提交、视频和 Deck 仍待完成。本机测试不代表真实测试网部署；新增源码与托管回读事实见[开发证据](docs/development-evidence.md)。
@@ -18,7 +20,7 @@ M2A 另提供本地[离线执行证据校验](docs/execution.md)：六项独立�
 
 控制者在 **812a8e2** 的实际浏览器检查覆盖默认 M1 / 模拟、切换后分别保留网络 best 105 与 RPC 来源执行报告、六阶段 / 来源 / 原始时间 / uint64、clear→simulate 新提示、export→有效报告粘贴新提示、canonical 大小写篡改拒绝且保留原摘要、缺项未验证 / 执行失败异常 / RPC 来源仍离线及三个 false 标志；390×844 下 inner / document / body 宽均为 390，截图检查后已恢复视口。**2511 字节实际下载、严格核心重导入和文件选择器重导入仅对应 b54945c**；后续未改动该导出 / 核心路径，但没有把旧结果冒称每次修复都重验。对齐后的实际键盘复验已完成：桌面及 390 像素视口均定位到离线来源和结论开头，已恢复默认视口。
 
-**实际 print-media / 打印分页及交互式导出等待期间清空取消仍未验证。** 打印入口、CSS / SSR 和异步 guard 证据不等于实际打印或该交互已验收。原公开 Site 已更新为站点发布版本 **3**；原生部署返回 succeeded，public 访问范围保持不变。匿名首页返回 HTTP 200，新版 JS / CSS 与验证构建逐字节一致；线上实际加载执行模拟，原始时间、uint64、内容摘要及离线 / 模拟 / false 标识均已回读。此处的站点发布版本不表示 Portaldot V3 实链已验证。认可 V3 身份、运行时、账户映射、测试币、探针、live 执行 / 最终确认 / 状态回读、视频 / Deck、Check-in 和最终提交仍待完成。详见[执行网页用法](docs/execution.md)。
+实际 print-media / 打印分页已于 **2026-10-16** 补验：完整、缺失、失败、RPC 来源、65 块长祖先链的实际 Chrome A4 导出共 26 页，保留来源、原始事实 / 时间、序号、摘要及离线限制；编辑器、操作和非活动视图不进入报告。一次控制 pending WebCrypto digest 的真实浏览器导出→清空→释放测试，等待摘要完成后观察到零次下载点击、报告为空、清空提示保留。该结果限定于所验场景。行为源码与既有 106 / 460 测试归属不变，本次没有重复跑套件。原公开 Site 的应用发布版本 **3** 保留 succeeded/public 交付证据；本轮材料发布另行记录。此站点版本不表示 Portaldot V3 实链已验证。认可 V3 身份、运行时、账户映射、测试币、探针、live 执行 / 最终确认 / 状态回读、Check-in 和最终提交仍待完成。详见[执行网页用法](docs/execution.md)与[材料](docs/checkin-materials.md)。
 
 ## 计划交付的六个模块
 

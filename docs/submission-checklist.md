@@ -1,6 +1,6 @@
 # PortalPulse 参赛提交清单
 
-截至 2026-10-13，项目仅处准备阶段，以下事项均为未来交付检查项，未代表已经实现、部署、发布或提交。依据：[本届官方 V3 Hacker House 详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)，本轮已读取该页的时间、提交及代码要求；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。2026 年 4 月 Mini Hackathon 模板不作为本届 V3 提交规则。
+截至 2026-10-16，项目已有公开只读与离线执行原型，实际打印验收与初期材料已准备，仍未完成认可 V3 部署、Check-in 或最终提交。以下清单区分材料准备与平台提交。依据为当日再次实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及真实提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
 
 ## Check-in：2026-10-24 20:00 前（北京时间）
 
@@ -11,7 +11,9 @@
 - [ ] 若原型使用模拟数据，明确标示。官方允许 Check-in 演示材料使用模拟数据，并鼓励真实测试网交互；PortalPulse 自身验收仍要求完整真实测试网流程。
 - [ ] 在 DoraHacks 提交后回读材料、链接与提交状态，留存结果。
 
-官方 Check-in 不接受仅停留于概念设计的项目，因此当前准备仓库本身尚不满足该阶段交付。[Check-in 规则](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)。
+当前原型可演示，但认可测试网部署证明仍缺失，不能据此宣称 Check-in 已合格。初期视频为92秒真实截图 / 实际报告组成的无声英文字幕讲解；实链演示在接入后更新。[材料与范围](checkin-materials.md)。
+
+内部目标为 **10-23 20:00 北京时间**，保留一天缓冲。10/16 表单读回显示：尚无可选的既有 PortalPulse Build，需要先建立项目；项目名、赛道、一句话、GitHub、部署信息、Demo视频URL、Deck URL为必填，进度与未完成事项可填。部署信息即使仍待完成也必须如实说明，不能空缺后假定合格。最终表单含 Terms of Use / Participant Agreement，接受步骤由本人确认。实际提交后仍需回读平台状态。
 
 ## Office Hours 申请：2026-10-27 20:00 前（北京时间）
 
