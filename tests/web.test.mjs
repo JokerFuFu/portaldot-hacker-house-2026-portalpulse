@@ -75,3 +75,11 @@ test('config replacement cancels old transport; only new complete snapshots publ
  assert.ok(Date.now()-Date.parse(reports[0].payload.endedAt)<1000);assert.ok(!JSON.stringify(reports[0]).includes(f.config.endpoint));
  assert.deepEqual(await importReport(await serializeReport(reports[0])),reports[0]);
 });
+
+test('network view remains default and execution owner is mounted but hidden',()=>{
+ const html=renderToStaticMarkup(createElement(App));
+ assert.match(html,/<button[^>]*aria-pressed="true"[^>]*>网络观测<\/button>/);
+ assert.match(html,/<button[^>]*aria-pressed="false"[^>]*>执行复核<\/button>/);
+ assert.match(html,/<section[^>]*class="execution-view"[^>]*hidden=""/);
+ assert.match(html,/开始只读采集/);assert.match(html,/加载模拟执行/);
+});

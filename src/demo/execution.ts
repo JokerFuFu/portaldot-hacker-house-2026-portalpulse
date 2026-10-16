@@ -1,0 +1,78 @@
+import type {ExecutionEvidence} from '../core/execution.js';
+
+// Fixed synthetic facts only. Each invocation owns fresh nested objects and arrays.
+export function makeDemoExecutionEvidence():ExecutionEvidence {
+ return {
+  "executionSchemaVersion": 1,
+  "origin": "simulated",
+  "network": {
+    "id": "simulated-execution",
+    "name": "Simulated execution fixture",
+    "source": "Manually derived synthetic facts; not Portaldot observations",
+    "endpointAlias": "simulated-offline",
+    "kind": "event-testnet",
+    "expectedGenesis": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedGenesis": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "intent": {
+    "vm": "revive",
+    "contract": "simulated-probe",
+    "caller": "simulated-caller",
+    "expectedSequence": "9007199254740993"
+  },
+  "submitted": {
+    "transactionHash": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "observedAt": "2026-10-14T00:00:00.000Z"
+  },
+  "inclusion": {
+    "transactionHash": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "block": {
+      "hash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "number": "100",
+      "parentHash": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    "transactionIndex": 0,
+    "transactions": [
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ],
+    "observedAt": "2026-10-14T00:00:00.000Z"
+  },
+  "execution": {
+    "transactionHash": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "blockHash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "transactionIndex": 0,
+    "outcome": "success",
+    "failureReason": null,
+    "observedAt": "2026-10-14T00:00:00.000Z"
+  },
+  "finality": {
+    "genesisHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "finalized": {
+      "hash": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "number": "101",
+      "parentHash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "ancestry": [
+      {
+        "hash": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "number": "101",
+        "parentHash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      {
+        "hash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "number": "100",
+        "parentHash": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      }
+    ],
+    "observedAt": "2026-10-14T00:00:00.000Z"
+  },
+  "readback": {
+    "genesisHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "blockHash": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "contract": "simulated-probe",
+    "caller": "simulated-caller",
+    "sequence": "9007199254740993",
+    "observedAt": "2026-10-14T00:00:00.000Z"
+  }
+};
+}

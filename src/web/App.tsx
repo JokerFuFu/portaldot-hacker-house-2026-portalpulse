@@ -5,6 +5,7 @@ import type {NetworkConfig,SessionReport} from '../core/types.js';
 import {createReport} from '../core/report.js';
 import {makeDemoSession} from '../demo/session.js';
 import {createLiveSession} from './live-session.js';
+import {ExecutionPanel} from './ExecutionPanel.js';
 import {makeViewModel,serializeReport,importIntoState,stateLabel,REPORT_BYTE_LIMIT} from './view-model.js';
 import type {Mode} from './view-model.js';
 const unknown='未知';
@@ -13,6 +14,7 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
  const [report,setReport]=useState<SessionReport|null>(initialReport??null),[mode,setMode]=useState<Mode>(initialMode);
  const [config,setConfig]=useState(initialConfig),[running,setRunning]=useState(false),[error,setError]=useState<string|null>(null);
  const [now,setNow]=useState(()=>Date.now()),[notice,setNotice]=useState('未连接；请选择模拟、导入或填写只读配置。'),[busy,setBusy]=useState(false);
+ const [view,setView]=useState<'network'|'execution'>('network');
  const session=useRef<ReturnType<typeof createLiveSession>|null>(null),revision=useRef(0);
  useEffect(()=>{session.current=createLiveSession();return()=>{revision.current++;session.current?.stop();};},[]);
  useEffect(()=>{if(!report)return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[Boolean(report)]);
@@ -64,6 +66,8 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
  ] as const:[];
  return <main>
   <header className="masthead"><div><h1>PortalPulse</h1><p>只读网络观测台</p></div><span className="scope">本地只读增量 · V3 验证待完成</span></header>
+  <nav className="view-switch actions" aria-label="工作视图"><button aria-pressed={view==='network'} onClick={()=>setView('network')}>网络观测</button><button aria-pressed={view==='execution'} onClick={()=>{stop();setView('execution');}}>执行复核</button></nav>
+  <section className="network-view" hidden={view!=='network'}>
   <section className="source-banner" aria-label="观测来源"><strong>{vm?.modeLabel??(running?'实时只读采集':'未连接')}</strong><span>{vm?.originLabel??(running?'等待 RPC 观测':'尚无观测')}</span><p>{vm?.network.source??'没有默认活动端点。模拟会话为人工数据；离线记录保留原始采集时间。'}</p></section>
   <nav className="actions" aria-label="报告操作"><button disabled={running||busy} onClick={()=>void simulated()}>加载模拟会话</button><label className={`file-button ${running||busy?'disabled':''}`}>导入 JSON<input type="file" accept=".json,application/json" aria-label="导入 JSON" disabled={running||busy} onChange={e=>void imported(e)}/></label><button disabled={!report||busy} onClick={()=>void exported()}>导出 JSON</button><button disabled={!report} onClick={()=>window.print()}>打印报告</button></nav>
   <p className="notice" role="status" aria-live="polite">{notice}</p>{error?<p className="error" role="alert">{error}。已有有效记录会保留；修正后可重试。</p>:null}
@@ -82,8 +86,11 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
    <aside><h2>自定义只读连接</h2><p className="hint">手动启动。允许 HTTP / HTTPS / WS / WSS；拒绝认证、查询与片段。浏览器连接还取决于 CORS 和安全上下文。</p>
     <form onSubmit={start}><label>端点（必填）<input name="endpoint" required type="url" placeholder="https://your-node.example" value={config.endpoint??''} onChange={e=>change('endpoint',e.target.value)}/></label><label>端点别名（必填）<input required maxLength={128} value={config.endpointAlias} onChange={e=>change('endpointAlias',e.target.value)}/></label><label>公开来源说明（必填）<input required maxLength={512} value={config.source} onChange={e=>change('source',e.target.value)}/></label><label>网络名称（必填）<input required maxLength={256} value={config.name} onChange={e=>change('name',e.target.value)}/></label><label>配置 ID（必填）<input required maxLength={128} value={config.id} onChange={e=>change('id',e.target.value)}/></label><label>预期创世哈希（选填）<input maxLength={66} value={config.expectedGenesis??''} placeholder="留空则身份保持未验证" onChange={e=>change('expectedGenesis',e.target.value)}/></label><div className="form-actions"><button className="primary" disabled={running||busy} type="submit">开始只读采集</button><button type="button" disabled={!running} onClick={stop}>停止采集</button></div></form>
     <p className="hint">修改配置会中止旧请求并保留离线记录。报告仅使用别名与来源，配置端点不导出。数据留在本机，刷新页面会清空未导出的会话。</p>
-    <div className="pending"><h3>当前交付范围</h3><p>身份观测、采样、报告与本地界面。真实 V3 接入、探针、交易执行 / 最终确认 / 状态回读、Check-in、提交及最终实链演示仍待完成。</p></div>
+    <div className="pending"><h3>当前交付范围</h3><p>身份观测、采样、报告与本地界面，以及离线执行事实复核。真实 V3 接入、探针、交易执行采集 / 实链最终确认 / 状态回读、Check-in、提交及最终实链演示仍待完成。</p></div>
    </aside>
-  </div><footer>PortalPulse · 本地只读工具 · 导入上限 16 MiB · 不含签名或交易操作</footer>
+  </div>
+  </section>
+  <section className="execution-view" hidden={view!=='execution'}><ExecutionPanel/></section>
+  <footer>PortalPulse · 本地只读工具 · 网络报告上限 16 MiB · 执行JSON上限 1 MiB · 不含签名或交易操作</footer>
  </main>;
 }
