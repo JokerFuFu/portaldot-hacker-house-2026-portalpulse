@@ -1,6 +1,6 @@
 # PortalPulse 参赛提交清单
 
-截至 2026-10-17，官方替代配置和真实只读观测已记录，独立身份与部署条件仍待核验（[当前证据](v3-readonly-20261017.md)）。项目已有公开只读与离线执行原型，实际打印验收与初期材料已准备，仍未完成认可 V3 部署、Check-in 或最终提交。以下清单区分材料准备与平台提交。依据为当日再次实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及真实提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
+截至 2026-10-17，官方替代配置和真实只读观测已记录，独立身份与部署条件仍待核验（[当前证据](v3-readonly-20261017.md)）。项目已有公开只读与离线执行原型，实际打印验收与初期材料已准备，仍未完成认可 V3 部署、Check-in 或最终提交。以下清单区分材料准备与平台提交。清单依据为 2026-10-16 再次实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及真实提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
 
 ## Check-in：2026-10-24 20:00 前（北京时间）
 
