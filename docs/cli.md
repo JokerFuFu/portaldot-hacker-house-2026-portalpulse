@@ -72,3 +72,8 @@ All execution summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAl
 ## Development status
 
 This is a partial readonly monitoring increment. Localhost HTTP/WS tests and the simulated demo do not count as real Portaldot V3 validation or acceptance of A03-A08/full A09. The offline evaluator is implemented; probe contract deployment, live transaction execution/finality/state readback, real V3 validation, Check-in, final submission, video and deck remain outstanding. Reports stay local until separately reviewed for publication.
+
+
+## October17 official readonly profile
+
+The replacement V3 profile, real dated four-sample report and metadata-size compatibility result are documented in [the current connection checkpoint](v3-readonly-20261017.md). The example expectedGenesis remains null and the actual collector exits2/unverified. Only state_getMetadata permits a2MiB full JSON reply; all other RPC methods retain1MiB. This changes neither the16MiB monitoring-report limit nor the1MiB execution-report limit.

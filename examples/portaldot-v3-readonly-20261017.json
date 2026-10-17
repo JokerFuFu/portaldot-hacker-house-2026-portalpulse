@@ -1,0 +1,9 @@
+{
+  "id": "portaldot-v3-20261017-readonly",
+  "name": "PortaldotV3 Test",
+  "source": "Organizer update 2026-10-17: https://discord.com/channels/1440212664751099996/1506204427651125349/1560719007307403354 ; no independent trusted genesis published",
+  "endpoint": "wss://test-node-v3.portaldot.dev",
+  "endpointAlias": "portaldot-v3-test-20261017",
+  "kind": "event-testnet",
+  "expectedGenesis": null
+}
