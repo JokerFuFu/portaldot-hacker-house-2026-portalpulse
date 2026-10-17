@@ -6,6 +6,7 @@ const READONLY_METHODS = new Set([
   'rpc_methods', 'chain_getBlockHash', 'chain_getHeader', 'chain_getFinalizedHead',
 ]);
 const RESPONSE_LIMIT = 1024 * 1024;
+const METADATA_RESPONSE_LIMIT = 2 * 1024 * 1024;
 let nextId = 0;
 
 export class RpcError extends Error {
@@ -46,6 +47,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
   return {
     async request(method,params=[],signal){
       if(!READONLY_METHODS.has(method))throw new RpcError('forbidden','Readonly method required');
+      const responseLimit=method==='state_getMetadata'?METADATA_RESPONSE_LIMIT:RESPONSE_LIMIT;
       if(closed)throw new RpcError('closed','RPC client closed');
       if(signal?.aborted)throw new RpcError('aborted','Request aborted');
       const id=++nextId;
@@ -69,7 +71,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
         const open=()=>{try{socket!.send(JSON.stringify({jsonrpc:'2.0',id,method,params}));}catch{failure();}};
         const message=(event:MessageEvent)=>{
           if(typeof event.data!=='string'){finish(new RpcError('malformed','Malformed non-text JSON response'));return;}
-          if(new TextEncoder().encode(event.data).byteLength>RESPONSE_LIMIT){finish(new RpcError('size','Response exceeds size limit'));return;}
+          if(new TextEncoder().encode(event.data).byteLength>responseLimit){finish(new RpcError('size','Response exceeds size limit'));return;}
           try{finish(undefined,parseResponse(event.data,id));}catch(error){finish(error as RpcError);}
         };
         const deadline=()=>{
@@ -90,7 +92,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
               if(!response.body)throw new RpcError('malformed','Empty response body');
               reader=response.body.getReader();
               const chunks:Uint8Array[]=[];let size=0;
-              while(true){const chunk=await reader.read();if(chunk.done)break;size+=chunk.value.byteLength;if(size>RESPONSE_LIMIT)throw new RpcError('size','Response exceeds size limit');chunks.push(chunk.value);}
+              while(true){const chunk=await reader.read();if(chunk.done)break;size+=chunk.value.byteLength;if(size>responseLimit)throw new RpcError('size','Response exceeds size limit');chunks.push(chunk.value);}
               const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
               finish(undefined,parseResponse(new TextDecoder('utf-8',{fatal:true}).decode(bytes),id));
             }catch(error){finish(error instanceof RpcError?error:new RpcError('network','Network request failed'));}

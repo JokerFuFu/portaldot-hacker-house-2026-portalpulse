@@ -37,6 +37,33 @@ for(const kind of ['http','ws']){
     const rpc=client();assert.deepEqual(await Promise.all([rpc.request('chain_getBlockHash',[1]),rpc.request('chain_getBlockHash',[2])]),[1,2]);
     assert.notEqual(calls[0].id,calls[1].id);
   });
+  test(`${kind}: accepts V14-sized metadata hex above 1 MiB without truncation`,async t=>{
+    // Synthetic transport data with the V14 prefix and observed decoded byte size;
+    // this checks JSON-RPC transport, not SCALE metadata decoding.
+    const metadata='0x6d6574610e'+'00'.repeat(561911);
+    assert.equal(Buffer.byteLength(metadata,'utf8'),1123834);
+    const {calls,client}=await fixture(t,kind,(q,send)=>send({jsonrpc:'2.0',id:q.id,result:metadata}));
+    assert.equal(await client().request('state_getMetadata'),metadata);
+    assert.equal(calls[0].method,'state_getMetadata');
+  });
+  for(const [method,bytes,accepted] of [
+    ['state_getMetadata',2097152,true],
+    ['state_getMetadata',2097153,false],
+    ['system_chain',1048576,true],
+    ['system_chain',1048577,false],
+  ])test(`${kind}: ${method} full UTF-8 envelope at ${bytes} bytes is ${accepted?'accepted':'rejected'}`,async t=>{
+    const result='链🔒';
+    const {client}=await fixture(t,kind,(q,send)=>{
+      const envelope=JSON.stringify({jsonrpc:'2.0',id:q.id,result});
+      const response=envelope+' '.repeat(bytes-Buffer.byteLength(envelope,'utf8'));
+      assert.equal(Buffer.byteLength(response,'utf8'),bytes);
+      assert.ok(response.length<bytes);
+      send(response);
+    });
+    const request=client().request(method);
+    if(accepted)assert.equal(await request,result);
+    else await assert.rejects(request,{name:'RpcError',code:'size'});
+  });
   for(const [label,response,pattern] of [
     ['RPC error',q=>({jsonrpc:'2.0',id:q.id,error:{code:-32601,message:'No method'}}),/No method/],
     ['malformed JSON',()=>'{broken',/json|malformed/i],
