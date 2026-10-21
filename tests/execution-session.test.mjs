@@ -51,3 +51,14 @@ for(const action of ['clear','dispose'])test(action+' while real digest awaits s
   if(action==='clear')assert.deepEqual(last(),{report:null,inputKind:null,busy:false,error:null});
  }
 });
+
+test('selected rehearsal produces a failed outcome instead of silently loading complete',async()=>{
+ const {session,last}=setup();await session.simulated('execution-failed');assert.equal(last().report.payload.execution.outcome,'failure');assert.equal(last().inputKind,'simulated');assert.equal(last().busy,false);
+ await session.simulated('unfinalized');assert.equal(last().report.payload.finality,null);assert.equal(last().report.payload.readback,null);
+});
+test('unknown rehearsal retains previous valid report with an error',async()=>{
+ const {session,last}=setup();await session.simulated();const previous=last().report;await session.simulated('__proto__');assert.equal(last().report,previous);assert.match(last().error,/Unknown execution scenario/);assert.equal(last().busy,false);
+});
+test('selected rehearsal replaces pending import and late import cannot restore complete facts',async()=>{
+ const {session,last}=setup(),d=delayed(),pending=session.load(()=>d.promise);await session.simulated('state-mismatch');const good=last();assert.equal(good.report.payload.readback.sequence,'9007199254740992');d.resolve(raw);await pending;assert.equal(last(),good);
+});

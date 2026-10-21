@@ -1,6 +1,6 @@
 import {createExecutionReport} from '../core/execution-report.js';
 import type {ExecutionReport} from '../core/execution-report.js';
-import {makeDemoExecutionEvidence} from '../demo/execution.js';
+import {makeExecutionScenario} from '../demo/execution.js';
 import {readExecutionInput} from './execution-model.js';
 import type {ExecutionInputKind} from './execution-model.js';
 
@@ -30,7 +30,7 @@ export function createExecutionSession(onChange:(state:ExecutionSessionState)=>v
  }
  return {
   load:(read:()=>Promise<string>)=>run(async()=>readExecutionInput(await read())),
-  simulated:()=>run(async()=>({report:await createExecutionReport(makeDemoExecutionEvidence()),inputKind:'simulated'})),
+  simulated:(scenario?:string)=>run(async()=>({report:await createExecutionReport(makeExecutionScenario(scenario)),inputKind:'simulated'})),
   clear() {
    if(disposed)return;
    generation++;

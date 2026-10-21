@@ -5,22 +5,25 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {createRpc,collectSample,analyzeSamples,createReport,importReport,RpcError,parseExecutionEvidence,evaluateExecutionEvidence,createExecutionReport,importExecutionReport} from '../core/index.js';
 import type {NetworkConfig,Sample,SessionReport,MonitorSummary,ExecutionReport} from '../core/index.js';
 import {makeDemoSession} from '../demo/session.js';
+import {makeExecutionScenario,executionScenarios} from '../demo/execution.js';
 
 const help=[
   'PortalPulse readonly CLI (Node >=22.12)',
   '  demo [--out path]                                  Explicit simulated local data',
+  '  execution-demo [--scenario ID] [--out path]         Explicit offline execution rehearsal',
   '  collect --config path [--samples N] [--interval-ms ms] [--out path]',
   '  inspect --input path                              Offline schema + digest inspection',
   '  execution-inspect --input path                    Offline raw evidence or execution report (1 MiB)',
   '  execution-report --input path --out path           Export offline execution report (1 MiB)',
   'Execution exit: complete offline=0; unverified=2; abnormal/malformed=1; never full verification.',
+  'Execution scenarios: '+executionScenarios.map(s=>s.id).join(', ')+'. Default: complete.',
   'Defaults: samples=4 (1..2000), interval-ms=10000 (1..3600000), request timeout=8000 ms.',
   'Output: one compact JSON summary; --out saves the complete local report without overwrite.',
   'Exit: demo/valid offline import=0 (not current network verification); collect normal=0,',
   '      collect unverified=2; abnormal collection/invalid input/tampering/output error=1.',
   'No default live endpoint. SIGINT stops collection and preserves completed/failed evidence.','',
 ].join('\n');
-interface Args {command:'demo'|'collect'|'inspect'|'execution-inspect'|'execution-report';options:Map<string,string>;samples:number;intervalMs:number;}
+interface Args {command:'demo'|'collect'|'inspect'|'execution-inspect'|'execution-report'|'execution-demo';options:Map<string,string>;samples:number;intervalMs:number;}
 function boundedInteger(value:string|undefined,fallback:number,max:number,label:string):number {
   if(value===undefined)return fallback;
   if(!/^[0-9]+$/.test(value)||!Number.isSafeInteger(Number(value))||Number(value)<1||Number(value)>max)throw new Error('Invalid '+label+' range: 1..'+max);
@@ -29,8 +32,8 @@ function boundedInteger(value:string|undefined,fallback:number,max:number,label:
 function parse(args:string[]):Args|null {
   if(args.length===0||args.length===1&&['--help','-h'].includes(args[0]!))return null;
   const command=args[0];
-  if(command!=='demo'&&command!=='collect'&&command!=='inspect'&&command!=='execution-inspect'&&command!=='execution-report')throw new Error('Unknown command; use --help');
-  const allowed=command==='execution-report'?['--input','--out']:command==='demo'?['--out']:(command==='inspect'||command==='execution-inspect')?['--input']:['--config','--samples','--interval-ms','--out'];
+  if(command!=='demo'&&command!=='collect'&&command!=='inspect'&&command!=='execution-inspect'&&command!=='execution-report'&&command!=='execution-demo')throw new Error('Unknown command; use --help');
+  const allowed=command==='execution-demo'?['--scenario','--out']:command==='execution-report'?['--input','--out']:command==='demo'?['--out']:(command==='inspect'||command==='execution-inspect')?['--input']:['--config','--samples','--interval-ms','--out'];
   const options=new Map<string,string>();
   for(let i=1;i<args.length;i+=2){
     const key=args[i]!;
@@ -102,18 +105,20 @@ async function main():Promise<number> {
   const args=parse(process.argv.slice(2));
   if(!args){process.stdout.write(help);return 0;}
   if(args.command==='collect')return collect(args);
-  if(args.command==='execution-report'||args.command==='execution-inspect'){
-    const text=await readBounded(args.options.get('--input')!,1024*1024);
+  if(args.command==='execution-report'||args.command==='execution-inspect'||args.command==='execution-demo'){
+    const text=args.command==='execution-demo'?null:await readBounded(args.options.get('--input')!,1024*1024);
     let report:ExecutionReport|undefined;
-    if(args.command==='execution-report'){
-      report=await createExecutionReport(parseExecutionEvidence(text));
+    if(args.command==='execution-demo'){
+      report=await createExecutionReport(makeExecutionScenario(args.options.get('--scenario')));
+    }else if(args.command==='execution-report'){
+      report=await createExecutionReport(parseExecutionEvidence(text!));
     }else{
       let root:unknown;
-      try{root=JSON.parse(text);}catch{throw new Error('Invalid execution evidence JSON');}
-      if(root!==null&&typeof root==='object'&&Object.hasOwn(root,'executionReportVersion'))report=await importExecutionReport(text);
+      try{root=JSON.parse(text!);}catch{throw new Error('Invalid execution evidence JSON');}
+      if(root!==null&&typeof root==='object'&&Object.hasOwn(root,'executionReportVersion'))report=await importExecutionReport(text!);
     }
-    const summary=evaluateExecutionEvidence(report?.payload??parseExecutionEvidence(text));
-    if(args.command==='execution-report')await save(report!,args.options.get('--out'));
+    const summary=evaluateExecutionEvidence(report?.payload??parseExecutionEvidence(text!));
+    if(args.command!=='execution-inspect')await save(report!,args.options.get('--out'));
     const output=report?{...summary,report:{executionReportVersion:report.executionReportVersion,sha256:report.sha256,integrity:'sha256-content-only; not source authenticity'}}:summary;
     process.stdout.write(JSON.stringify(output)+'\n');
     return summary.status==='abnormal'?1:summary.evidenceComplete?0:2;

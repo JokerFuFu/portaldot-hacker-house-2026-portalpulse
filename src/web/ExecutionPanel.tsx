@@ -6,6 +6,7 @@ import type {ExecutionInputKind} from './execution-model.js';
 import {createExecutionSession} from './execution-session.js';
 import type {ExecutionSessionState} from './execution-session.js';
 import {stateLabel} from './view-model.js';
+import {executionScenarios} from '../demo/execution.js';
 
 const unknown='未提供/未验证';
 
@@ -68,6 +69,7 @@ export function ExecutionReportView({report,inputKind}:{report:ExecutionReport;i
 
 export function ExecutionPanel() {
  const [state,setState]=useState<ExecutionSessionState>({report:null,inputKind:null,busy:false,error:null});
+ const [scenario,setScenario]=useState('complete');
  const [text,setText]=useState(''),[exporting,setExporting]=useState(false),[notice,setNotice]=useState<ExecutionNotice>({report:null,message:'执行证据仅在本机离线复核；导入上限 1 MiB UTF-8。'});
  const session=useRef<ReturnType<typeof createExecutionSession>|null>(null);
  const currentReport=useRef<ExecutionReport|null>(null),exportRevision=useRef(0);
@@ -120,8 +122,13 @@ export function ExecutionPanel() {
  return <div className="execution-panel">
   <div className="execution-editor">
    <h2>执行复核</h2><button disabled={!state.report||busy} onClick={showResult}>查看当前复核结果</button><p className="hint">始终离线。支持原始执行证据或版本化执行报告；没有自动网络连接、签名或交易操作。</p>
+   <label htmlFor="execution-scenario">模拟验收场景</label>
+   <select id="execution-scenario" value={scenario} disabled={busy} onChange={e=>{const value=e.target.value;setScenario(value);void session.current?.simulated(value);}}>
+    {executionScenarios.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}
+   </select>
+   <p className="hint">选择后自动离线复核。{executionScenarios.find(s=>s.id===scenario)?.description}</p>
    <div className="actions">
-    <button disabled={busy} onClick={()=>void session.current?.simulated()}>加载模拟执行</button>
+    <button disabled={busy} onClick={()=>void session.current?.simulated(scenario)}>加载模拟执行</button>
     <label className={'file-button '+(busy?'disabled':'')}>导入执行JSON<input type="file" accept=".json,application/json" aria-label="导入执行JSON" disabled={busy} onChange={e=>void imported(e)}/></label>
    </div>
    <label htmlFor="execution-json">执行证据JSON</label>

@@ -9,6 +9,12 @@ async function optional(path){try{return await import(path);}catch(e){if(e.code=
 const model=await optional('../dist/web/execution-model.js');
 const demo=await optional('../dist/demo/execution.js');
 const ui=await optional('../dist/web/ExecutionPanel.js');
+
+test('execution editor offers six labeled rehearsal choices with an explicit offline boundary',()=>{
+ const html=renderToStaticMarkup(createElement(ui.ExecutionPanel));assert.match(html,/<label[^>]*for="execution-scenario"[^>]*>模拟验收场景<\/label>/);assert.match(html,/<select[^>]*id="execution-scenario"/);
+ for(const id of ['complete','missing-evidence','execution-failed','wrong-transaction','unfinalized','state-mismatch'])assert.match(html,new RegExp('<option[^>]*value="'+id+'"'));
+ assert.match(html,/始终离线/);assert.match(html,/没有自动网络连接、签名或交易操作/);
+});
 function api(name){assert.equal(typeof model[name],'function',name+' must be available');return model[name];}
 function render(props){assert.equal(typeof ui.ExecutionReportView,'function','ExecutionReportView must be available');return renderToStaticMarkup(createElement(ui.ExecutionReportView,props));}
 
