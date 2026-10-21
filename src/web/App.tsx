@@ -86,7 +86,7 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
    <aside><h2>自定义只读连接</h2><p className="hint">手动启动。允许 HTTP / HTTPS / WS / WSS；拒绝认证、查询与片段。浏览器连接还取决于 CORS 和安全上下文。</p>
     <form onSubmit={start}><label>端点（必填）<input name="endpoint" required type="url" placeholder="https://your-node.example" value={config.endpoint??''} onChange={e=>change('endpoint',e.target.value)}/></label><label>端点别名（必填）<input required maxLength={128} value={config.endpointAlias} onChange={e=>change('endpointAlias',e.target.value)}/></label><label>公开来源说明（必填）<input required maxLength={512} value={config.source} onChange={e=>change('source',e.target.value)}/></label><label>网络名称（必填）<input required maxLength={256} value={config.name} onChange={e=>change('name',e.target.value)}/></label><label>配置 ID（必填）<input required maxLength={128} value={config.id} onChange={e=>change('id',e.target.value)}/></label><label>预期创世哈希（选填）<input maxLength={66} value={config.expectedGenesis??''} placeholder="留空则身份保持未验证" onChange={e=>change('expectedGenesis',e.target.value)}/></label><div className="form-actions"><button className="primary" disabled={running||busy} type="submit">开始只读采集</button><button type="button" disabled={!running} onClick={stop}>停止采集</button></div></form>
     <p className="hint">修改配置会中止旧请求并保留离线记录。报告仅使用别名与来源，配置端点不导出。数据留在本机，刷新页面会清空未导出的会话。</p>
-    <div className="pending"><h3>当前交付范围</h3><p>身份观测、采样、报告与本地界面，以及离线执行事实复核。真实 V3 接入、探针、交易执行采集 / 实链最终确认 / 状态回读、Check-in、提交及最终实链演示仍待完成。</p></div>
+    <div className="pending"><h3>当前交付范围</h3><p>只读网络观测、报告与六类离线执行验收场景。进度材料已于2026-10-20随<a href="https://dorahacks.io/build/50050">Build50050</a>提交，最后回读为待审核；尚非审核通过或最终提交。可信网络身份、探针部署及实链执行 / 最终确认 / 状态回读仍待完成。</p></div>
    </aside>
   </div>
   </section>

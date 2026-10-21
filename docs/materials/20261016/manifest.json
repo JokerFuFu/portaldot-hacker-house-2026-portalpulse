@@ -1,7 +1,7 @@
 {
   "preparedAt": "2026-10-16T10:12:06.001451+00:00",
   "project": "PortalPulse",
-  "stage": "Synthetic / offline prototype; recognized V3 deployment and Check-in not completed",
+  "stage": "October16 synthetic/offline media checkpoint; deployment/Check-in incomplete then, current submission recorded separately",
   "video": "92-second silent English-captioned genuine UI/PDF snapshot walkthrough, not continuous screen recording",
   "files": [
     {
@@ -16,8 +16,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 6625,
-      "sha256": "b1217df149835b6e0b0b6b44af5a64030775550bcd6b49dae7d076155c5ac81a"
+      "bytes": 7617,
+      "sha256": "e0e22bd82744413a9cef38b6608f6109a2140a387b1db23a2bba78291185cc73"
     },
     {
       "file": "long-ancestry-a4.pdf",
@@ -60,6 +60,6 @@
       "sha256": "0861b64e930e8fdedd471a0fde22d7f2eecaaa4e85410bf648cf45bf8310bff3"
     }
   ],
-  "indexUpdatedAt": "2026-10-17T03:46:22.472793+00:00",
-  "indexUpdateScope": "October17 separate real readonly network checkpoint linked; October16 synthetic media and all other listed file bytes unchanged."
+  "indexUpdatedAt": "2026-10-21T02:15:45.733351+00:00",
+  "indexUpdateScope": "October21 six-case rehearsal, reviewer guide and October20 submitted/Under Review status linked; original October16 media bytes unchanged."
 }

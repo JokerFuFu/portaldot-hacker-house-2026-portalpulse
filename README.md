@@ -2,6 +2,8 @@
 
 赛道：**Node Operations & Tooling（节点运营与开发工具）**。
 
+**2026-10-21 当前状态：六类离线验收场景可在网页与 CLI 直接复现。** 切到“执行复核”，选择完整、缺少证据、执行失败、错误交易关联、未最终确认或回读不匹配；所有场景均为固定人工事实，始终离线且三个验证/写入标志为 false。行为提交 `5ad3fe6` 已通过99项聚焦、507项全套及类型/构建检查。参赛进度材料已于10月20日随 [Build50050](https://dorahacks.io/build/50050) 提交，最后回读状态为 **Under Review**，尚未获审核通过或完成最终提交。探针部署与实链执行仍待独立可信网络身份、签名账户和工具链实测。见[90秒评审复现指南](docs/reviewer-guide.md)及[提交记录与验证范围](docs/evidence/checkin-submission-20261020.json)。下文带日期的段落保留原检查点归属，其中过去的“未提交”不再代表当前平台记录。
+
 **2026-10-17：官方替代 RPC 已公布，真实只读观测已完成。** 新端点返回 `PortaldotV3 Test`、运行时3002 /metadataV14，EVM Chain ID420420777与公告一致。修复新元数据超过1MiB的问题后，四次真实采集无RPC失败；身份仍未验证，CLI按预期退出2，未启用写入。修复通过45项聚焦、470项全套及类型/构建检查。现有打印、Deck与原型视频继续可用；探针部署、真实执行/回读和Check-in仍待完成。配置、可导入的真实历史报告、来源与限制见[10月17日接入记录](docs/v3-readonly-20261017.md)。下文带日期的进度保留其原检查点归属。
 
 **2026-10-16 当前进度：离线原型的实际打印验收和 Check-in 材料已准备。** 五种合成场景共 26 页 A4 报告已检查，其中 65 块连续祖先链为 14 页；一次控制 WebCrypto 摘要延迟的浏览器导出→清空→释放测试没有触发旧下载。八页英文 Deck（PDF / 可编辑 PPTX）、92 秒无声英文字幕原型截图讲解和报告样例见[参赛材料索引](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/materials/)及[材料与验收范围](docs/checkin-materials.md)。视频由真实 UI 截图和实际 PDF 组成，不是连续操作录屏或实链演示。认可 V3 配置、探针部署、真实执行与回读、Check-in 和最终提交仍待完成。
@@ -60,7 +62,11 @@ node dist/cli/main.js inspect --input /private/tmp/portalpulse-demo-report.json
 node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
 node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out /private/tmp/portalpulse-execution-report.json
 node dist/cli/main.js execution-inspect --input /private/tmp/portalpulse-execution-report.json
+node dist/cli/main.js execution-demo --scenario complete
+node dist/cli/main.js execution-demo --scenario unfinalized
 ~~~
+
+`execution-demo` 的完整一致场景退出0，缺证据/未最终确认退出2，明确异常场景退出1；后两类是预期诊断结果。加 `--out 新路径` 可保存完整可重导入的执行报告，异常/未验证事实也会保留，已有文件不会覆盖。六个场景ID及网页步骤见[评审指南](docs/reviewer-guide.md)。
 
 输出路径必须不存在。模拟会话显示人工数据及固定采集日期；导入 JSON 永远显示离线与原始采集时间。网页默认“网络观测”且未连接，按“加载模拟会话”查看网络示例，或“导入 JSON”检查记录。自定义只读配置填完后须手动开始；停止、修改配置、切换执行复核和卸载界面都会中止旧网络请求。身份缺少预期创世哈希时保持未验证。HTTP 端点须允许 CORS，HTTPS 页面还受浏览器混合内容规则限制。
 
@@ -82,6 +88,8 @@ Substrate 保留为网络观测路径；指南中的 Revive / Solidity 是网络
 
 ## 项目文档
 
+- [当前评审复现指南与六场景预期结果](docs/reviewer-guide.md)
+- [10/20平台提交状态记录（非平台签发证书）](docs/evidence/checkin-submission-20261020.json)
 - [10/17 官方新配置与真实只读观测](docs/v3-readonly-20261017.md)
 - [产品流程与架构](docs/design.md)
 - [离线执行证据与 CLI](docs/execution.md)

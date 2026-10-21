@@ -55,6 +55,16 @@ Inspect always sets mode to offline and verifiedNetwork to false, preserves orig
 
 ## Offline execution evidence and reports
 
+Six wallet-free rehearsal choices are also available:
+
+~~~sh
+node dist/cli/main.js execution-demo
+node dist/cli/main.js execution-demo --scenario state-mismatch --out /private/tmp/portalpulse-state-mismatch.json
+node dist/cli/main.js execution-inspect --input /private/tmp/portalpulse-state-mismatch.json
+~~~
+
+IDs: `complete`, `missing-evidence`, `execution-failed`, `wrong-transaction`, `unfinalized`, `state-mismatch`. The default is complete. These deterministic fixtures exercise the same evaluator; no RPC or wallet is used. Complete exits0; missing-evidence/unfinalized exit2; the three abnormal scenarios exit1 while preserving the diagnostic report. `--out` is optional and never overwrites. The command rejects unknown/duplicate flags, invalid scenario IDs and RPC/config options. Exported reports reimport through the existing strict execution path with all offline/false flags and original synthetic times intact. See [the six-case reviewer matrix](reviewer-guide.md).
+
 ~~~sh
 node dist/cli/main.js execution-inspect --input examples/execution-simulated.example.json
 node dist/cli/main.js execution-report --input examples/execution-simulated.example.json --out /private/tmp/portalpulse-execution-report.json
@@ -71,7 +81,7 @@ All execution summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAl
 
 ## Development status
 
-This is a partial readonly monitoring increment. Localhost HTTP/WS tests and the simulated demo do not count as real Portaldot V3 validation or acceptance of A03-A08/full A09. The offline evaluator is implemented; probe contract deployment, live transaction execution/finality/state readback, real V3 validation, Check-in, final submission, video and deck remain outstanding. Reports stay local until separately reviewed for publication.
+This is a partial readonly/offline product. Localhost HTTP/WS tests and synthetic rehearsal do not count as real Portaldot V3 validation or full A03-A08/A09 acceptance. Probe deployment and complete live execution/finality/state readback remain outstanding. October16 deck/video are prepared synthetic prototype materials; October20 progress submission was last read Under Review, not approved or final. Reports stay local until separately reviewed for publication.
 
 
 ## October17 official readonly profile

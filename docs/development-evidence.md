@@ -1,5 +1,7 @@
 # 本地只读增量开发证据
 
+本页按日期保留历史证据；文末“October21 offline rehearsal increment”为本轮记录。10/20当前进度材料已随Build50050提交待审，尚无认可V3探针或完整实链执行证明；早期的“无提交/托管”仅属于当时检查点。
+
 2026-10-14。本页按提交区分实现者验证、独立最低运行时复现和实际浏览器观察。没有真实 V3 接入、探针、钱包、签名、交易或提交证据。全部浏览器及 RPC 测试使用本地人工数据或命名 localhost 夹具。
 
 ## 原提交的独立复现
@@ -373,3 +375,14 @@ The tested build then collected four real samples from the newly announced offic
 Earlier today the deliveredad17 source ZIP was installed into an independently clean temporary directory with a new npm cache. Node22.12/npm10.9, locked install,460/460, typecheck/build and five CLI commands succeeded;71 tracked files stayed unchanged, simulated original timestamps/uint64/content digest stayed exact, stale historical monitoring remained stale and built JS/CSS matched the prior public projection. These results belong toad17, not the repair. The current repair's test/build receipts remain separately revision-scoped. No unchanged print/media scenario or old suite was rerun for reassurance.
 
 Updated documentation and materials index link the new real readonly observations separately from October16 synthetic print/video samples. The existing media bytes are unchanged. No wallet signing, transaction, probe deployment, outgoing organizer message, agreement acceptance or Check-in occurred. Independent identity grounding, actual mapped/funded deployer, compatible toolchain/probe and real execution/finality/state readback remain pending.
+# October21 offline rehearsal increment
+
+The approved failure/missing-evidence flows now have a single pure six-scenario catalog, shared by `execution-demo` and the web execution session. No dependency, execution schema, network transport, signing or write permission changed.
+
+- Baseline ec66f98:470/470 tests, Node22.12, core/web compilation passed.
+- Factory1533e74585a6cedc9c8288d266c73e0e8fe5602c: actual RED16 failures for absent factory/catalog, GREEN16 and full486/486. Complete preserves the original fixture; all variants retain original times/uint64 and return fresh nested evidence.
+- Web/CLI5ad3fe67fc3cf253ab3b6b61f0d8128529b6258a: actual focused RED56 with44pass/12feature failures; focused GREEN99/99, complete507/507, both TypeScript checks and Vite build passed. Existing invalid-command rejections already green were not counted as newly failing behavior.
+- Actual local browser selected all6 choices and read normal/unverified/abnormal as specified, with offline and all3false flags retained. This checks real selector wiring; no RPC or wallet action was performed.
+- The actual2511-byte state-mismatch report was downloaded and reimported through the file chooser, retaining digest cd29e29dfdac2887280f0e29357660e59933011dc0fbbfb2ebbcfe04f5c62423 and exact expected/observed sequences. Payload tampering was rejected and the last valid report retained. At390px, the active selector was328px wide and inner/document/body widths were all390; viewport override was reset. These new observations are separate from the original October16 print/media evidence.
+- Dependencies were reused unchanged for this increment. No new clean-install, live finality, probe or on-chain execution claim is attached to these results. The later reviewer/materials-only edits retain their own scope; old print/media checks keep October16 attribution.
+- The platform checkpoint is October20 Build50050/Under Review, not approval or final submission. Public evidence omits private contact and account records.

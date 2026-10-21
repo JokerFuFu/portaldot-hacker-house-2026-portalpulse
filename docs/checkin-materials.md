@@ -1,4 +1,8 @@
-# PortalPulse prototype materials — October 16, 2026
+# PortalPulse reviewer and prototype materials
+
+**October21 current update:** the prototype now provides six deterministic offline rehearsal choices in the webpage and CLI. [Reviewer steps and expected results](reviewer-guide.md) · [Reviewer guide PDF](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/materials/portalpulse-reviewer-guide-20261021.pdf). The progress materials were submitted with [Build50050](https://dorahacks.io/build/50050) on October20; last verified status **Under Review**, not organizer approval or final submission. [Project-maintained platform readback record](evidence/checkin-submission-20261020.json).
+
+## October16 historical media checkpoint
 
 Track: **Node Operations & Tooling**. [Open the prototype](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/) · [Materials index](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/materials/).
 
@@ -26,11 +30,11 @@ Behavioral revision9b0f6e4 retains its106 focused /460 full Node22.12 tests plus
 
 The official event page was re-read on October16. Check-in is due **October24 at12:00 UTC /20:00 Asia/Shanghai**. The working internal submission/readback target is **October23 at20:00 Asia/Shanghai**. Demo Day is currently November8–9, UTC dates; precise sessions still need organizer confirmation. [Official schedule and requirements](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail).
 
-The current form requires deployment information, public demo-video URL and Pitch Deck URL in addition to project, track, overview and repository fields. Its progress and outstanding-items fields allow a truthful status update. No PortalPulse Build entry or Check-in submission has been completed. Testnet deployment information cannot be replaced with a simulated transaction, a wallet address or the website URL. Simulated Check-in demo materials are permitted by the event page; that does not waive the deployment-information requirement.
+At the October16 form readback, deployment information, public demo-video URL and Pitch Deck URL were required in addition to project, track, overview and repository fields. Its progress and outstanding-items fields allowed a truthful status update; no Build existed then. That historical status was superseded by the October20 submitted/Under Review checkpoint above. Deployment was truthfully entered as not completed; simulated transactions, wallet addresses and the website URL were not presented as deployment proof.
 
 Next: confirm the organizer-recognized V3 configuration, observe network identity/runtime, verify mapped and funded deployer, then use the user's wallet for the probe deployment/update. Collect exact transaction inclusion/execution, linked finality and anchored caller-specific state readback before claiming real V3 verification. The final integration video and deployment proof will be refreshed after that work. The user handles wallet signatures and the form's agreement confirmation.
 
 
 ## October17 connection update
 
-The material files above retain their October16 synthetic/offline scope. Replacement official RPC configuration and real readonlyTest/3002 observations are now available in [the separate October17 checkpoint](v3-readonly-20261017.md), including an importable real historical monitoring report. No independent trusted genesis was published; identity, probe deployment, funded mapped deployer and real execution/readback remain pending. The470-test metadata repair supersedes the earlier460-test behavior only for that revision; the October16 print/media evidence is not reattributed. Check-in remains unsubmitted with the same internal and official deadlines.
+The media files above retain their October16 synthetic/offline scope. Replacement official RPC configuration and real readonlyTest/3002 observations are available in [the separate October17 checkpoint](v3-readonly-20261017.md), including an importable real historical monitoring report. At that checkpoint no independent trusted genesis or deployment proof was available; Check-in was still unsubmitted then. The470-test metadata repair supersedes the earlier460-test behavior only for that revision; October16 print/media evidence is not reattributed. Current submission and remaining integration status are recorded at the top of this document and in the [checklist](submission-checklist.md).

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-20T05:55:23.914663+00:00",
+  "evidenceType": "Project-maintained index of actual DoraHacks UI readback; not a platform-issued certificate",
+  "buildName": "PortalPulse",
+  "buildId": 50050,
+  "buildUrl": "https://dorahacks.io/build/50050",
+  "statusUrl": "https://dorahacks.io/hackathon/portaldot-hacker-house-2026/build",
+  "track": "Node Operations & Tooling",
+  "platformMessage": "Build Submitted!",
+  "lastReadBackStatus": "Under Review",
+  "projectSubmissionVerified": true,
+  "checkpointProgressMaterialsSubmitted": true,
+  "organizerApprovalVerified": false,
+  "finalSubmissionCompleted": false,
+  "probeDeployed": false,
+  "sourceRevisionAtCheckpoint": "ec66f98bc4354459208940d138d206692de31ed0",
+  "materialLinksReadBack": 5,
+  "readbackScope": "Success acknowledgement, own-Build card and Manage Submission status/track; fixed Build page description and five links matched. Post-submit UI did not separately expose all nine custom answers; their values were checked before the overall accepted submission."
+}

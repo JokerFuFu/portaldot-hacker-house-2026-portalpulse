@@ -1,0 +1,16 @@
+{
+  "preparedForDate": "2026-10-21",
+  "recordedAt": "2026-10-21T02:13:35.008957+00:00",
+  "scope": "Offline reviewer guide; no V3 deployment or live execution proof",
+  "guide": {
+    "filename": "portalpulse-reviewer-guide-20261021.pdf",
+    "bytes": 9971,
+    "sha256": "9295cc04c7702f37b0c2e471913958e528356b6a3238ccfb9b8b3eb4fede3625",
+    "pages": 3
+  },
+  "behaviorTestRevision": "5ad3fe67fc3cf253ab3b6b61f0d8128529b6258a",
+  "focusedTests": 99,
+  "fullTests": 507,
+  "prototypeMediaCheckpoint": "2026-10-16; original deck/video/A4 scope retained",
+  "platformCheckpoint": "2026-10-20 Build50050 submitted; last read Under Review, not approval/final"
+}

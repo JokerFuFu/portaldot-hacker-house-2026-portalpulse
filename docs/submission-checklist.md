@@ -1,19 +1,20 @@
 # PortalPulse 参赛提交清单
 
-截至 2026-10-17，官方替代配置和真实只读观测已记录，独立身份与部署条件仍待核验（[当前证据](v3-readonly-20261017.md)）。项目已有公开只读与离线执行原型，实际打印验收与初期材料已准备，仍未完成认可 V3 部署、Check-in 或最终提交。以下清单区分材料准备与平台提交。清单依据为 2026-10-16 再次实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)及真实提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
+截至 2026-10-21，当前进度材料已于10月20日随[Build50050](https://dorahacks.io/build/50050)提交，最后平台回读为 **Under Review**，不等于审核通过或最终提交。[提交记录与范围](evidence/checkin-submission-20261020.json)。独立可信身份、探针部署和实链完整流程仍待完成；离线六场景与复现说明见[评审指南](reviewer-guide.md)。清单依据为10月16日实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)和10月20日实际提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
 
 ## Check-in：2026-10-24 20:00 前（北京时间）
 
-- [ ] 如实说明当前进度和未完成事项。
-- [ ] 提供公众可访问的 GitHub 仓库，完整 README、持续更新的开发记录和产品架构图。
-- [ ] 提供 Portaldot 测试网部署信息：真实网络身份、适用的合约地址、交易哈希和可用时的浏览器链接；原始主网只读结果不能替代这些材料。
-- [ ] 提供可演示的原型或核心流程；选择可运行网页 / Web3 DApp 链接，或最多三分钟、展示至少一个核心功能的视频。
-- [ ] 若原型使用模拟数据，明确标示。官方允许 Check-in 演示材料使用模拟数据，并鼓励真实测试网交互；PortalPulse 自身验收仍要求完整真实测试网流程。
-- [ ] 在 DoraHacks 提交后回读材料、链接与提交状态，留存结果。
+- [x] 10月20日进度与未完成事项已如实填写并提交。
+- [x] 公开GitHub、README、开发记录、架构与演示/视频/Deck链接已提交；固定Build页五个链接已回读。
+- [x] 部署字段如实填写尚未部署，没有伪造地址或交易；平台整体接受提交。
+- [x] 可演示原型与92秒模拟截图讲解已提供，明确其人工数据和历史日期。
+- [x] DoraHacks成功提示、活动自己的Build卡片及Manage Submission均回读到Under Review，项目说明与材料链接匹配。
+- [ ] 主办方审核结果仍待确认；未将整体接受提交冒称所有九个自定义答案均有逐字段服务端读回。
+- [ ] 完整产品的认可V3探针部署、真实交易和状态证据仍未完成，原主网观测与模拟材料均不替代。
 
-当前原型可演示，但认可测试网部署证明仍缺失，不能据此宣称 Check-in 已合格。初期视频为92秒真实截图 / 实际报告组成的无声英文字幕讲解；实链演示在接入后更新。[材料与范围](checkin-materials.md)。
+本次是已提交待审的当前进度材料，尚不宣称Check-in审核合格。初期视频为92秒真实截图/实际报告组成的无声英文字幕讲解；实链演示仍待接入后更新。[材料与范围](checkin-materials.md)。
 
-内部目标为 **10-23 20:00 北京时间**，保留一天缓冲。10/16 表单读回显示：尚无可选的既有 PortalPulse Build，需要先建立项目；项目名、赛道、一句话、GitHub、部署信息、Demo视频URL、Deck URL为必填，进度与未完成事项可填。部署信息即使仍待完成也必须如实说明，不能空缺后假定合格。最终表单含 Terms of Use / Participant Agreement，接受步骤由本人确认。实际提交后仍需回读平台状态。
+原内部目标为 **10-23 20:00 北京时间**，现已提前产生真实提交记录；不要重复创建Build或重复提交。10月20日本人确认协议后完成提交，联系人/协议待办已解除。后续沿Build50050更新真实进度并回读审核状态，最终提交另行核验。
 
 ## Office Hours 申请：2026-10-27 20:00 前（北京时间）
 
