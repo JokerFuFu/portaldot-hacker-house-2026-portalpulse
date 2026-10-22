@@ -1,0 +1,9 @@
+{
+  "id": "portaldot-v3-test",
+  "name": "Portaldot V3 Test (official explorer identity)",
+  "source": "Organizer Titus designated https://scanner-testnet-v3.portaldot.dev/ on 2026-10-22; indexed block 1 Parent Hash published at https://scanner-testnet-v3.portaldot.dev/#/blocks/1 ; designation https://discord.com/channels/1440212664751099996/1479446495643303997/1562675414575484959",
+  "endpoint": "wss://test-node-v3.portaldot.dev",
+  "endpointAlias": "official-v3-test-ws",
+  "kind": "event-testnet",
+  "expectedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd"
+}

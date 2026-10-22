@@ -1,5 +1,7 @@
 # PortalPulse 参赛提交清单
 
+**2026-10-22更新：** [官方Week2公告](https://discord.com/channels/1440212664751099996/1506204427651125349/1562526145373544599)重申10/24 20:00北京时间截止，初步演示可使用标注模拟、偏好真实测试网交互，合约/交易证据按适用情况提供，审核/反馈预计by October26（无精确时区/时刻）。Build50050仍列在活动且可管理，本轮没有明确通过/修改意见；下列10/20待审回执保持原归属。新[网络身份与探针准备](probe-toolchain.md)不等于已部署或最终提交，不重复创建Build。
+
 截至 2026-10-21，当前进度材料已于10月20日随[Build50050](https://dorahacks.io/build/50050)提交，最后平台回读为 **Under Review**，不等于审核通过或最终提交。[提交记录与范围](evidence/checkin-submission-20261020.json)。独立可信身份、探针部署和实链完整流程仍待完成；离线六场景与复现说明见[评审指南](reviewer-guide.md)。清单依据为10月16日实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)和10月20日实际提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
 
 ## Check-in：2026-10-24 20:00 前（北京时间）
@@ -8,7 +10,7 @@
 - [x] 公开GitHub、README、开发记录、架构与演示/视频/Deck链接已提交；固定Build页五个链接已回读。
 - [x] 部署字段如实填写尚未部署，没有伪造地址或交易；平台整体接受提交。
 - [x] 可演示原型与92秒模拟截图讲解已提供，明确其人工数据和历史日期。
-- [x] DoraHacks成功提示、活动自己的Build卡片及Manage Submission均回读到Under Review，项目说明与材料链接匹配。
+- [x] 10月20日DoraHacks成功提示、活动自己的Build卡片及Manage Submission均回读到Under Review，项目说明与材料链接匹配；10月22日未明示新的审核结论。
 - [ ] 主办方审核结果仍待确认；未将整体接受提交冒称所有九个自定义答案均有逐字段服务端读回。
 - [ ] 完整产品的认可V3探针部署、真实交易和状态证据仍未完成，原主网观测与模拟材料均不替代。
 

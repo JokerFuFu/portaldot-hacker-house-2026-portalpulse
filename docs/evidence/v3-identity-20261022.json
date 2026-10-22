@@ -1,0 +1,105 @@
+{
+  "evidenceVersion": 1,
+  "evidenceType": "official-source-network-identity-and-probe-preparation",
+  "verifiedAt": "2026-10-22T09:44:11.198937+00:00",
+  "expectedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+  "networkIdentityVerified": true,
+  "sourceDesignation": {
+    "author": "Titus",
+    "publishedAt": "2026-10-22T03:54:11.940Z",
+    "source": "https://discord.com/channels/1440212664751099996/1479446495643303997/1562675414575484959",
+    "followup": "https://discord.com/channels/1440212664751099996/1479446495643303997/1562675491847016499",
+    "designatedExplorer": "https://scanner-testnet-v3.portaldot.dev/"
+  },
+  "publishedBlockOne": {
+    "source": "https://scanner-testnet-v3.portaldot.dev/#/blocks/1",
+    "title": "Portaldot V3 Testnet Blockchain Explorer",
+    "blockNumber": 1,
+    "blockHash": "0x1187e9c6e9788c964fd96f10c63eafe94cbd5f8dfd41a7cf20c5b9a3a8c77303",
+    "parentHash": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "stateRoot": "0x0619d5a52253d9168062ad50e0c4870f71742bf6786aa49fbfa944a3fb7802c2",
+    "extrinsicsRoot": "0xbace625acc83b8bcff72a4959d7058c710ac92b96caf75845cafe9af68f982c9",
+    "blockTimeDisplayed": "2026-10-12 15:54:06",
+    "blockTimeTimezoneNotAssumed": true,
+    "method": "Read official explorer block 1 Parent Hash. By block numbering, this is block 0 (genesis) hash.",
+    "rawUiExcerpt": "Block # 1; Hash 0x1187e9c6e9788c964fd96f10c63eafe94cbd5f8dfd41a7cf20c5b9a3a8c77303; Parent Hash 0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd"
+  },
+  "headerProof": {
+    "encodedBytes": 405,
+    "algorithm": "SCALE Header then Blake2b-256",
+    "computedHash": "0x1187e9c6e9788c964fd96f10c63eafe94cbd5f8dfd41a7cf20c5b9a3a8c77303",
+    "matchesPublishedHash": true
+  },
+  "runtime": {
+    "specName": "portaldot-v3",
+    "specVersion": 3002,
+    "transactionVersion": 2
+  },
+  "evmChainId": 420420777,
+  "checks": {
+    "officialSourceParentUsedAsExpected": true,
+    "nativeChainIsTest": true,
+    "observedGenesisMatchesExternal": true,
+    "blockOneNumber": true,
+    "blockOneHashMatchesExternal": true,
+    "blockOneParentMatchesExternal": true,
+    "stateRootMatchesExternal": true,
+    "extrinsicsRootMatchesExternal": true,
+    "twoRpcHeaderCopiesIdentical": true,
+    "localScaleHeaderHashMatchesPublished": true,
+    "allEightNativeResponsesSucceeded": true,
+    "evmChainIdMatchesOfficial": true,
+    "runtimeV3": true
+  },
+  "trustScope": "Organizer-designated HTTPS indexer publication plus RPC/header/hash agreement; operator-selected official network identity, not independent consensus or wallet possession.",
+  "monitoringRun": {
+    "samples": 4,
+    "requests": 36,
+    "success": 35,
+    "failure": 1,
+    "failedMethod": "state_getMetadata",
+    "timeoutMs": 8000,
+    "failedSample": 4,
+    "firstThreeIdentitySnapshots": "normal",
+    "exitCode": 1,
+    "status": "abnormal",
+    "collectorVerifiedNetwork": false,
+    "allGreen": false
+  },
+  "probePreparation": {
+    "compilerVersion": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+    "evmVersion": "paris",
+    "sourceSha256": "abafacf868ee594f83642c8fd3333d0ef73a501c8df63efb9d9ae082f605edce",
+    "creationBytecodeSha256": "a0fed7c8ba951dfcc7dc84d985235e9e671613d65133e1d668291cdb43e728b4",
+    "runtimeBytecodeSha256": "8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09",
+    "creationBytes": 384,
+    "runtimeBytes": 352,
+    "localContractBehaviorTestsPassed": 9,
+    "localBuildCommandTestsPassed": 4,
+    "realV3CreationEthCallRuntimeMatched": true,
+    "realTransactionSubmitted": false,
+    "contractDeployed": false,
+    "selectedSignerVerified": false,
+    "storageExposureVerified": false
+  },
+  "writeAllowed": false,
+  "completeProjectVerification": false,
+  "checkin": {
+    "buildUrl": "https://dorahacks.io/build/50050",
+    "submittedAtCheckpoint": "2026-10-20",
+    "historicalState": "Under Review",
+    "observationDate": "2026-10-22",
+    "ownBuildListed": true,
+    "currentExplicitReviewConclusion": false
+  },
+  "week2": {
+    "source": "https://discord.com/channels/1440212664751099996/1506204427651125349/1562526145373544599",
+    "publishedAt": "2026-10-21T18:01:03.389Z",
+    "deadlineBjt": "2026-10-24 20:00 UTC+8",
+    "preliminaryLabeledMockAllowed": true,
+    "realTestnetPreferred": true,
+    "contractAndTxWhereApplicable": true,
+    "reviewTargetLiteral": "by October 26",
+    "reviewExactTimezoneAndCutoffStated": false
+  }
+}

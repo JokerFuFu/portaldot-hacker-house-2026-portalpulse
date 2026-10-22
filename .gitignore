@@ -5,6 +5,7 @@ build/
 out/
 target/
 coverage/
+artifacts/
 .vite/
 *.tsbuildinfo
 

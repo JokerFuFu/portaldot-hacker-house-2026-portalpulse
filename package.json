@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build:core": "tsc",
+    "build:probe": "node scripts/build-probe.mjs",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.web.json --noEmit",
     "test": "npm run build:core && npm run build:web-tests && node --test tests/*.test.mjs",
     "cli": "node dist/cli/main.js",

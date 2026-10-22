@@ -84,6 +84,12 @@ All execution summaries stay `mode: offline`, `verifiedNetwork: false`, `writeAl
 This is a partial readonly/offline product. Localhost HTTP/WS tests and synthetic rehearsal do not count as real Portaldot V3 validation or full A03-A08/A09 acceptance. Probe deployment and complete live execution/finality/state readback remain outstanding. October16 deck/video are prepared synthetic prototype materials; October20 progress submission was last read Under Review, not approved or final. Reports stay local until separately reviewed for publication.
 
 
-## October17 official readonly profile
+## October22 official-source identity and probe toolchain
 
-The replacement V3 profile, real dated four-sample report and metadata-size compatibility result are documented in [the current connection checkpoint](v3-readonly-20261017.md). The example expectedGenesis remains null and the actual collector exits2/unverified. Only state_getMetadata permits a2MiB full JSON reply; all other RPC methods retain1MiB. This changes neither the16MiB monitoring-report limit nor the1MiB execution-report limit.
+An [explicit pinned V3 profile](../examples/portaldot-v3-config-20261022.json) now uses the organizer-designated explorer's block1 Parent Hash, cross-checked against RPC headers and local SCALE/Blake2b-256. It does not enable writing or establish independent consensus. The actual four-sample run retained a fourth metadata timeout and exited1; its first three identity snapshots were normal. The [sanitized evidence](evidence/v3-identity-20261022.json) preserves both facts.
+
+The separate local build command is `node scripts/build-probe.mjs --out artifacts/PortalPulseProbe.json`. It emits reproducible ABI/bytecode/provenance, refuses existing outputs and makes no RPC/signing call. Contract tests and a readonly constructor simulation do not constitute deployment. See [the toolchain and deployment gate](probe-toolchain.md).
+
+## Historical October17 official readonly profile
+
+The replacement V3 profile, real dated four-sample report and metadata-size compatibility result are documented in [that dated connection checkpoint](v3-readonly-20261017.md). Its historical expectedGenesis remains null and that collector exited2/unverified. Only state_getMetadata permits a2MiB full JSON reply; all other RPC methods retain1MiB. This changes neither the16MiB monitoring-report limit nor the1MiB execution-report limit.
