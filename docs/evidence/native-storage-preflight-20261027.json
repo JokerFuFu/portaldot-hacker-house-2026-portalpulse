@@ -1,0 +1,76 @@
+{
+  "evidenceType": "Operator-maintained sanitized readonly checkpoint; not organizer approval or a deployment receipt",
+  "observedAt": "2026-10-27T02:32:02.755Z",
+  "documentedAt": "2026-10-29T02:50:59.019390+00:00",
+  "network": {
+    "chain": "PortaldotV3 Test",
+    "specVersion": 3002,
+    "transactionVersion": 2,
+    "evmChainId": 420420777,
+    "identityEvidence": "v3-identity-20261022.json",
+    "scope": "Previously selected organizer-published identity; not independent consensus"
+  },
+  "pinnedBlock": {
+    "number": 211653,
+    "hash": "0x229b97902e14a141c79e115fd6ea6b45cf9a5c2ffc8559ae0c0dbf0e125c98d5"
+  },
+  "runtimeApi": {
+    "method": "ReviveApi_instantiate",
+    "actualMetadataVersion": 15,
+    "actualMetadataBytes": 624452,
+    "metadataSha256": "184f535a9829813ffc34c95023f3dba98ffe905b4446c94a3f2dcc0facd63886",
+    "readonlyRequests": 11,
+    "constructorStateCalls": 3
+  },
+  "artifact": {
+    "sourceRevision": "f1bf551f45cb3d0df23c98c33353a1b3a1849cc0",
+    "creationBytes": 384,
+    "runtimeBytes": 352,
+    "creationSha256": "a0fed7c8ba951dfcc7dc84d985235e9e671613d65133e1d668291cdb43e728b4",
+    "runtimeSha256": "8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09",
+    "returnedRuntimeMatches": true
+  },
+  "nativeStorage": {
+    "decimals": 14,
+    "estimatedChargeRaw": "4056600000000000",
+    "estimatedChargeTokens": "40.566",
+    "candidateCapRaw": "8113200000000000",
+    "candidateCapTokens": "81.132",
+    "candidateWeightLimit": {
+      "refTime": "2719592",
+      "proofSize": "0"
+    },
+    "boundedDryRunPassed": true,
+    "zeroCapRejectedWith": "revive.StorageDepositLimitExhausted",
+    "zeroCapModuleIndex": 80,
+    "zeroCapModuleError": 24
+  },
+  "independentCheck": {
+    "method": "Separate Python closed-subset SCALE parser over recorded native request/response bytes",
+    "passed": true,
+    "inputAndOutputBytesChecked": true,
+    "allThreeConstructorCallsPinnedToSameFinalizedBlock": true
+  },
+  "limits": {
+    "candidateAccountContextOnly": true,
+    "rawAccountSpecificEvidencePublished": false,
+    "selectedSignerVerified": false,
+    "actualTransactionFeeVerified": false,
+    "selectedWalletBudgetVerified": false,
+    "isolatedCodecValidatedForSigning": false,
+    "unknownSignedExtensions": [
+      "AuthorizeCall",
+      "EthSetOrigin"
+    ],
+    "futureStateGuarantee": false,
+    "writeAllowed": false,
+    "signingPerformed": false,
+    "transactionSubmitted": false,
+    "deploymentPerformed": false,
+    "liveUpdateFinalityAndReadbackCompleted": false
+  },
+  "references": [
+    "https://node-console.portaldot.dev/#/runtime",
+    "https://paritytech.github.io/polkadot-sdk/master/sp_api/trait.Metadata.html"
+  ]
+}

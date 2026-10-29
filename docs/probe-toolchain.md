@@ -1,6 +1,6 @@
-# Probe build and deployment preparation — October22
+# Probe build and deployment preparation — updated October29
 
-The probe source is implemented and tested locally. A readonly constructor `eth_call` on the identified V3 network returned its exact compiled runtime; no contract was deployed and no transaction was submitted. Actual signer ownership, storage/fee limits, deployment, one caller update and finality/state readback remain pending. The web application continues to provide readonly monitoring and offline evidence review.
+The probe source is implemented and tested locally. A readonly constructor `eth_call` and a later native candidate-account dry run on the identified V3 network returned the exact compiled runtime. The October27 native checkpoint also exercised a finite candidate storage-deposit limit and a zero-limit rejection. No contract was deployed and no transaction was submitted. Actual selected-wallet identity, transaction fee and final wallet budget, deployment, one caller update and finality/state readback remain pending. The web application continues to provide readonly monitoring and offline evidence review.
 
 ## Build the artifact
 
@@ -39,6 +39,22 @@ node dist/cli/main.js collect --config examples/portaldot-v3-config-20261022.jso
 ~~~
 
 The actual October22 four-sample run had35/36 successful requests: the fourth metadata request exceeded8 seconds, so the complete run correctly returned abnormal/exit1. Its first three identity snapshots were normal. The failed run was retained; a trusted source does not make incomplete observations green. Imported reports remain offline and preserve their original times.
+
+## October27 native readonly storage checkpoint
+
+At finalized block **211653**, eleven readonly system/`state_call` requests used that block's actual V15 metadata to encode and decode `ReviveApi_instantiate`. The existing384-byte creation code returned the artifact's352-byte runtime. Three constructor calls shared that exact finalized block:
+
+| Candidate-account check | Recorded result |
+|---|---|
+| No explicit gas/storage limit, readonly estimate | Succeeded; storage charge40.566 tPOT (4056600000000000 native units, decimals14) |
+| Explicit finite storage limit81.132 tPOT | Succeeded; candidate Weight limit refTime2719592/proofSize0 |
+| Same Weight limit, storage limit0 | Failed explicitly with revive.StorageDepositLimitExhausted, Module80/Error24 |
+
+A separate Python parser checked the actual SCALE request/response bytes, metadata envelope/hash, creation/runtime bytes, amounts and negative-case error code. See the [sanitized checkpoint](evidence/native-storage-preflight-20261027.json). The metadata was624452 bytes, SHA256 `184f535a9829813ffc34c95023f3dba98ffe905b4446c94a3f2dcc0facd63886`; [the SDK Metadata API](https://paritytech.github.io/polkadot-sdk/master/sp_api/trait.Metadata.html) describes querying an explicitly supported metadata version.
+
+This is an operator-maintained candidate-account snapshot, separate from a deployment receipt or independent consensus proof. The81.132 tPOT limit is a tested finite simulation cap, not an amount paid, a future-state guarantee or the selected wallet's final budget. The actual transaction fee remains unverified; do not simply add this deposit to the earlier EVM gas-price arithmetic as a total fee. The isolated codec warned about unknown AuthorizeCall/EthSetOrigin signed extensions and was used only for readonly encoding/decoding, never as a validated signing client.
+
+Raw origin, predicted address and account-specific requests remain private. Earlier local metadata-decoding failures were preserved; the successful pinned run and independent byte check support this checkpoint. These October27 observations were documented publicly on October29, without rerunning or reattributing the October22 application tests. The webpage continues readonly/offline operation.
 
 ## Before a real signature
 
