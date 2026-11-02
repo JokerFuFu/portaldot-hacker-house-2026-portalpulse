@@ -20,7 +20,7 @@ async function fixture(t,kind,reply,{delayConnect=false}={}) {
   const endpoint=`${kind==='ws'?'ws':'http'}://127.0.0.1:${server.address().port}`;
   const clients=[];
   t.after(async()=>{for(const client of clients)client.close();for(const ws of wss?.clients??[])ws.terminate();server.closeAllConnections();for(const socket of sockets)socket.destroy();await new Promise(resolve=>server.close(resolve));});
-  return {calls,client:(options)=>{const client=createRpc(endpoint,options);clients.push(client);return client;}};
+  return {endpoint,calls,client:(options)=>{const client=createRpc(endpoint,options);clients.push(client);return client;}};
 }
 for(const kind of ['http','ws']){
   test(`${kind}: forbidden mutation never reaches server; readonly request correlates`,async t=>{
@@ -98,3 +98,17 @@ for(const kind of ['http','ws']){
   });
 }
 test('expired WebSocket deadline never opens or emits a late request',async t=>{const{client,calls}=await fixture(t,'ws',(q,send)=>send({jsonrpc:'2.0',id:q.id,result:true}));await assert.rejects(client({timeoutMs:0.000001}).request('system_chain'),/timeout|deadline/i);await new Promise(resolve=>setTimeout(resolve,30));assert.equal(calls.length,0);});
+
+for(const kind of ['http','ws']){
+  test(kind+': configured endpoint is redacted before a boundary-crossing RPC error is truncated',async t=>{
+    let endpoint;
+    const f=await fixture(t,kind,(q,send)=>send({jsonrpc:'2.0',id:q.id,error:{code:-32000,message:'x'.repeat(500)+endpoint}}));
+    endpoint=f.endpoint;
+    await assert.rejects(f.client().request('system_chain'),error=>{
+      assert.equal(error.code,'-32000');
+      assert.ok(!error.message.includes('http://')&&!error.message.includes('ws://'),'no endpoint fragment may survive truncation');
+      assert.ok(error.message.length<=512);
+      return true;
+    });
+  });
+}

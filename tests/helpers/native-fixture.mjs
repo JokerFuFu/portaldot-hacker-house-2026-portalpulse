@@ -39,7 +39,7 @@ export function syntheticMetadata() {
   registry.setMetadata(metadata);
   return {registry,metadataHex:metadata.toHex()};
 }
-export function nativeFixture({outcomes=[{index:1,success:true}],extrinsics=['0x1004000000','0x1004000001']}={}) {
+export function nativeFixture({outcomes=[{index:1,success:true}],extrinsics=['0x1004000000','0x1404000004aa']}={}) {
   const {registry,metadataHex}=syntheticMetadata();
   // A real SCALE Vec<EventRecord>, with independently specified little-endian fields.
   const records=outcomes.map(({index,success,phase='ApplyExtrinsic'})=>{

@@ -144,6 +144,11 @@ export async function collectNativeObservation(rpc,input,options) {
     }catch{throw new ObservationError('metadata','Unable to decode exact portable parent metadata and System.Events type');}
     result.metadata={atBlockHash:result.block.parentHash,version:Number(metadata.version),bytes:rawMetadata.length,
       sha256:createHash('sha256').update(rawMetadata).digest('hex'),codecValidatedForSigning:false};
+    stage='extrinsic';
+    try{
+      const rawTarget=bytes(block.extrinsics[index],512*1024,'target extrinsic');
+      exactCodec(registry.createType('Extrinsic',rawTarget),rawTarget,'target extrinsic');
+    }catch{throw new ObservationError('extrinsic','Unable to decode the exact target extrinsic with execution-time metadata');}
     stage='events';
     const storageHex=await request('state_getStorage',[EVENTS_KEY,blockHash]);
     if(storageHex===null)return result;

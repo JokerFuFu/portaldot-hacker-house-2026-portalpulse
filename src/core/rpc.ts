@@ -1,4 +1,4 @@
-import {normalizeEndpoint} from './config.js';
+import {normalizeEndpoint,endpointRedactor} from './config.js';
 import type {ReadOnlyRpc} from './types.js';
 
 const READONLY_METHODS = new Set([
@@ -14,7 +14,7 @@ export class RpcError extends Error {
   constructor(public readonly code:string, message:string) {super(message);this.name='RpcError';}
 }
 
-function parseResponse(text:string,id:number):unknown {
+function parseResponse(text:string,id:number,redact:(message:string)=>string):unknown {
   let data:unknown;
   try {data=JSON.parse(text);} catch {throw new RpcError('malformed','Malformed JSON response');}
   if (!data || typeof data!=='object' || Array.isArray(data)) throw new RpcError('malformed','Malformed JSON-RPC response');
@@ -29,7 +29,7 @@ function parseResponse(text:string,id:number):unknown {
     if(!value || typeof value!=='object' || Array.isArray(value))throw new RpcError('malformed','Malformed response error');
     const rpcError=value as Record<string,unknown>;
     if(!Number.isSafeInteger(rpcError.code)||typeof rpcError.message!=='string')throw new RpcError('malformed','Malformed response error');
-    throw new RpcError(String(rpcError.code),rpcError.message.slice(0,512));
+    throw new RpcError(String(rpcError.code),redact(rpcError.message).slice(0,512));
   }
   return response.result;
 }
@@ -41,6 +41,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
   } catch (error) {
     throw new RpcError('endpoint', error instanceof Error ? error.message : 'Invalid endpoint');
   }
+  const redact=endpointRedactor(endpoint);
   const timeoutMs=options.timeoutMs??8000;
   if(!Number.isFinite(timeoutMs)||timeoutMs<=0)throw new RpcError('timeout','Timeout must be positive and finite');
   const pending=new Set<(error:RpcError)=>void>();
@@ -73,7 +74,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
         const message=(event:MessageEvent)=>{
           if(typeof event.data!=='string'){finish(new RpcError('malformed','Malformed non-text JSON response'));return;}
           if(new TextEncoder().encode(event.data).byteLength>responseLimit){finish(new RpcError('size','Response exceeds size limit'));return;}
-          try{finish(undefined,parseResponse(event.data,id));}catch(error){finish(error as RpcError);}
+          try{finish(undefined,parseResponse(event.data,id,redact));}catch(error){finish(error as RpcError);}
         };
         const deadline=()=>{
           const remaining=timeoutMs-(performance.now()-started);
@@ -95,7 +96,7 @@ export function createRpc(endpoint:string,options:{timeoutMs?:number}={}):ReadOn
               const chunks:Uint8Array[]=[];let size=0;
               while(true){const chunk=await reader.read();if(chunk.done)break;size+=chunk.value.byteLength;if(size>responseLimit)throw new RpcError('size','Response exceeds size limit');chunks.push(chunk.value);}
               const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
-              finish(undefined,parseResponse(new TextDecoder('utf-8',{fatal:true}).decode(bytes),id));
+              finish(undefined,parseResponse(new TextDecoder('utf-8',{fatal:true}).decode(bytes),id,redact));
             }catch(error){finish(error instanceof RpcError?error:new RpcError('network','Network request failed'));}
             finally{if(reader){try{await reader.cancel();}catch{}reader.releaseLock();}}
           })();

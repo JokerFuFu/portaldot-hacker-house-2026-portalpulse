@@ -1,5 +1,15 @@
 # 本地只读增量开发证据
 
+## 2026-11-02 原生交易只读观察器
+
+新增Node-only CLI：指定block hash/native extrinsic hash，核对genesis与SCALE header/hash，按父块metadata完整解码目标extrinsic并逐字节往返，只接受相同ApplyExtrinsic索引的系统成功/失败。多项、冲突、错归属、损坏metadata/events/交易体、超时或中止均保留异常/未验证；HTTP/WS错误在截断前脱敏，输出使用独占创建防覆盖。现有网页和离线报告Schema未改。
+
+控制器在Node22.12实际验证：原基线520/520；初始42聚焦/562全套后，一次独立整组复核发现2项Important（交易体仅验长度、RPC错误先截断泄漏端点残片），无Critical/Minor。6项新增回归均实际RED，再由控制器一次修复；最终原生+RPC聚焦93/93、全套568/568、类型与生产构建通过。独立复核自行跑的collector29通过/1因其沙箱listenEPERM无法执行，不将其写成独立全套通过；没有再次派人复审来替代回归证据。
+
+真实官方V3历史块211653的公开index0交易，用修复后的源文件哈希试读：5个collector只读请求，加1个选定目标读取，精确目标解码及ExtrinsicSuccess归属匹配，exit0。父块V14metadata561916B/SHA6cdd6dd8df07912cde51e8d8614d8d3f5e2bfa26305350483c1c1141d39f2015。它不是PortalPulse部署/更新或本人签名交易；原始交易/账户未公开，脱敏[检查点](evidence/native-observation-20261102.json)保留源码哈希。AuthorizeCall/EthSetOrigin警告仍在stderr，签名客户端未验证。
+
+只读系统dispatch关联不校验body trie root/storage root、批处理或包装器内部结果、探针调用语义、签名者、独立共识、最终确认或合约状态。相关标记继续false，A08完整实链仍未通过。实际钱包/费用预算、部署/更新、应用最终确认/状态回读/报告网页集成及新实链视频仍待。Node用法、版本与限制见[说明](native-observation.md)。
+
 本页按日期保留历史证据；文末“October21 offline rehearsal increment”为本轮记录。10/20当前进度材料已随Build50050提交待审，尚无认可V3探针或完整实链执行证明；早期的“无提交/托管”仅属于当时检查点。
 
 2026-10-14。本页按提交区分实现者验证、独立最低运行时复现和实际浏览器观察。没有真实 V3 接入、探针、钱包、签名、交易或提交证据。全部浏览器及 RPC 测试使用本地人工数据或命名 localhost 夹具。

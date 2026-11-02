@@ -1,6 +1,6 @@
 {
   "evidenceType": "Operator-maintained scoped readonly collector trial, not organizer approval, proof of ownership or a PortalPulse probe receipt",
-  "observedAt": "2026-11-02T02:16:53.012Z",
+  "observedAt": "2026-11-02T02:23:30.562Z",
   "observationMode": "readonly-native-observation",
   "network": {
     "expectedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
@@ -44,7 +44,7 @@
   "sourceFiles": [
     {
       "path": "scripts/native-observation.mjs",
-      "sha256": "f8f36e8220cc2c9fbe29e419ce35157edb0429cf4b4442860196c550139d6419"
+      "sha256": "1cc6326c68d95f7ba20143656b213456c9ef8b3604d4a27ed2fecb1d00c3df6f"
     },
     {
       "path": "scripts/observe-native.mjs",
@@ -52,7 +52,7 @@
     },
     {
       "path": "src/core/rpc.ts",
-      "sha256": "aa1946a0b004a60ffebc2adb21ad0edd8faa71ff1d2d83517115a66fb9f75a81"
+      "sha256": "b3fc842acf962206927be023276d32af6a2fc3a13d71a467eab1a85aca93f846"
     },
     {
       "path": "package-lock.json",
@@ -80,5 +80,7 @@
   "portalPulseProbeUpdated": false,
   "transactionSubmittedByThisCommand": false,
   "rawExtrinsicMetadataEventsAccountsOrLocalPathsPublished": false,
-  "scope": "Header hashing and exact SCALE decoding correlate the supplied RPC data. Body trie root, storage root, contract/inner-call semantics, finality ancestry, source authentication and consensus are not verified."
+  "scope": "Header hashing and exact SCALE decoding correlate the supplied RPC data. Body trie root, storage root, contract/inner-call semantics, finality ancestry, source authentication and consensus are not verified.",
+  "targetStructuralDecodeVerified": true,
+  "targetStructuralDecodeScope": "Exact extrinsic roundtrip with execution-time registry, not signature, signer, caller or contract semantics verification"
 }

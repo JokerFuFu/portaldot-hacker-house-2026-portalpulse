@@ -111,3 +111,26 @@ test('trailing bytes in a digest item cannot be silently normalized into a match
   const r=await observe(f);
   assert.equal(r.status,'abnormal');assert.equal(r.error.code,'block');
 });
+
+for(const [label,bad] of [
+  ['unsupported version','0x0400'],
+  ['truncated call','0x080400'],
+  ['trailing call bytes','0x140400000000'],
+])test('malformed target extrinsic '+label+' cannot acquire a successful dispatch',async()=>{
+  const f=nativeFixture({extrinsics:['0x1004000000',bad]});
+  const r=await observe(f);
+  assert.equal(r.status,'abnormal');assert.equal(r.dispatch,null);assert.equal(r.error.code,'extrinsic');
+});
+test('RPC error crossing truncation boundary is redacted before saved observation',async t=>{
+  const f=nativeFixture();f.config.endpoint='https://private.internal.example/secret-route';
+  const previous=globalThis.fetch;
+  globalThis.fetch=async(_url,options)=>{
+    const request=JSON.parse(options.body);
+    return new Response(JSON.stringify({jsonrpc:'2.0',id:request.id,error:{code:-32000,message:'x'.repeat(490)+f.config.endpoint}}));
+  };
+  t.after(()=>{globalThis.fetch=previous;});
+  const client=createRpc(f.config.endpoint);t.after(()=>client.close());
+  const r=await collector()(client,f.config,{blockHash:f.blockHash,transactionHash:f.transactionHash});
+  assert.equal(r.status,'abnormal');
+  assert.ok(!JSON.stringify(r).includes('private.intern'),'no partial configured hostname may survive');
+});
