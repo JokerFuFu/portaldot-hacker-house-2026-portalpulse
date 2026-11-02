@@ -1,0 +1,84 @@
+{
+  "evidenceType": "Operator-maintained scoped readonly collector trial, not organizer approval, proof of ownership or a PortalPulse probe receipt",
+  "observedAt": "2026-11-02T02:16:53.012Z",
+  "observationMode": "readonly-native-observation",
+  "network": {
+    "expectedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "observedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "identityEvidence": "v3-identity-20261022.json"
+  },
+  "block": {
+    "hash": "0x229b97902e14a141c79e115fd6ea6b45cf9a5c2ffc8559ae0c0dbf0e125c98d5",
+    "number": "211653",
+    "parentHash": "0x20c568da4a55335c7edb6a77bcd312662f854f2527a9aa676a1c3c059fe3aa74"
+  },
+  "target": {
+    "transactionHash": "0xd8eb189e9f38f388998fdf35b29e8e7e3a283d31953491efa540f052b96f9e6f",
+    "transactionIndex": 0,
+    "transactionCount": 1,
+    "scope": "Historical public extrinsic at position0. Role, signer, caller and ownership were not identified. Not a PortalPulse deployment or update."
+  },
+  "executionRuntime": {
+    "atBlockHash": "0x20c568da4a55335c7edb6a77bcd312662f854f2527a9aa676a1c3c059fe3aa74",
+    "specName": "portaldot-v3",
+    "specVersion": 3002,
+    "transactionVersion": 2
+  },
+  "metadata": {
+    "atBlockHash": "0x20c568da4a55335c7edb6a77bcd312662f854f2527a9aa676a1c3c059fe3aa74",
+    "version": 14,
+    "bytes": 561916,
+    "sha256": "6cdd6dd8df07912cde51e8d8614d8d3f5e2bfa26305350483c1c1141d39f2015",
+    "codecValidatedForSigning": false
+  },
+  "systemDispatch": {
+    "outcome": "success",
+    "systemEvent": "ExtrinsicSuccess",
+    "transactionHash": "0xd8eb189e9f38f388998fdf35b29e8e7e3a283d31953491efa540f052b96f9e6f",
+    "blockHash": "0x229b97902e14a141c79e115fd6ea6b45cf9a5c2ffc8559ae0c0dbf0e125c98d5",
+    "transactionIndex": 0,
+    "failureReason": null
+  },
+  "collectorReadonlyCalls": 5,
+  "separateReadonlyTargetDiscoveryCalls": 1,
+  "sourceFiles": [
+    {
+      "path": "scripts/native-observation.mjs",
+      "sha256": "f8f36e8220cc2c9fbe29e419ce35157edb0429cf4b4442860196c550139d6419"
+    },
+    {
+      "path": "scripts/observe-native.mjs",
+      "sha256": "e4a65d6eef799e1ccb23e14489c3a40cb43df6b9f692ea73d24fb789b6e56a79"
+    },
+    {
+      "path": "src/core/rpc.ts",
+      "sha256": "aa1946a0b004a60ffebc2adb21ad0edd8faa71ff1d2d83517115a66fb9f75a81"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3a2ac160cdad7b27adb30b3e16ef13f5e6b943e47c4ffad1b24e8c2d82e67d59"
+    }
+  ],
+  "codecWarnings": {
+    "retainedOnStderr": true,
+    "unknownSignedExtensions": [
+      "AuthorizeCall",
+      "EthSetOrigin"
+    ],
+    "signingClientValidated": false
+  },
+  "limits": {
+    "verifiedNetwork": false,
+    "writeAllowed": false,
+    "fullVerification": false,
+    "finalityVerified": false,
+    "contractStateVerified": false,
+    "signerVerified": false,
+    "extrinsicsRootVerified": false
+  },
+  "portalPulseProbeDeployed": false,
+  "portalPulseProbeUpdated": false,
+  "transactionSubmittedByThisCommand": false,
+  "rawExtrinsicMetadataEventsAccountsOrLocalPathsPublished": false,
+  "scope": "Header hashing and exact SCALE decoding correlate the supplied RPC data. Body trie root, storage root, contract/inner-call semantics, finality ancestry, source authentication and consensus are not verified."
+}

@@ -1,5 +1,7 @@
 # PortalPulse 产品设计
 
+**2026-11-02原生观察增量：** 独立Node CLI新增原生block/extrinsic/system-event只读采集，依据实际父区块metadata解码并核对精确交易索引；现有网页与离线执行Schema不变。原生系统dispatch成功不能证明包装/批处理内部调用或PortalPulseProbe成功，最终确认/状态读回仍false；详见[原生观察](native-observation.md)。该增量是完整六阶段实链采集的前置层，仍需合同语义、最终确认路径、锚定读回及现有执行报告/网页集成。
+
 设计日期：2026-10-09；进展更新：2026-10-22。赛道：Node Operations & Tooling。六模块目标保留，已实现身份观测、监控、只读CLI/网页、离线六阶段核验与版本化报告。探针源码及可复现编译工具已实现，本地EVM行为和一次真实V3只读构造器模拟已验证；[新官方身份来源与范围](evidence/v3-identity-20261022.json)已核对。真实探针部署/更新、应用内执行事件采集、最终确认及锚定状态回读仍待完成，实际签名和费用/存储预算先于部署。[探针准备](probe-toolchain.md)、[时间线](roadmap.md)和[验收标准](acceptance.md)分别记录事实与目标。
 
 ## 当前离线执行增量

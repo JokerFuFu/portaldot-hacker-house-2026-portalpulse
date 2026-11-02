@@ -4,6 +4,7 @@ import type {ReadOnlyRpc} from './types.js';
 const READONLY_METHODS = new Set([
   'system_chain', 'system_properties', 'state_getRuntimeVersion', 'state_getMetadata',
   'rpc_methods', 'chain_getBlockHash', 'chain_getHeader', 'chain_getFinalizedHead',
+  'chain_getBlock', 'state_getStorage',
 ]);
 const RESPONSE_LIMIT = 1024 * 1024;
 const METADATA_RESPONSE_LIMIT = 2 * 1024 * 1024;
