@@ -6,7 +6,7 @@ export const parent='0x'+'22'.repeat(32);
 export const eventsKey='0x26aa394eea5630e07c48ae0c9558cef780d41e5e16056765bc8461851072c9d7';
 const field=(name,type)=>({name,type,typeName:null,docs:[]});
 const variant=(name,index,fields=[])=>({name,index,fields,docs:[]});
-export function syntheticMetadata() {
+export function syntheticMetadata(withRevive = false, signedExtensionIdentifier) {
   const types=[];
   function add(path,def,params=[]){const id=types.length;types.push({id,type:{path,params,def,docs:[]}});return id;}
   add([],{primitive:'U32'}); //0
@@ -30,17 +30,28 @@ export function syntheticMetadata() {
   add(['sp_runtime','generic','unchecked_extrinsic','UncheckedExtrinsic'],{composite:{fields:[]}},[{name:'Address',type:2},{name:'Call',type:12},{name:'Signature',type:2},{name:'Extra',type:16}]); //15
   add([],{tuple:[]}); //16
   add(['synthetic_runtime','Runtime'],{composite:{fields:[]}}); //17
+  const pallets=[{name:'System',index:0,storage:{prefix:'System',items:[{name:'Events',modifier:'Default',type:{Plain:11},fallback:'0x00',docs:[]}]},calls:{type:13},events:{type:6},constants:[],errors:null}];
+  if(withRevive){
+    const h160=add(['primitive_types','H160'],{array:{len:20,type:1}});
+    const revive=add(['pallet_revive','pallet','Event'],{variant:{variants:[
+      variant('ContractEmitted',0,[field('contract',h160),field('data',14),field('topics',10)]),
+      variant('EthExtrinsicRevert',1,[field('dispatch_error',3)]),
+    ]}});
+    types[7].type.def.variant.variants.push(variant('Revive',80,[field(null,revive)]));
+    pallets.push({name:'Revive',index:80,storage:null,calls:null,events:{type:revive},constants:[],errors:null});
+  }
   const registry=new TypeRegistry();
   const metadata=new Metadata(registry,{magicNumber:0x6174656d,metadata:{V14:{
     lookup:{types},
-    pallets:[{name:'System',index:0,storage:{prefix:'System',items:[{name:'Events',modifier:'Default',type:{Plain:11},fallback:'0x00',docs:[]}]},calls:{type:13},events:{type:6},constants:[],errors:null}],
-    extrinsic:{type:15,version:4,signedExtensions:[]},type:17,
+    pallets,
+    extrinsic:{type:15,version:4,signedExtensions:signedExtensionIdentifier ?
+      [{identifier:signedExtensionIdentifier,type:16,additionalSigned:16}] : []},type:17,
   }}});
-  registry.setMetadata(metadata);
+  registry.setMetadata(metadata,undefined,undefined,true);
   return {registry,metadataHex:metadata.toHex()};
 }
-export function nativeFixture({outcomes=[{index:1,success:true}],extrinsics=['0x1004000000','0x1404000004aa']}={}) {
-  const {registry,metadataHex}=syntheticMetadata();
+export function nativeFixture({outcomes=[{index:1,success:true}],extrinsics=['0x1004000000','0x1404000004aa'],probeEvents=[]}={}) {
+  const {registry,metadataHex}=syntheticMetadata(probeEvents.length>0);
   // A real SCALE Vec<EventRecord>, with independently specified little-endian fields.
   const records=outcomes.map(({index,success,phase='ApplyExtrinsic'})=>{
     const position=Buffer.alloc(4);position.writeUInt32LE(index);
@@ -48,6 +59,15 @@ export function nativeFixture({outcomes=[{index:1,success:true}],extrinsics=['0x
     const outcome=success?'0000'+'00'.repeat(8):'0001'+'02'+'00'.repeat(8);
     return prefix+outcome+'00';
   });
+  for(const e of probeEvents){
+    const position=Buffer.alloc(4);position.writeUInt32LE(e.index);
+    const prefix='00'+position.toString('hex');
+    if(e.revert){records.push(prefix+'50010200');continue;}
+    const size=(e.data.length-2)/2;
+    const compact=n=>(n*4).toString(16).padStart(2,'0');
+    records.push(prefix+'5000'+e.contract.slice(2)+compact(size)+e.data.slice(2)+
+      compact(e.topics.length)+e.topics.map(topic=>topic.slice(2)).join('')+'00');
+  }
   if(records.length>=64)throw Error('Small synthetic fixture only');
   const eventHex='0x'+(records.length*4).toString(16).padStart(2,'0')+records.join('');
   const header={parentHash:parent,number:'0x0a',stateRoot:'0x'+'33'.repeat(32),extrinsicsRoot:'0x'+'44'.repeat(32),digest:{logs:[]}};

@@ -3,18 +3,13 @@ import {createHash} from 'node:crypto';
 import {Metadata,TypeRegistry} from '@polkadot/types';
 import {blake2AsHex} from '@polkadot/util-crypto';
 import {validateNetworkConfig,endpointRedactor} from '../dist/core/config.js';
+import {bytes,exactCodec,exactNativeHeader,H256} from './native-header.mjs';
+import {probeEvent} from './probe-event.mjs';
 
 const MAINNET='0x83b5212c69f85f3996f8696bb35bf913af51b176a5f53d0a74fd3a83dc0b8a54';
 const EVENTS_KEY='0x26aa394eea5630e07c48ae0c9558cef780d41e5e16056765bc8461851072c9d7';
-const H256=/^0x[0-9a-fA-F]{64}$/;
 class ObservationError extends Error {
   constructor(code,message){super(message);this.code=code;}
-}
-function bytes(value,max,label) {
-  if(typeof value!=='string'||value.length<2||value.length>2+2*max||!/^0x(?:[0-9a-fA-F]{2})*$/.test(value)){
-    throw new Error('Invalid or oversized '+label);
-  }
-  return Buffer.from(value.slice(2),'hex');
 }
 function compact(data) {
   const mode=data[0]&3;
@@ -23,14 +18,16 @@ function compact(data) {
   if(mode===2&&data.length>=4){const n=data.readUInt32LE(0)>>>2;if(n>=16384)return {value:n,offset:4};}
   throw new Error('Noncanonical or oversized compact length');
 }
-function exactCodec(codec,raw,label) {
-  if(!Buffer.from(codec.toU8a()).equals(raw))throw new Error('Noncanonical or trailing '+label);
-  return codec;
-}
 function short(text,redact) {
   return redact(String(text)).replace(/[\u0000-\u001f\u007f]/g,' ').slice(0,512);
 }
-export async function collectNativeObservation(rpc,input,options) {
+export function collectNativeObservation(rpc,input,options) {
+  return collectNative(rpc,input,options,null);
+}
+export function collectNativeProbeObservation(rpc,input,options,intent) {
+  return collectNative(rpc,input,options,intent);
+}
+async function collectNative(rpc,input,options,intent) {
   const config=validateNetworkConfig(input);
   if(config.kind!=='event-testnet'||config.endpoint===null||config.expectedGenesis===null||config.expectedGenesis===MAINNET){
     throw new Error('Native observation requires an explicit event-testnet endpoint and non-mainnet expected genesis');
@@ -80,27 +77,10 @@ export async function collectNativeObservation(rpc,input,options) {
     const response=await request('chain_getBlock',[blockHash]);
     if(response===null)return result;
     const block=response?.block;
-    const header=block?.header;
-    const headerKeys=['parentHash','number','stateRoot','extrinsicsRoot','digest'];
-    if(!header||typeof header!=='object'||Object.keys(header).length!==5||headerKeys.some(k=>!Object.hasOwn(header,k))||
-      !H256.test(header.parentHash)||!H256.test(header.stateRoot)||!H256.test(header.extrinsicsRoot)||
-      typeof header.number!=='string'||!/^0x[0-9a-fA-F]{1,64}$/.test(header.number)||
-      !header.digest||Object.keys(header.digest).length!==1||!Array.isArray(header.digest.logs)||header.digest.logs.length>512){
-      throw new ObservationError('block','Malformed selected block header');
-    }
-    let headerBytes;
-    try{
-      const headerRegistry=new TypeRegistry();
-      let size=0;
-      for(const log of header.digest.logs){
-        const raw=bytes(log,512*1024,'digest');size+=raw.length;
-        exactCodec(headerRegistry.createType('DigestItem',raw),raw,'digest item');
-      }
-      if(size>512*1024)throw new Error('Digest size');
-      headerBytes=headerRegistry.createType('Header',header).toU8a();
-    }catch{throw new ObservationError('block','Invalid or oversized selected block header');}
-    if(blake2AsHex(headerBytes,256)!==blockHash)throw new ObservationError('block','Selected header hash mismatch');
-    if(BigInt(header.number)===0n)throw new ObservationError('block','Genesis block has no transaction execution context');
+    let header;
+    try {header=exactNativeHeader(block?.header,blockHash);}
+    catch(error){throw new ObservationError('block',error.message);}
+    if(header.number==='0')throw new ObservationError('block','Genesis block has no transaction execution context');
     if(!Array.isArray(block.extrinsics)||block.extrinsics.length>8192){
       throw new ObservationError('block','Invalid or oversized extrinsic list');
     }
@@ -113,13 +93,14 @@ export async function collectNativeObservation(rpc,input,options) {
       total+=raw.length;if(total>512*1024)throw new Error('Extrinsic body size limit');
       hashes.push(blake2AsHex(raw,256));
     }
-    result.block={hash:blockHash,number:BigInt(header.number).toString(),parentHash:header.parentHash.toLowerCase()};
+    result.block=header;
     const matches=hashes.flatMap((hash,index)=>hash===transactionHash?[index]:[]);
     if(matches.length===0)return result;
     if(matches.length!==1)throw new ObservationError('block','Ambiguous transaction hash in selected block');
     const index=matches[0];
     result.inclusion={transactionHash,transactionIndex:index,transactionCount:hashes.length};
     result.checks.inclusion={state:'normal'};
+    if(intent)result.transactions=hashes;
     stage='runtime';
     const runtime=await request('state_getRuntimeVersion',[result.block.parentHash]);
     if(!runtime||typeof runtime.specName!=='string'||!runtime.specName.length||runtime.specName.length>128||
@@ -135,7 +116,8 @@ export async function collectNativeObservation(rpc,input,options) {
       registry=new TypeRegistry();
       metadata=exactCodec(new Metadata(registry,rawMetadata),rawMetadata,'metadata');
       if(![14,15].includes(Number(metadata.version)))throw new Error('Only portable metadata supported');
-      registry.setMetadata(metadata);
+      // Keep the existing generic observer warnings. Probe diagnostics omit provider text.
+      registry.setMetadata(metadata,undefined,undefined,Boolean(intent));
       const system=metadata.asLatest.pallets.find(p=>p.name.toString()==='System');
       const storage=system?.storage.unwrapOr(null);
       const entry=storage?.items.find(x=>x.name.toString()==='Events');
@@ -159,17 +141,20 @@ export async function collectNativeObservation(rpc,input,options) {
       events=exactCodec(registry.createType(eventType,raw),raw,'events');
       if(!Array.isArray(events)||events.length>8192)throw new Error('Invalid event vector');
     }catch{throw new ObservationError('events','Unable to decode exact bounded System.Events bytes');}
-    const outcomes=[];
+    const outcomes=[],probeEvents=[];
     for(const record of events){
       if(!record.phase||!record.event)throw new ObservationError('events','Invalid EventRecord shape');
       if(!record.phase.isApplyExtrinsic)continue;
       const eventIndex=record.phase.asApplyExtrinsic.toNumber();
       if(eventIndex>=hashes.length)throw new ObservationError('events','Event phase index outside selected block');
       const event=record.event;
-      if(eventIndex===index&&event.section==='system'&&['ExtrinsicSuccess','ExtrinsicFailed'].includes(event.method)){
+      if(eventIndex!==index)continue;
+      if(intent&&event.section==='revive')probeEvents.push(event);
+      if(event.section==='system'&&['ExtrinsicSuccess','ExtrinsicFailed'].includes(event.method)){
         outcomes.push(event);
       }
     }
+    if(intent)result.probeEvent=probeEvent(probeEvents,intent);
     if(outcomes.length===0)return result;
     if(outcomes.length!==1)throw new ObservationError('events','Conflicting or duplicate system outcome events');
     const event=outcomes[0],success=event.method==='ExtrinsicSuccess';

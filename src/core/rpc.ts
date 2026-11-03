@@ -5,6 +5,7 @@ const READONLY_METHODS = new Set([
   'system_chain', 'system_properties', 'state_getRuntimeVersion', 'state_getMetadata',
   'rpc_methods', 'chain_getBlockHash', 'chain_getHeader', 'chain_getFinalizedHead',
   'chain_getBlock', 'state_getStorage',
+  'eth_chainId', 'eth_getBlockByHash', 'eth_getBlockByNumber', 'eth_getCode', 'eth_call',
 ]);
 const RESPONSE_LIMIT = 1024 * 1024;
 const METADATA_RESPONSE_LIMIT = 2 * 1024 * 1024;
