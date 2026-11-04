@@ -1,5 +1,8 @@
 # PortalPulse reviewer and prototype materials
 
+**4 November current review checkpoint.** Refreshed eight-slide PDF/PPTX, three-page reviewer guide, 144-second captioned CLI output-snapshot walkthrough and importable reports are available in the [current review package](review-checkpoint-20261104.md). The media includes actual readonly observations, a dated historical transaction and synthetic cases. Participant-probe deployment/update, real finalized caller-state proof and final platform receipt remain pending. Check-in keeps the October20 Build50050 submission record, with approval unconfirmed.
+
+
 **October21 current update:** the prototype now provides six deterministic offline rehearsal choices in the webpage and CLI. [Reviewer steps and expected results](reviewer-guide.md) · [Reviewer guide PDF](https://portalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site/materials/portalpulse-reviewer-guide-20261021.pdf). The progress materials were submitted with [Build50050](https://dorahacks.io/build/50050) on October20; last verified status **Under Review**, not organizer approval or final submission. [Project-maintained platform readback record](evidence/checkin-submission-20261020.json).
 
 ## October16 historical media checkpoint

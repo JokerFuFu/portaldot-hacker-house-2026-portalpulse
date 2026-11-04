@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:20,000
+The CLI collected the official V3 profile at 02:08-02:09 UTC. Identity matched the configured organizer-source genesis. This snapshot covers readonly monitoring.
+
+2
+00:00:20,000 --> 00:00:42,000
+Replay preserved the original observations. Freshness was already stale, so status was abnormal. Exit 0 confirmed schema and digest validity while keeping that result.
+
+3
+00:00:42,000 --> 00:01:04,000
+The historical transaction confirms a readonly collection path. Its probe intent uses zero-address placeholders, with no matching probe event or state. The report remains unverified.
+
+4
+00:01:04,000 --> 00:01:24,000
+The new collector links Revive events to EVM code and state at explicit block hashes. Complete probe cases were tested with artificial data and local HTTP services.
+
+5
+00:01:24,000 --> 00:01:48,000
+All six CLI rehearsals returned the expected results. Missing evidence stayed unverified. Execution failures, wrong transactions and state mismatches stayed abnormal.
+
+6
+00:01:48,000 --> 00:02:04,000
+The local probe artifact reproduced exactly. Compilation and earlier constructor simulations are preparation evidence. Participant deployment and a live update remain pending.
+
+7
+00:02:04,000 --> 00:02:24,000
+PortalPulse has public source and a runnable readonly console. Final submission still needs the participant probe and platform receipt. The deadline was last verified on the official page on 3 November.

@@ -1,5 +1,8 @@
 # PortalPulse 参赛提交清单
 
+**2026-11-04 当前状态。** [新评审材料](review-checkpoint-20261104.md)已补齐当前只读实现、真实监测与人工场景的可审阅交付。官方 V3 来源身份于10/22已核验，原生回读采集器已实现；实际所选钱包/费用预算、本人签名后的新探针部署和更新、实链验收与最终平台回读仍待。10/20 Build50050 Check-in 提交保留，审核结论未确认。11/4核心目标的完整实链条件尚未达成，11/6 12:00北京时间最终提交和冻结目标保持。
+
+
 **2026-10-22更新：** [官方Week2公告](https://discord.com/channels/1440212664751099996/1506204427651125349/1562526145373544599)重申10/24 20:00北京时间截止，初步演示可使用标注模拟、偏好真实测试网交互，合约/交易证据按适用情况提供，审核/反馈预计by October26（无精确时区/时刻）。Build50050仍列在活动且可管理，本轮没有明确通过/修改意见；下列10/20待审回执保持原归属。新[网络身份与探针准备](probe-toolchain.md)不等于已部署或最终提交，不重复创建Build。
 
 截至 2026-10-21，当前进度材料已于10月20日随[Build50050](https://dorahacks.io/build/50050)提交，最后平台回读为 **Under Review**，不等于审核通过或最终提交。[提交记录与范围](evidence/checkin-submission-20261020.json)。独立可信身份、探针部署和实链完整流程仍待完成；离线六场景与复现说明见[评审指南](reviewer-guide.md)。清单依据为10月16日实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)和10月20日实际提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。

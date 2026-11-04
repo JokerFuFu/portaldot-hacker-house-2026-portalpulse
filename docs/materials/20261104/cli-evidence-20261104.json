@@ -1,0 +1,424 @@
+{
+  "recordedAt": "2026-11-04T02:15:24.895718+00:00",
+  "sourceCommit": "6059a1dbde747501be826696573a06a35ae28178",
+  "nodeVersion": "v24.22.1",
+  "scope": "Actual November 4 CLI outputs. Scenario facts are synthetic. Historical transaction observed November 3. Participant probe deployment and update pending.",
+  "liveMonitor": {
+    "exit": 0,
+    "statusAtCollection": "normal",
+    "verifiedNetworkAtCollection": true,
+    "identityMeaning": "Matched configured organizer-source genesis; independent consensus unverified",
+    "sampleCount": 4,
+    "rpcCount": 36,
+    "successfulRpcCount": 36,
+    "startedAt": "2026-11-04T02:08:16.520Z",
+    "endedAt": "2026-11-04T02:09:21.268Z",
+    "sha256": "6928a59da42505e5b7dbdf20364d202c1a59e44caac9b4f4d95785b5a4fa8c34",
+    "observations": [
+      {
+        "observedAt": "2026-11-04T02:08:16.520Z",
+        "best": "314148",
+        "finalized": "314146"
+      },
+      {
+        "observedAt": "2026-11-04T02:08:36.444Z",
+        "best": "314151",
+        "finalized": "314149"
+      },
+      {
+        "observedAt": "2026-11-04T02:08:56.229Z",
+        "best": "314154",
+        "finalized": "314152"
+      },
+      {
+        "observedAt": "2026-11-04T02:09:21.268Z",
+        "best": "314159",
+        "finalized": "314157"
+      }
+    ]
+  },
+  "monitorReplay": {
+    "origin": "rpc",
+    "mode": "offline",
+    "status": "abnormal",
+    "verifiedNetwork": false,
+    "interrupted": false,
+    "integrity": "schema-and-sha256-valid; not source authenticity",
+    "report": {
+      "schemaVersion": 1,
+      "sha256": "6928a59da42505e5b7dbdf20364d202c1a59e44caac9b4f4d95785b5a4fa8c34",
+      "network": {
+        "id": "portaldot-v3-test",
+        "name": "Portaldot V3 Test (official explorer identity)",
+        "source": "Organizer Titus designated https://scanner-testnet-v3.portaldot.dev/ on 2026-10-22; indexed block 1 Parent Hash published at https://scanner-testnet-v3.portaldot.dev/#/blocks/1 ; designation https://discord.com/channels/1440212664751099996/1479446495643303997/1562675414575484959",
+        "endpointAlias": "official-v3-test-ws",
+        "kind": "event-testnet",
+        "expectedGenesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd"
+      },
+      "sampleCount": 4,
+      "intervalMs": 10000,
+      "startedAt": "2026-11-04T02:08:16.520Z",
+      "endedAt": "2026-11-04T02:09:21.268Z",
+      "droppedSamples": 0
+    },
+    "monitoring": {
+      "reachability": {
+        "state": "normal",
+        "reason": "Latest recorded RPC requests completed"
+      },
+      "identity": {
+        "state": "normal",
+        "reason": "Configured genesis matched; readonly identity header checks passed"
+      },
+      "freshness": {
+        "state": "abnormal",
+        "reason": "Last completed observation is stale"
+      },
+      "bestProgress": {
+        "state": "normal",
+        "reason": "Observed progress within the sampled interval threshold"
+      },
+      "finalizedProgress": {
+        "state": "normal",
+        "reason": "Observed progress within the sampled interval threshold"
+      },
+      "baselineMs": 19924,
+      "thresholdMs": 180000
+    }
+  },
+  "historicalReplay": {
+    "mode": "offline",
+    "origin": "rpc",
+    "verifiedNetwork": false,
+    "writeAllowed": false,
+    "fullVerification": false,
+    "evidenceComplete": false,
+    "status": "unverified",
+    "trust": "Offline RPC-supplied facts; source authenticity, current network and independent consensus are not verified",
+    "checks": {
+      "network": {
+        "state": "normal",
+        "reason": "Offline configured event-testnet genesis match; no current network verification"
+      },
+      "submission": {
+        "state": "unverified",
+        "reason": "Stage evidence absent; no inference from later stages"
+      },
+      "inclusion": {
+        "state": "unverified",
+        "reason": "Prerequisite evidence has not passed"
+      },
+      "execution": {
+        "state": "unverified",
+        "reason": "Stage evidence absent; no inference from later stages"
+      },
+      "finality": {
+        "state": "unverified",
+        "reason": "Prerequisite evidence has not passed"
+      },
+      "state": {
+        "state": "unverified",
+        "reason": "Stage evidence absent; no inference from later stages"
+      }
+    },
+    "expectedSequence": "0",
+    "observedSequence": null,
+    "report": {
+      "executionReportVersion": 1,
+      "sha256": "5951443419f352bbcdb252ff9c5d8f9a34e89b0d6ac8b854c5a309a129412c65",
+      "integrity": "sha256-content-only; not source authenticity"
+    }
+  },
+  "scenarios": [
+    {
+      "id": "complete",
+      "exit": 0,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": true,
+      "status": "normal",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "normal",
+          "reason": "Successful execution correlated to exact inclusion"
+        },
+        "finality": {
+          "state": "normal",
+          "reason": "Linked ancestry from finalized block to exact inclusion"
+        },
+        "state": {
+          "state": "normal",
+          "reason": "Finalized readback context and uint64 sequence match"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": "9007199254740993",
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "8d48a5007da2ae06405a1b18ae984d7776c19503f9e9d5be7b04931cb9d71b81",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    },
+    {
+      "id": "missing-evidence",
+      "exit": 2,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": false,
+      "status": "unverified",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "unverified",
+          "reason": "Stage evidence absent; no inference from later stages"
+        },
+        "finality": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        },
+        "state": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": "9007199254740993",
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "446aa7118fdde1c2be8d4e59844bfc93011788a363b182f8ae949fdd3059f68f",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    },
+    {
+      "id": "execution-failed",
+      "exit": 1,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": false,
+      "status": "abnormal",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "abnormal",
+          "reason": "Execution failure: Synthetic execution failure; no transaction sent"
+        },
+        "finality": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        },
+        "state": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": "9007199254740993",
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "8acc77edf3dd5f86fdeac1fbb2a6d14f87d64afedd0c6fabaf4c5f245ddf55bc",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    },
+    {
+      "id": "wrong-transaction",
+      "exit": 1,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": false,
+      "status": "abnormal",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "abnormal",
+          "reason": "Execution transaction, block or index mismatch"
+        },
+        "finality": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        },
+        "state": {
+          "state": "unverified",
+          "reason": "Prerequisite evidence has not passed"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": "9007199254740993",
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "fda675488231d542dcf02b190e2a661afb9c100270c7d0eeeb3ed8c2ec4d9035",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    },
+    {
+      "id": "unfinalized",
+      "exit": 2,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": false,
+      "status": "unverified",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "normal",
+          "reason": "Successful execution correlated to exact inclusion"
+        },
+        "finality": {
+          "state": "unverified",
+          "reason": "Stage evidence absent; no inference from later stages"
+        },
+        "state": {
+          "state": "unverified",
+          "reason": "Stage evidence absent; no inference from later stages"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": null,
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "15fd32bba9117f7619c1d5de8b97756916cf0305a987b556bcbe94e665f30689",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    },
+    {
+      "id": "state-mismatch",
+      "exit": 1,
+      "mode": "offline",
+      "origin": "simulated",
+      "verifiedNetwork": false,
+      "writeAllowed": false,
+      "fullVerification": false,
+      "evidenceComplete": false,
+      "status": "abnormal",
+      "trust": "Offline simulated facts only; no Portaldot observations or consensus proof",
+      "checks": {
+        "network": {
+          "state": "normal",
+          "reason": "Offline configured event-testnet genesis match; no current network verification"
+        },
+        "submission": {
+          "state": "normal",
+          "reason": "Submission hash recorded"
+        },
+        "inclusion": {
+          "state": "normal",
+          "reason": "Submitted hash matches inclusion and indexed transaction"
+        },
+        "execution": {
+          "state": "normal",
+          "reason": "Successful execution correlated to exact inclusion"
+        },
+        "finality": {
+          "state": "normal",
+          "reason": "Linked ancestry from finalized block to exact inclusion"
+        },
+        "state": {
+          "state": "abnormal",
+          "reason": "Readback genesis, finalized block, contract, caller or sequence mismatch"
+        }
+      },
+      "expectedSequence": "9007199254740993",
+      "observedSequence": "9007199254740992",
+      "report": {
+        "executionReportVersion": 1,
+        "sha256": "cd29e29dfdac2887280f0e29357660e59933011dc0fbbfb2ebbcfe04f5c62423",
+        "integrity": "sha256-content-only; not source authenticity"
+      }
+    }
+  ],
+  "probeBuild": {
+    "contractName": "PortalPulseProbe",
+    "compilerVersion": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+    "creationBytes": 384,
+    "runtimeBytes": 352,
+    "creationBytecodeSha256": "a0fed7c8ba951dfcc7dc84d985235e9e671613d65133e1d668291cdb43e728b4",
+    "runtimeBytecodeSha256": "8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09",
+    "artifactMatchesOctober22Bytes": true,
+    "artifactSha256": "c24969a5916a942aed355d3f77d9aea3527d3b6138b78c89cbfbd67cda3a8e33"
+  },
+  "priorFullSuite": {
+    "date": "2026-11-03",
+    "passed": 594,
+    "failed": 0,
+    "sourceCommit": "6059a1dbde747501be826696573a06a35ae28178",
+    "rerunOnNovember4": false
+  },
+  "participantProbeDeployed": false,
+  "participantProbeUpdated": false,
+  "finalSubmissionCompleted": false
+}

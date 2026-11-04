@@ -1,0 +1,93 @@
+{
+  "format": "Edited captioned CLI evidence output snapshots",
+  "notContinuousScreenRecording": true,
+  "audio": "none",
+  "date": "2026-11-04",
+  "sourceCommit": "6059a1dbde747501be826696573a06a35ae28178",
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "frameRate": 25,
+  "durationSeconds": 144,
+  "scenes": [
+    {
+      "number": 1,
+      "title": "Official V3 network monitoring",
+      "durationSeconds": 20,
+      "caption": "The CLI collected the official V3 profile at 02:08-02:09 UTC. Identity matched the configured organizer-source genesis. This snapshot covers readonly monitoring.",
+      "source": "monitor-report.json",
+      "selectedFields": "ACTUAL READONLY COLLECTION - 4 Nov 2026\n4 samples / 36 successful RPC reads / exit 0\n\nUTC                  best         finalized\n  02:08:16.520       314148       314146\n  02:08:36.444       314151       314149\n  02:08:56.229       314154       314152\n  02:09:21.268       314159       314157\n\norigin=rpc  mode=live  status=normal  verifiedNetwork=true\nRuntime 3002 / transaction 2 / configured genesis matched",
+      "startSeconds": 0,
+      "endSeconds": 20
+    },
+    {
+      "number": 2,
+      "title": "The same report replays as offline evidence",
+      "durationSeconds": 22,
+      "caption": "Replay preserved the original observations. Freshness was already stale, so status was abnormal. Exit 0 confirmed schema and digest validity while keeping that result.",
+      "source": "cli-evidence-20261104.json#monitorReplay",
+      "selectedFields": "$ node dist/cli/main.js inspect --input monitor-report.json\n\n{\n  \"origin\": \"rpc\",\n  \"mode\": \"offline\",\n  \"status\": \"abnormal\",\n  \"verifiedNetwork\": false,\n  \"freshness\": {\n    \"state\": \"abnormal\",\n    \"reason\": \"Last completed observation is stale\"\n  },\n  \"sampleCount\": 4\n}",
+      "startSeconds": 20,
+      "endSeconds": 42
+    },
+    {
+      "number": 3,
+      "title": "Historical native transaction ancestry",
+      "durationSeconds": 22,
+      "caption": "The historical transaction confirms a readonly collection path. Its probe intent uses zero-address placeholders, with no matching probe event or state. The report remains unverified.",
+      "source": "probe-readback-20261103.json + cli-evidence-20261104.json#historicalReplay",
+      "selectedFields": "RPC OBSERVATION - 3 Nov 2026 / replayed 4 Nov\nNative inclusion 299780 / observed finalized head 299784\n4 checked native parent links\n\norigin=rpc  mode=offline  status=unverified  exit=2\nprobe contract=zero placeholder  caller=zero placeholder\nsubmission=null  matching probe execution=null  state=null\n\nReport digest\n5951443419f352bbcdb252ff9c5d8f9a34e89b0d6ac8b854c5a309a129412c65",
+      "startSeconds": 42,
+      "endSeconds": 64
+    },
+    {
+      "number": 4,
+      "title": "Native Revive probe collection",
+      "durationSeconds": 20,
+      "caption": "The new collector links Revive events to EVM code and state at explicit block hashes. Complete probe cases were tested with artificial data and local HTTP services.",
+      "source": "scripts/probe-observation.mjs at 6059a1d; prior 594-test checkpoint",
+      "selectedFields": "IMPLEMENTED IN SOURCE 6059a1d - FULL POSITIVE PATH USES FIXTURES\n\nMatch exact extrinsic hash and ApplyExtrinsic index\nCheck contract, caller and uint64 SequenceRecorded event\nValidate up to 32 native parent links\nResolve matching EVM block hashes\nCompare exact compiled runtime at inclusion and finality\nRead sequenceOf(caller) at the pinned finalized block\n\nKeep probe-report.json and probe-collection.json",
+      "startSeconds": 64,
+      "endSeconds": 84
+    },
+    {
+      "number": 5,
+      "title": "Six actual CLI rehearsal runs",
+      "durationSeconds": 24,
+      "caption": "All six CLI rehearsals returned the expected results. Missing evidence stayed unverified. Execution failures, wrong transactions and state mismatches stayed abnormal.",
+      "source": "cli-evidence-20261104.json#scenarios",
+      "selectedFields": "SYNTHETIC FACTS - commands executed 4 Nov 2026\n\nscenario               status          exit\ncomplete               normal          0\nmissing-evidence       unverified      2\nexecution-failed       abnormal        1\nwrong-transaction      abnormal        1\nunfinalized            unverified      2\nstate-mismatch         abnormal        1\n\nmode=offline  origin=simulated\nverifiedNetwork=false  writeAllowed=false  fullVerification=false\nExact decimal sequence 9007199254740993",
+      "startSeconds": 84,
+      "endSeconds": 108
+    },
+    {
+      "number": 6,
+      "title": "Pinned local probe compilation",
+      "durationSeconds": 16,
+      "caption": "The local probe artifact reproduced exactly. Compilation and earlier constructor simulations are preparation evidence. Participant deployment and a live update remain pending.",
+      "source": "cli-evidence-20261104.json#probeBuild",
+      "selectedFields": "LOCAL COMPILATION - 4 Nov 2026\n0.8.24+commit.e11b9ed9.Emscripten.clang\nParis / optimizer 200 / metadata hash none\ncreation bytes=384  runtime bytes=352\n\nRuntime bytecode SHA-256\n8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09\n\nWhole artifact matches 22 Oct bytes exactly\nArtifact SHA-256\nc24969a5916a942aed355d3f77d9aea3527d3b6138b78c89cbfbd67cda3a8e33",
+      "startSeconds": 108,
+      "endSeconds": 124
+    },
+    {
+      "number": 7,
+      "title": "Participant probe and final submission",
+      "durationSeconds": 20,
+      "caption": "PortalPulse has public source and a runnable readonly console. Final submission still needs the participant probe and platform receipt. The deadline was last verified on the official page on 3 November.",
+      "source": "reviewer guide; official schedule read 3 Nov 2026",
+      "selectedFields": "PENDING\nSelect actual wallet account / mapping / fresh funds\nReview transaction fee and finite storage budget\nParticipant signs new deployment and record(uint64)\nCollect exact finalized caller-state evidence\nAdd real-probe media and read back final DoraHacks receipt\n\nFinal submit / freeze: 6 Nov, 12:00 Asia/Shanghai\nCheck-in submitted 20 Oct / Build 50050 / approval unconfirmed\n\nPublic console\nportalpulse-jokerfufu-2026-readonly.jokerfu.chatgpt.site",
+      "startSeconds": 124,
+      "endSeconds": 144
+    }
+  ],
+  "sourceFiles": {
+    "cli-evidence-20261104.json": "0113dc986c7125145dc7ff1657cf7e50c5fc05f8005e54485234e34a853da0ee",
+    "monitor-report.json": "353fa8f19ea9a26abe0c85ae04628720834f5c8cb634a03b6e35059ac005821d",
+    "../../evidence/probe-readback-20261103.json": "d261a9fc9c322037f9fa37d137542f2652d04dbc587dbb28a99699b7c934e337"
+  },
+  "outputSha256": "4831d659cdadf511dde04ac39e775cfe1329be68a06a4fb157e59a35c4e88834",
+  "outputBytes": 2227498,
+  "participantProbeDeployed": false
+}

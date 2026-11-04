@@ -1,5 +1,10 @@
 # 本地只读增量开发证据
 
+## November 4 review materials and CLI capture
+
+Product baseline 6059a1dbde747501be826696573a06a35ae28178 retains the November 3 594-test/typecheck/build checkpoint. This update changes documentation and media only. Node24.22.1 core compilation, six CLI rehearsals, historical report replay, monitor replay and probe compilation were actually executed on November4. Four official V3 samples /36 readonly requests passed at collection; later offline replay retained stale freshness. Refreshed Deck, guide, CLI video and exact evidence are in the [dated review checkpoint](review-checkpoint-20261104.md). Participant signing, new probe deployment/update, complete live evidence and final platform receipt remain pending.
+
+
 ## 2026-11-02 原生交易只读观察器
 
 新增Node-only CLI：指定block hash/native extrinsic hash，核对genesis与SCALE header/hash，按父块metadata完整解码目标extrinsic并逐字节往返，只接受相同ApplyExtrinsic索引的系统成功/失败。多项、冲突、错归属、损坏metadata/events/交易体、超时或中止均保留异常/未验证；HTTP/WS错误在截断前脱敏，输出使用独占创建防覆盖。现有网页和离线报告Schema未改。
