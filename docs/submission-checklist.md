@@ -8,7 +8,7 @@ Checkpoint: 4 November 2026. Track: Node Operations & Tooling. [Actual V3 eviden
 - [x] October 20 progress materials submitted as [Build 50050](https://dorahacks.io/build/50050), before the October 24 20:00 Asia/Shanghai deadline.
 - [x] Platform showed Build Submitted and original Under Review readback. The submitted deployment field truthfully said not deployed at that time. [Dated record](evidence/checkin-submission-20261020.json).
 - [x] Original source, prototype video/Deck/demo links were read back. Later historical pending-probe text is superseded by the November 4 real-chain checkpoint.
-- [ ] Organizer approval or feedback is not inferred from an editable or publicly listed Build. The latest owner-only review result requires explicit platform readback.
+- [x] Organizer Check-in result independently read on November4: entry10 PortalPulse (JokerFuFu), PASSED. [Official result and review scope](evidence/official-checkin-result-20261104.json). This is separate from an award or final Demo Day slot.
 
 Do not create a duplicate Build or repeat the original Check-in. Continue updates through Build 50050. Contact sharing and the October 20 agreements were confirmed by the participant. Any newly presented agreement requires its own human decision.
 

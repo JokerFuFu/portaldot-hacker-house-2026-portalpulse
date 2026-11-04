@@ -1,5 +1,11 @@
 # 本地只读增量开发证据
 
+## November4 later documentation clarification and official Check-in result
+
+The final reviewer guide and material page now distinguish the real imported report (origin=rpc) from artificial rehearsals (origin=simulated). Every execution import remains offline with three false verification/write flags. The earlier generic wording was too broad; report JSON, product logic, probe, JS/CSS and test bytes are unchanged. The replacement guide's three pages were rendered and visually inspected. The existing594-test fresh macOS run retains its original time and functional-file hashes; no new unchanged suite is claimed.
+
+The organizer Check-in result was retrieved from its linked official document and matched to entry10 PortalPulse/JokerFuFu/Node Operations & Tooling: PASSED. The external old-revision Windows467/470 result and three SIGINT failures are retained as an unretouched historical observation, not a claim that current Windows support was retested or fixed. [Official result record](evidence/official-checkin-result-20261104.json). Source and hosted bytes for this material-only revision have a separate release record.
+
 ## 4 November 2026 actual probe, browser acceptance and complete-package reproduction
 
 The participant signed a new native Revive deployment at block318063 and record(1) at318407. The product collector baseline6059a1d made17 successful actual readonly calls, linked three native parent edges to finalized318410, matched exact contract/caller/uint64 and pinned352-byte runtime/state1. The original report, diagnostics and actual source/timestamp limits are in [live-chain evidence](live-chain-20261104.md). The deployment operator helper's separate46-edge readback does not expand the product32-edge window.

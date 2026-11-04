@@ -1,5 +1,7 @@
 # PortalPulse
 
+**Official Check-in result: PASSED.** The organizer result document lists entry 10, PortalPulse (JokerFuFu), Node Operations & Tooling. [Source and review scope](docs/evidence/official-checkin-result-20261104.json). The old Windows rerun had three SIGINT-test failures; the current fresh594-test run was macOS Node24. Current Windows signal behavior has not been independently retested.
+
 Node Operations & Tooling for Portaldot Hacker House 2026.
 
 PortalPulse helps node operators and DApp builders see whether a network is advancing, where a transaction failed, and whether finalized caller state matches the requested update. It combines a readonly browser console, Node.js collectors, a small caller-specific Solidity probe, and portable JSON/print reports.
