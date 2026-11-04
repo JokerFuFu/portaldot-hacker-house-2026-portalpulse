@@ -1,0 +1,89 @@
+{
+  "observedAt": "2026-11-03T02:02:00.720Z",
+  "scope": "Read-only official V3 recent historical transaction ancestry and empty-address EIP-1898 capability. Probe intent uses zero-address placeholders.",
+  "official": {
+    "genesis": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "chainId": "0x190f1ca9",
+    "head": {
+      "hash": "0xb1b50d6f72b273605af17d55bf07acf0678910a0b165cb54af0aa08466666170",
+      "number": "299781",
+      "parentHash": "0x529040e0926480f596e0279d1f0cf611e856455b035c99db04ccf7dc444e5949"
+    },
+    "evmHeadHash": "0x456baff23982b3be3f0e5bfd0b1663f916623f9fe3bdbc0faea351f5629aac50",
+    "inclusion": {
+      "hash": "0x529040e0926480f596e0279d1f0cf611e856455b035c99db04ccf7dc444e5949",
+      "number": "299780",
+      "parentHash": "0xb4fb27d670cedd26036c0b90579fc8ab3aec149743f07b491f93dd5a22a9345e"
+    },
+    "txHash": "0xae93fabc7a9bced08632d40ab5262f87ac8d5a4938a6217afa43bb4d87490870",
+    "selectedIndex": 0
+  },
+  "linkedFinality": {
+    "genesisHash": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "finalized": {
+      "hash": "0x9e665ade9dfb533ea97bbc0c9d8a5c7a7403693b3442b19659c6d3605c49f8b2",
+      "number": "299784",
+      "parentHash": "0x0a91475f5f13392d35b82c53b68df0b1b1eadaa0f4f52e753f0c9127c199ab2c"
+    },
+    "ancestry": [
+      {
+        "hash": "0x9e665ade9dfb533ea97bbc0c9d8a5c7a7403693b3442b19659c6d3605c49f8b2",
+        "number": "299784",
+        "parentHash": "0x0a91475f5f13392d35b82c53b68df0b1b1eadaa0f4f52e753f0c9127c199ab2c"
+      },
+      {
+        "hash": "0x0a91475f5f13392d35b82c53b68df0b1b1eadaa0f4f52e753f0c9127c199ab2c",
+        "number": "299783",
+        "parentHash": "0x674ce62ca3b8083aeaa57df10e1b0d959681a3224a76e4609bf372331930f04c"
+      },
+      {
+        "hash": "0x674ce62ca3b8083aeaa57df10e1b0d959681a3224a76e4609bf372331930f04c",
+        "number": "299782",
+        "parentHash": "0xb1b50d6f72b273605af17d55bf07acf0678910a0b165cb54af0aa08466666170"
+      },
+      {
+        "hash": "0xb1b50d6f72b273605af17d55bf07acf0678910a0b165cb54af0aa08466666170",
+        "number": "299781",
+        "parentHash": "0x529040e0926480f596e0279d1f0cf611e856455b035c99db04ccf7dc444e5949"
+      },
+      {
+        "hash": "0x529040e0926480f596e0279d1f0cf611e856455b035c99db04ccf7dc444e5949",
+        "number": "299780",
+        "parentHash": "0xb4fb27d670cedd26036c0b90579fc8ab3aec149743f07b491f93dd5a22a9345e"
+      }
+    ],
+    "observedAt": "2026-11-03T02:02:00.443Z"
+  },
+  "eip1898": {
+    "pinnedCode": {
+      "result": "0x"
+    },
+    "pinnedCall": {
+      "result": "0x"
+    },
+    "missingHashCode": {
+      "error": {
+        "code": "-32000",
+        "message": "Ethereum block not found"
+      }
+    },
+    "missingHashCall": {
+      "error": {
+        "code": "-32000",
+        "message": "Ethereum block not found"
+      }
+    }
+  },
+  "reportDigest": "5951443419f352bbcdb252ff9c5d8f9a34e89b0d6ac8b854c5a309a129412c65",
+  "cliExit": 2,
+  "offlineEvidenceComplete": false,
+  "probeEvent": {
+    "state": "unverified",
+    "reason": "No matching SequenceRecorded event at the target phase"
+  },
+  "participantSignatureObserved": false,
+  "probeDeploymentObserved": false,
+  "probeUpdateObserved": false,
+  "probeStateObserved": false,
+  "writeAllowed": false
+}

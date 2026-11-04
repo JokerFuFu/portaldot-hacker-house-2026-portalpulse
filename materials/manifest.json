@@ -1,0 +1,190 @@
+{
+  "date": "2026-11-04",
+  "scope": "Participant-signed V3 deployment/update and actual browser/PDF evidence, separate from synthetic failure rehearsals",
+  "productImplementationBaseline": "6059a1dbde747501be826696573a06a35ae28178",
+  "video": {
+    "format": "Edited screenshot and output-excerpt walkthrough",
+    "continuousInteractionRecording": false,
+    "walletSigningFootage": false,
+    "audio": "none",
+    "burnedInEnglishCaptions": true,
+    "durationSeconds": 150,
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "frameRate": 25,
+    "scenes": [
+      {
+        "number": 1,
+        "title": "Participant-signed deployment on Portaldot V3 Test",
+        "durationSeconds": 20,
+        "caption": "The participant signed a new native Revive deployment. Exact success and Instantiated events, empty parent code and the compiled 352-byte runtime were read back.",
+        "frame": "scene-01.png",
+        "source": "docs/evidence/portalpulse-v3-deployment-20261104.json",
+        "cropPixels": null,
+        "selectedFields": "ACTUAL DEPLOYMENT / native block 318063 / index 1\nContract\n0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d\n\nNative transaction\n0x2ea2e1a719b819f168807b6b3f97d618fc0bff2cbe2817f938803f5c6632e3b5\n\nInitial caller sequence: 0\nActual fee: 0.05110751235041 tPOT\nActual code/storage holds: 40.566 tPOT\nNo wallet key or backup is used by PortalPulse."
+      },
+      {
+        "number": 2,
+        "title": "Actual browser monitoring of the official V3 node",
+        "durationSeconds": 20,
+        "caption": "Eleven samples produced 99 successful reads at 09:50-09:54 UTC. Best and finalized blocks advanced. Stopping preserved an offline report that later became stale.",
+        "frame": "scene-02.png",
+        "source": "Actual public Site6 browser screenshot; original capture 4 Nov 2026. Monitor JSON preserves exact sample times.",
+        "cropPixels": null,
+        "selectedFields": null
+      },
+      {
+        "number": 3,
+        "title": "A reachable endpoint with the wrong expected identity",
+        "durationSeconds": 20,
+        "caption": "For this negative test, only expected genesis was deliberately changed. Nine real samples remained identity-abnormal although RPC was reachable. The correct identity was restored.",
+        "frame": "scene-03.png",
+        "source": "Actual browser negative test; crop focuses on configured/observed genesis and independent status rows.",
+        "cropPixels": [
+          0,
+          0,
+          895,
+          600
+        ],
+        "selectedFields": null
+      },
+      {
+        "number": 4,
+        "title": "Real record(1), imported into execution review",
+        "durationSeconds": 24,
+        "caption": "The actual update entered native block 318407. The collector matched its event, contract, caller and sequence. Finalized head 318410 linked through three exact parent edges.",
+        "frame": "scene-04.png",
+        "source": "Actual imported RPC report UI, 4 Nov 2026. This is offline review of the saved real record.",
+        "cropPixels": null,
+        "selectedFields": null
+      },
+      {
+        "number": 5,
+        "title": "Actual JSON roundtrip and four A4 report pages",
+        "durationSeconds": 22,
+        "caption": "The browser downloaded this real report and reimported that file with unchanged facts and digest. Actual A4 printing kept source, original times, stages and offline limitations.",
+        "frame": "scene-05.png",
+        "source": "Four actual Chrome PDF pages, arranged side by side without altering report content. Full PDF is included in materials.",
+        "cropPixels": null,
+        "selectedFields": null
+      },
+      {
+        "number": 6,
+        "title": "The same real report replays through the CLI",
+        "durationSeconds": 24,
+        "caption": "All six supplied stages agree and replay exits zero. Imported RPC evidence stays offline with all three trust/write flags false. SHA-256 checks content integrity, not consensus.",
+        "frame": "scene-06.png",
+        "source": "Actual execution-inspect output captured by this build; selected fields shown verbatim.",
+        "cropPixels": null,
+        "selectedFields": "ACTUAL CLI REPLAY / saved real report / exit 0\n\nnetwork        normal\nsubmission     normal\ninclusion      normal\nexecution      normal\nfinality       normal\nstate          normal\n\nExpected sequence: 1    Observed sequence: 1\norigin=rpc  mode=offline\nverifiedNetwork=false  writeAllowed=false  fullVerification=false\n\nPayload SHA-256\n6dcdad84f91ac6ebd74ef333fb9371bea8839a9433ba2bc789edccd6dc12bf5b"
+      },
+      {
+        "number": 7,
+        "title": "Public source, reproduction and operator use",
+        "durationSeconds": 20,
+        "caption": "Use the saved report for historical replay. The live collector has a 32-parent-edge window. Six failure rehearsals remain synthetic. Operator trials and broader runtime coverage are next.",
+        "frame": "scene-07.png",
+        "source": "README.md and docs/probe-readback.md; installation commands are preserved as documented commands.",
+        "cropPixels": null,
+        "selectedFields": "Node.js >=22.12 / locked dependencies\n\nnpm ci --ignore-scripts\nnpm test\nnpm run typecheck\nnpm run build\n\nThe live collector is for a recent participant update.\nBrowser monitoring and report review are readonly.\n\nPublic source\ngithub.com/JokerFuFu/portaldot-hacker-house-2026-portalpulse\n\nConsole and full evidence package\njokerfufu.github.io/portaldot-hacker-house-2026-portalpulse/"
+      }
+    ],
+    "outputSha256": "9d93d41eb762644d343b5407ca2e9a601e06bccd785c5243a06969bd3401e53c",
+    "outputBytes": 2982463
+  },
+  "evidenceReferences": [
+    {
+      "path": "../evidence/portalpulse-v3-deployment-20261104.json",
+      "sha256": "d139f0fa139484974ad0bbac77cf23ae6791c53a0a9c29f75a39389243583e7b"
+    },
+    {
+      "path": "../evidence/portalpulse-v3-execution-report-20261104.json",
+      "sha256": "aa58c70d9a60e0c00cb6352b92767c216a925f4e4b7c7824d6b6a9b542943e31"
+    },
+    {
+      "path": "../evidence/portalpulse-v3-collection-20261104.json",
+      "sha256": "ee118dde1d3c17bba95560f0b2306a0adc86b742f473bc7dc59a1db3dac586a7"
+    },
+    {
+      "path": "../evidence/portalpulse-v3-live-checkpoint-20261104.json",
+      "sha256": "34ddede0dc72ebf733ad066aac69426592525c285b5b5b9cb8d0e3c96bc9e0f2"
+    },
+    {
+      "path": "../evidence/portalpulse-browser-monitor-20261104.json",
+      "sha256": "3a08edb151e134af6a727b28c4a5b81dc4df44bc64946114e382d46c5da504d6"
+    },
+    {
+      "path": "../evidence/portalpulse-browser-identity-mismatch-20261104.json",
+      "sha256": "c0b8e803036d101937319530ef555bfa54ff1ad3a58c3cf185f953ad07ff32dd"
+    }
+  ],
+  "trust": {
+    "origin": "rpc",
+    "mode": "offline",
+    "verifiedNetwork": false,
+    "writeAllowed": false,
+    "fullVerification": false,
+    "sourceAuthenticityVerified": false,
+    "independentConsensusVerified": false,
+    "storageProofVerified": false
+  },
+  "files": [
+    {
+      "name": "portalpulse-final-pitch-20261104.pptx",
+      "bytes": 229053,
+      "sha256": "f3c43c9fa9a215939065c71a7160ef5d85d65cd638664a58ba6bd5b0a3a53d8a"
+    },
+    {
+      "name": "portalpulse-final-pitch-20261104.pdf",
+      "bytes": 390299,
+      "sha256": "53da69e776130cadae04dcaccac2afece9b02478c0f2644009c47b9c1e0aeaeb"
+    },
+    {
+      "name": "portalpulse-final-reviewer-guide-20261104.pdf",
+      "bytes": 107322,
+      "sha256": "a5de40fff086738f8e922ae62383949d8abcadc27bdd4eee6b9db56af19452a2"
+    },
+    {
+      "name": "portalpulse-real-demo-20261104.mp4",
+      "bytes": 2982463,
+      "sha256": "9d93d41eb762644d343b5407ca2e9a601e06bccd785c5243a06969bd3401e53c"
+    },
+    {
+      "name": "portalpulse-real-demo-20261104.en.srt",
+      "bytes": 1452,
+      "sha256": "9f14d84bf5642ebb15cfc07e88ef5942c852691e23d572cf76ff73b9a660aa1a"
+    },
+    {
+      "name": "portalpulse-real-execution-a4-20261104.pdf",
+      "bytes": 383703,
+      "sha256": "8b54c0305ea21bab518b0fe43f7cabc3f5ae44bba9420c149129fd9ba52a2f4c"
+    },
+    {
+      "name": "real-network-ui-20261104.png",
+      "bytes": 105962,
+      "sha256": "ab10077712a04cd4d356caface618fd48727fb9d112486f2609dc8bec0f4b279"
+    },
+    {
+      "name": "real-execution-ui-20261104.png",
+      "bytes": 99218,
+      "sha256": "f29e1fabba93588ebc661f14539b0aede8817c36cd76c33ed27b1212e21f6f9d"
+    },
+    {
+      "name": "wrong-identity-ui-20261104.png",
+      "bytes": 109458,
+      "sha256": "9f1ea96f2b96db6d0e202c6236af4071777163ae36b145595aec234f8edbea9e"
+    },
+    {
+      "name": "PortalPulseProbe.json",
+      "bytes": 4034,
+      "sha256": "c24969a5916a942aed355d3f77d9aea3527d3b6138b78c89cbfbd67cda3a8e33"
+    },
+    {
+      "name": "portalpulse-real-demo-20261104.en.vtt",
+      "bytes": 1460,
+      "sha256": "2c926a78d0368233e1bf44b82b17dd596b09d6ad0af396d65bffb6d6f70ee018"
+    }
+  ]
+}

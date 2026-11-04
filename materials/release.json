@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-11-04T10:52:47.021239+00:00",
+  "sourceCommit": "fccd69fb44e17f815c6a509027da7d13c452fb20",
+  "sourceRepository": "https://github.com/JokerFuFu/portaldot-hacker-house-2026-portalpulse",
+  "sourceTrackedFiles": 148,
+  "sourceArchive": {
+    "name": "portalpulse-final-source.zip",
+    "bytes": 10650891,
+    "sha256": "d862980ae06d34985fc9207f39088fb3c004d83ffca27d100942e87701cf7d85"
+  },
+  "sourceGitZipAndAnonymousFixedRevisionFilesMatched": true,
+  "cleanEnvironment": {
+    "node": "24.22.1",
+    "npm": "11.19.1",
+    "installedPackages": 80,
+    "testsPassed": 594,
+    "testsFailed": 0,
+    "typecheck": "passed",
+    "build": "passed",
+    "originalRealReportReplay": "passed"
+  },
+  "browserBuildAssets": [
+    "assets/index-BlWztYjb.js",
+    "assets/index-BHIFKYz_.css"
+  ],
+  "realExecutionPayloadSha256": "6dcdad84f91ac6ebd74ef333fb9371bea8839a9433ba2bc789edccd6dc12bf5b",
+  "videoSeconds": 150,
+  "originalHistoricalHostPreserved": true,
+  "host": "GitHub Pages, gh-pages root",
+  "scope": "Static build/material/source-byte record. Platform receipt and organizer approval are separate."
+}

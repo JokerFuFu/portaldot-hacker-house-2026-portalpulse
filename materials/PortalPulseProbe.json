@@ -1,0 +1,99 @@
+{
+  "artifactVersion": 1,
+  "contractName": "PortalPulseProbe",
+  "sourceSha256": "abafacf868ee594f83642c8fd3333d0ef73a501c8df63efb9d9ae082f605edce",
+  "compiler": {
+    "version": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "evmVersion": "paris",
+      "metadata": {
+        "bytecodeHash": "none"
+      },
+      "outputSelection": {
+        "*": {
+          "*": [
+            "abi",
+            "evm.bytecode.object",
+            "evm.deployedBytecode.object",
+            "evm.methodIdentifiers"
+          ],
+          "": [
+            "ast"
+          ]
+        }
+      }
+    },
+    "distribution": "npm solc 0.8.24",
+    "packageIntegrity": "sha512-G5yUqjTUPc8Np74sCFwfsevhBPlUifUOfhYrgyu6CmYlC6feSw0YS6eZW47XDT23k3JYdKx5nJ+Q7whCEmNcoA==",
+    "soljsonSha256": "fb59b825b7d57f9de89cd9de2415b12aab1fcc7eb2573fd2bf5c9b969eacf4d9"
+  },
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "caller",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "sequence",
+          "type": "uint64"
+        }
+      ],
+      "name": "SequenceRecorded",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "nextSequence",
+          "type": "uint64"
+        }
+      ],
+      "name": "record",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "sequenceOf",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "creationBytecode": "0x608060405234801561001057600080fd5b50610160806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c806301b573b71461003b5780637f8d3bd314610082575b600080fd5b6100656100493660046100f9565b60006020819052908152604090205467ffffffffffffffff1681565b60405167ffffffffffffffff909116815260200160405180910390f35b610095610090366004610129565b610097565b005b3360008181526020818152604091829020805467ffffffffffffffff191667ffffffffffffffff861690811790915591519182527fe713287ae922897fd174c4f5c60424054f2cfd8876dcc88925f454345bf53ebc910160405180910390a250565b60006020828403121561010b57600080fd5b81356001600160a01b038116811461012257600080fd5b9392505050565b60006020828403121561013b57600080fd5b813567ffffffffffffffff8116811461012257600080fdfea164736f6c6343000818000a",
+  "runtimeBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c806301b573b71461003b5780637f8d3bd314610082575b600080fd5b6100656100493660046100f9565b60006020819052908152604090205467ffffffffffffffff1681565b60405167ffffffffffffffff909116815260200160405180910390f35b610095610090366004610129565b610097565b005b3360008181526020818152604091829020805467ffffffffffffffff191667ffffffffffffffff861690811790915591519182527fe713287ae922897fd174c4f5c60424054f2cfd8876dcc88925f454345bf53ebc910160405180910390a250565b60006020828403121561010b57600080fd5b81356001600160a01b038116811461012257600080fd5b9392505050565b60006020828403121561013b57600080fd5b813567ffffffffffffffff8116811461012257600080fdfea164736f6c6343000818000a",
+  "creationBytecodeSha256": "a0fed7c8ba951dfcc7dc84d985235e9e671613d65133e1d668291cdb43e728b4",
+  "runtimeBytecodeSha256": "8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09",
+  "methodIdentifiers": {
+    "record(uint64)": "7f8d3bd3",
+    "sequenceOf(address)": "01b573b7"
+  },
+  "eventSelectors": {
+    "SequenceRecorded": "0xe713287ae922897fd174c4f5c60424054f2cfd8876dcc88925f454345bf53ebc"
+  },
+  "scope": "Compiler artifact only; no deployment receipt, wallet ownership or consensus verification."
+}

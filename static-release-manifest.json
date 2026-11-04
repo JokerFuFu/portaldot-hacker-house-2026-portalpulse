@@ -1,0 +1,200 @@
+{
+  "sourceCommit": "fccd69fb44e17f815c6a509027da7d13c452fb20",
+  "files": [
+    {
+      "path": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1081,
+      "sha256": "27e11bfabe3f530d04d1b12dcdf408f03d0c60a704c57c571b4fe447bc085a81"
+    },
+    {
+      "path": "assets/index-BHIFKYz_.css",
+      "bytes": 9028,
+      "sha256": "85664c0e991e950722f86258384d0799d6003eb5c94ca8febfa3c0399f419d61"
+    },
+    {
+      "path": "assets/index-BlWztYjb.js",
+      "bytes": 279073,
+      "sha256": "5918e92528213a8b6635a98cd4c80b58337d4ba9f80781dee9ea1b74a6bbf561"
+    },
+    {
+      "path": "evidence/checkin-submission-20261020.json",
+      "bytes": 1047,
+      "sha256": "4737b930c12fa114e5879accaba022dcc6d9ef8f65dc1bcee454d99be6d05f0d"
+    },
+    {
+      "path": "evidence/event-schedule-20261013.json",
+      "bytes": 2722,
+      "sha256": "cf51d396307138de1f84548876b274999fe7bf6f30d80067fe82ffb164bbd323"
+    },
+    {
+      "path": "evidence/final-reproduction-20261104.json",
+      "bytes": 13156,
+      "sha256": "c1a6035bf43605fe5579505cbc22f9dd4156b4e603f2c6a2c2395c8fc5b38fde"
+    },
+    {
+      "path": "evidence/mainnet-readonly-20261009.json",
+      "bytes": 5154,
+      "sha256": "d056bbe379a5d188f97ec5ff0245d50a9554b8939036e3c21e5de9f6d8a33d2b"
+    },
+    {
+      "path": "evidence/native-observation-20261102.json",
+      "bytes": 3498,
+      "sha256": "ceee00426b3f16ddd07e3f66948745af1bc6c93f1c5a874323f5cb7ffcfffa1c"
+    },
+    {
+      "path": "evidence/native-storage-preflight-20261027.json",
+      "bytes": 2705,
+      "sha256": "30be001ab6bc7ed5c0bc5cca8131c83a1b4891079efdc6be2f9ac6fe9e6ee388"
+    },
+    {
+      "path": "evidence/portalpulse-browser-identity-mismatch-20261104.json",
+      "bytes": 61943,
+      "sha256": "c0b8e803036d101937319530ef555bfa54ff1ad3a58c3cf185f953ad07ff32dd"
+    },
+    {
+      "path": "evidence/portalpulse-browser-monitor-20261104.json",
+      "bytes": 75797,
+      "sha256": "3a08edb151e134af6a727b28c4a5b81dc4df44bc64946114e382d46c5da504d6"
+    },
+    {
+      "path": "evidence/portalpulse-v3-collection-20261104.json",
+      "bytes": 4819,
+      "sha256": "ee118dde1d3c17bba95560f0b2306a0adc86b742f473bc7dc59a1db3dac586a7"
+    },
+    {
+      "path": "evidence/portalpulse-v3-deployment-20261104.json",
+      "bytes": 12579,
+      "sha256": "d139f0fa139484974ad0bbac77cf23ae6791c53a0a9c29f75a39389243583e7b"
+    },
+    {
+      "path": "evidence/portalpulse-v3-execution-report-20261104.json",
+      "bytes": 3256,
+      "sha256": "aa58c70d9a60e0c00cb6352b92767c216a925f4e4b7c7824d6b6a9b542943e31"
+    },
+    {
+      "path": "evidence/portalpulse-v3-live-checkpoint-20261104.json",
+      "bytes": 3703,
+      "sha256": "34ddede0dc72ebf733ad066aac69426592525c285b5b5b9cb8d0e3c96bc9e0f2"
+    },
+    {
+      "path": "evidence/probe-readback-20261103.json",
+      "bytes": 3299,
+      "sha256": "d261a9fc9c322037f9fa37d137542f2652d04dbc587dbb28a99699b7c934e337"
+    },
+    {
+      "path": "evidence/probe-readback-historical-report-20261103.json",
+      "bytes": 2648,
+      "sha256": "e1ad2d1a96bffe4b7eb5b95fe9ee75db243f51279e27263003d1352566eec010"
+    },
+    {
+      "path": "evidence/v3-identity-20261022.json",
+      "bytes": 4489,
+      "sha256": "c1605068f42e3f833fd4716bd52edd46644a312fa95135085ed51ee15f525abb"
+    },
+    {
+      "path": "evidence/v3-monitoring-20261017.json",
+      "bytes": 26629,
+      "sha256": "552ad604c8324a3f4fd22f06bcb859b857af16b4d2c15634422312fc6ae228ce"
+    },
+    {
+      "path": "evidence/v3-readonly-20261009.json",
+      "bytes": 1622,
+      "sha256": "6e1f3bd99b05296f4ebcb5c35bbd00829cad3830fa5ccbd30eb8c184da5d93ff"
+    },
+    {
+      "path": "evidence/v3-readonly-20261017.json",
+      "bytes": 5364,
+      "sha256": "ca9db5a18b04b9c9ffdfcd1431a66f09fbf1bc40c19bcfb7c75e5549eff218a8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 422,
+      "sha256": "91870bdef8abbb5016e49072e0790e89b3fbc75987868223ac9e7e6e08b14b2a"
+    },
+    {
+      "path": "materials/PortalPulseProbe.json",
+      "bytes": 4034,
+      "sha256": "c24969a5916a942aed355d3f77d9aea3527d3b6138b78c89cbfbd67cda3a8e33"
+    },
+    {
+      "path": "materials/README.md",
+      "bytes": 1560,
+      "sha256": "fa7b94df4072e7e5e340947de2a21ec39078eae9653d7c9fb0605398a61f4b8a"
+    },
+    {
+      "path": "materials/index.html",
+      "bytes": 5151,
+      "sha256": "ab7587037d82750d7fa0d4854ad642d5f48830a58fe902b772103bfb16a00ca0"
+    },
+    {
+      "path": "materials/manifest.json",
+      "bytes": 8909,
+      "sha256": "08b1b1b2f9d731fe2294b43f083a3602fb10ff8adecdc1c222e788837ed01ad5"
+    },
+    {
+      "path": "materials/portalpulse-final-pitch-20261104.pdf",
+      "bytes": 390299,
+      "sha256": "53da69e776130cadae04dcaccac2afece9b02478c0f2644009c47b9c1e0aeaeb"
+    },
+    {
+      "path": "materials/portalpulse-final-pitch-20261104.pptx",
+      "bytes": 229053,
+      "sha256": "f3c43c9fa9a215939065c71a7160ef5d85d65cd638664a58ba6bd5b0a3a53d8a"
+    },
+    {
+      "path": "materials/portalpulse-final-reviewer-guide-20261104.pdf",
+      "bytes": 107322,
+      "sha256": "a5de40fff086738f8e922ae62383949d8abcadc27bdd4eee6b9db56af19452a2"
+    },
+    {
+      "path": "materials/portalpulse-final-source.zip",
+      "bytes": 10650891,
+      "sha256": "d862980ae06d34985fc9207f39088fb3c004d83ffca27d100942e87701cf7d85"
+    },
+    {
+      "path": "materials/portalpulse-real-demo-20261104.en.srt",
+      "bytes": 1452,
+      "sha256": "9f14d84bf5642ebb15cfc07e88ef5942c852691e23d572cf76ff73b9a660aa1a"
+    },
+    {
+      "path": "materials/portalpulse-real-demo-20261104.en.vtt",
+      "bytes": 1460,
+      "sha256": "2c926a78d0368233e1bf44b82b17dd596b09d6ad0af396d65bffb6d6f70ee018"
+    },
+    {
+      "path": "materials/portalpulse-real-demo-20261104.mp4",
+      "bytes": 2982463,
+      "sha256": "9d93d41eb762644d343b5407ca2e9a601e06bccd785c5243a06969bd3401e53c"
+    },
+    {
+      "path": "materials/portalpulse-real-execution-a4-20261104.pdf",
+      "bytes": 383703,
+      "sha256": "8b54c0305ea21bab518b0fe43f7cabc3f5ae44bba9420c149129fd9ba52a2f4c"
+    },
+    {
+      "path": "materials/real-execution-ui-20261104.png",
+      "bytes": 99218,
+      "sha256": "f29e1fabba93588ebc661f14539b0aede8817c36cd76c33ed27b1212e21f6f9d"
+    },
+    {
+      "path": "materials/real-network-ui-20261104.png",
+      "bytes": 105962,
+      "sha256": "ab10077712a04cd4d356caface618fd48727fb9d112486f2609dc8bec0f4b279"
+    },
+    {
+      "path": "materials/release.json",
+      "bytes": 1127,
+      "sha256": "00ea572898b489c5d08b5b0d92f9cc7b774f22f4108326f24b8c495d6731ad7f"
+    },
+    {
+      "path": "materials/wrong-identity-ui-20261104.png",
+      "bytes": 109458,
+      "sha256": "9f1ea96f2b96db6d0e202c6236af4071777163ae36b145595aec234f8edbea9e"
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "preflightVersion": 1,
+  "scope": "Dated real readonly RPC observations. No probe deployment, transaction execution, independent consensus proof or full product verification.",
+  "startedAt": "2026-10-17T03:26:09.800Z",
+  "finishedAt": "2026-10-17T03:26:20.298Z",
+  "source": "https://discord.com/channels/1440212664751099996/1506204427651125349/1560719007307403354",
+  "guideRevision": "ef1f438a9eb373806c5e11e78f44340a7d926f1d",
+  "declaredNetwork": {
+    "substrateWebSocket": "wss://test-node-v3.portaldot.dev",
+    "evmHttp": "https://test-evm-rpc-v3.portaldot.dev",
+    "evmChainId": 420420777,
+    "nodeExplorer": "https://node-console.portaldot.dev/"
+  },
+  "explorerExplicitTestUrl": "https://node-console.portaldot.dev/?rpc=wss%3A%2F%2Ftest-node-v3.portaldot.dev#/explorer",
+  "tlsVerification": "default enabled; no bypass",
+  "observed": {
+    "system_chain": "PortaldotV3 Test",
+    "system_chainType": "Live",
+    "system_properties": {
+      "ss58Format": 42,
+      "tokenDecimals": 14,
+      "tokenSymbol": "tPOT"
+    },
+    "system_health": {
+      "peers": 1,
+      "isSyncing": false,
+      "shouldHavePeers": false
+    },
+    "genesisRequest": {
+      "jsonrpc": "2.0",
+      "id": 11,
+      "method": "chain_getBlockHash",
+      "params": [
+        0
+      ]
+    },
+    "genesisResult": "0xd4f9acbcf7f52388d8b095abe3c198d19fc510e0343e643e87cfbccb155283bd",
+    "runtimeAtFinalizedBlock": {
+      "blockHash": "0x9e5d0d5fd75bbb2c0c4ede599f15953fc70e7f46b1397c83e41a53536a99e55d",
+      "specName": "portaldot-v3",
+      "implName": "portaldot-v3-node",
+      "specVersion": 3002,
+      "transactionVersion": 2,
+      "stateVersion": 1
+    },
+    "metadataAtSameFinalizedBlock": {
+      "hexBytes": 1123834,
+      "decodedBytes": 561916,
+      "sha256": "18368d1bc7fa50876700bb131cf4a38118997606dfb12f0cad8f91bf6080a8b6",
+      "magic": "meta",
+      "version": 14
+    },
+    "rpcMethodCount": 125,
+    "evmReads": [
+      {
+        "observedAt": "2026-10-17T03:26:09.804Z",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "eth_chainId",
+          "params": []
+        },
+        "httpStatus": 200,
+        "response": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": "0x190f1ca9"
+        }
+      },
+      {
+        "observedAt": "2026-10-17T03:26:11.372Z",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "method": "web3_clientVersion",
+          "params": []
+        },
+        "httpStatus": 200,
+        "response": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "result": "eth-rpc/main-fddd431/x86_64-unknown-linux-gnu/rustc1.98.0"
+        }
+      },
+      {
+        "observedAt": "2026-10-17T03:26:12.503Z",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": 3,
+          "method": "eth_blockNumber",
+          "params": []
+        },
+        "httpStatus": 200,
+        "response": {
+          "jsonrpc": "2.0",
+          "id": 3,
+          "result": "0x10d0d"
+        }
+      },
+      {
+        "observedAt": "2026-10-17T03:26:12.865Z",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": 4,
+          "method": "eth_syncing",
+          "params": []
+        },
+        "httpStatus": 200,
+        "response": {
+          "jsonrpc": "2.0",
+          "id": 4,
+          "result": false
+        }
+      }
+    ]
+  },
+  "expectedGenesis": null,
+  "independentTrustedGenesisPublished": false,
+  "verifiedNetwork": false,
+  "writeAllowed": false,
+  "fullVerification": false,
+  "deploymentPerformed": false,
+  "currentCliCollection": {
+    "behaviorRevision": "36b28667b0282542de19837388c5c465bc45cdab",
+    "startedAt": "2026-10-17T03:44:27.985625+00:00",
+    "finishedAt": "2026-10-17T03:45:58.960992+00:00",
+    "exit": 2,
+    "origin": "rpc",
+    "status": "unverified",
+    "verifiedNetwork": false,
+    "sampleCount": 4,
+    "report": "v3-monitoring-20261017.json",
+    "fileSha256": "552ad604c8324a3f4fd22f06bcb859b857af16b4d2c15634422312fc6ae228ce",
+    "monitoring": {
+      "reachability": {
+        "state": "normal",
+        "reason": "Latest recorded RPC requests completed"
+      },
+      "identity": {
+        "state": "unverified",
+        "reason": "Missing or unverified identity evidence"
+      },
+      "freshness": {
+        "state": "normal",
+        "reason": "Last completed observation is within freshness window"
+      },
+      "bestProgress": {
+        "state": "unverified",
+        "reason": "Incomplete or failed observation resets progress baseline"
+      },
+      "finalizedProgress": {
+        "state": "unverified",
+        "reason": "Incomplete or failed observation resets progress baseline"
+      },
+      "baselineMs": null,
+      "thresholdMs": 180000
+    }
+  },
+  "limits": [
+    "Observed genesis is not promoted to an independently trusted expected genesis.",
+    "Runtime metadata header/version is not full ABI decoding or contract-toolchain compatibility.",
+    "One RPC provider and sampled head increases do not prove independent finality or continuous availability.",
+    "Node Console root defaulted to Live/3001 at this observation; select the explicit Test/3002 RPC URL.",
+    "Guide calls the token tPOTv3 while system_properties returned tPOT.",
+    "Mapped/funded deployer and user signing still need verification; private account evidence is excluded."
+  ]
+}
