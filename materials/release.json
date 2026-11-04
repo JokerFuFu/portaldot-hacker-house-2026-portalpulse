@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-11-04T10:52:47.021239+00:00",
-  "sourceCommit": "fccd69fb44e17f815c6a509027da7d13c452fb20",
+  "recordedAt": "2026-11-04T13:01:48.679520+00:00",
+  "sourceCommit": "3a3d780b690377edfc850b2d44e5de7d69c5a4b7",
   "sourceRepository": "https://github.com/JokerFuFu/portaldot-hacker-house-2026-portalpulse",
-  "sourceTrackedFiles": 148,
+  "sourceTrackedFiles": 149,
   "sourceArchive": {
     "name": "portalpulse-final-source.zip",
-    "bytes": 10650891,
-    "sha256": "d862980ae06d34985fc9207f39088fb3c004d83ffca27d100942e87701cf7d85"
+    "bytes": 10652526,
+    "sha256": "c0f7523b8c17dac909e721f9ec85c8edee33b1af8555d34f9444b0b4412d10d1"
   },
   "sourceGitZipAndAnonymousFixedRevisionFilesMatched": true,
   "cleanEnvironment": {
@@ -27,5 +27,14 @@
   "videoSeconds": 150,
   "originalHistoricalHostPreserved": true,
   "host": "GitHub Pages, gh-pages root",
-  "scope": "Static build/material/source-byte record. Platform receipt and organizer approval are separate."
+  "scope": "Static build/material/source-byte record. Platform receipt and organizer approval are separate.",
+  "officialCheckin": {
+    "result": "PASSED",
+    "position": 10,
+    "project": "PortalPulse",
+    "builder": "JokerFuFu",
+    "source": "https://docs.google.com/document/d/1sHqbRgpsY5icNReaokhk43nm36psp91L6N2gcqA0GW8/edit"
+  },
+  "documentationClarification": "Real imported report retains rpc origin; artificial rehearsals retain simulated origin. All execution imports stay offline with three false verification/write flags.",
+  "codeUnchangedSinceValidatedBaseline": "fccd69fb44e17f815c6a509027da7d13c452fb20"
 }

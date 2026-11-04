@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "fccd69fb44e17f815c6a509027da7d13c452fb20",
+  "sourceCommit": "3a3d780b690377edfc850b2d44e5de7d69c5a4b7",
   "files": [
     {
       "path": ".nojekyll",
@@ -50,6 +50,11 @@
       "path": "evidence/native-storage-preflight-20261027.json",
       "bytes": 2705,
       "sha256": "30be001ab6bc7ed5c0bc5cca8131c83a1b4891079efdc6be2f9ac6fe9e6ee388"
+    },
+    {
+      "path": "evidence/official-checkin-result-20261104.json",
+      "bytes": 1311,
+      "sha256": "673f6ef1e830ec8e95132e141758169b90021565100a6dee09bcf943342abbc4"
     },
     {
       "path": "evidence/portalpulse-browser-identity-mismatch-20261104.json",
@@ -128,13 +133,13 @@
     },
     {
       "path": "materials/index.html",
-      "bytes": 5151,
-      "sha256": "ab7587037d82750d7fa0d4854ad642d5f48830a58fe902b772103bfb16a00ca0"
+      "bytes": 5240,
+      "sha256": "2cdcbcf90c52f1b422f6350d8cc6a61c6e7e702f4bca50f620417fa8c36d1ff6"
     },
     {
       "path": "materials/manifest.json",
       "bytes": 8909,
-      "sha256": "08b1b1b2f9d731fe2294b43f083a3602fb10ff8adecdc1c222e788837ed01ad5"
+      "sha256": "ee33816ddc68021463edeb949c352fd8db08dd6dedb81bb2867026ca131aa9c5"
     },
     {
       "path": "materials/portalpulse-final-pitch-20261104.pdf",
@@ -148,13 +153,13 @@
     },
     {
       "path": "materials/portalpulse-final-reviewer-guide-20261104.pdf",
-      "bytes": 107322,
-      "sha256": "a5de40fff086738f8e922ae62383949d8abcadc27bdd4eee6b9db56af19452a2"
+      "bytes": 107361,
+      "sha256": "979ab1702dee7fa9ed087a97b4088a032d25edbf04e0eadbe07a6ced5ae468dc"
     },
     {
       "path": "materials/portalpulse-final-source.zip",
-      "bytes": 10650891,
-      "sha256": "d862980ae06d34985fc9207f39088fb3c004d83ffca27d100942e87701cf7d85"
+      "bytes": 10652526,
+      "sha256": "c0f7523b8c17dac909e721f9ec85c8edee33b1af8555d34f9444b0b4412d10d1"
     },
     {
       "path": "materials/portalpulse-real-demo-20261104.en.srt",
@@ -188,8 +193,8 @@
     },
     {
       "path": "materials/release.json",
-      "bytes": 1127,
-      "sha256": "00ea572898b489c5d08b5b0d92f9cc7b774f22f4108326f24b8c495d6731ad7f"
+      "bytes": 1644,
+      "sha256": "2d0064b75c98a03e18b22273683d9a5c80579788e6323925aad6c5128e0f0930"
     },
     {
       "path": "materials/wrong-identity-ui-20261104.png",
