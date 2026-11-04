@@ -1,5 +1,9 @@
 # Native transaction observation
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 This Node-only command observes one **supplied native extrinsic hash inside one supplied block**. It checks the selected genesis, recomputes the header hash, hashes the raw length-prefixed extrinsics, and accepts a system dispatch outcome only from the target extrinsic's exact ApplyExtrinsic phase. It never signs, submits, deploys, connects a wallet, or searches an account.
 
 A normal observation means **single-RPC correlation of inclusion and system dispatch**. It does not prove that the extrinsic invoked PortalPulseProbe, identify its signer or caller, interpret wrapper/batch inner-call results, verify the extrinsics trie root, establish independent consensus/finality, or read contract state. Those remain explicit false flags even for a successful system event. A batch or wrapper can have system success while an inner call fails; do not use this command as a contract success verdict.

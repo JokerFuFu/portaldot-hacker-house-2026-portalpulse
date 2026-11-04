@@ -1,5 +1,19 @@
 # 本地只读增量开发证据
 
+## 4 November 2026 actual probe, browser acceptance and complete-package reproduction
+
+The participant signed a new native Revive deployment at block318063 and record(1) at318407. The product collector baseline6059a1d made17 successful actual readonly calls, linked three native parent edges to finalized318410, matched exact contract/caller/uint64 and pinned352-byte runtime/state1. The original report, diagnostics and actual source/timestamp limits are in [live-chain evidence](live-chain-20261104.md). The deployment operator helper's separate46-edge readback does not expand the product32-edge window.
+
+The actual public Site6 browser downloaded and file-reimported the real report, preserving all facts/digest, then produced four actual A4 pages that were inspected. Separate browser monitoring recorded11 samples/99 successful calls, and a deliberately wrong expected genesis stayed abnormal for9 real samples. Stop/offline and later stale freshness were retained. Six failure/revert/fork rehearsals remain artificial, not induced testnet failures.
+
+Final App edits correct two stale delivery labels and Vite uses relative asset paths for project-path hosting. At10:35:38-10:36:16 UTC, a fresh147-file checkout and initially empty npm cache installed80 locked packages from the official npm registry with lifecycle scripts disabled. Node24.22.1/npm11.19.1: **594/594 tests**, no failures/cancelled/skipped/todo, typecheck and core/Vite build all passed. Thirty-one modules built to index-BlWztYjb.js/index-BHIFKYz_.css. Saved-real-report replay exited0, six synthetic rehearsals returned expected0/1/2, and the local probe artifact reproduced byte-for-byte. All functional source/config/test files still match this snapshot. [Sanitized reproduction record and file hashes](evidence/final-reproduction-20261104.json).
+
+The first setup-only harness attempt assumed a bundled npm entry that did not exist and stopped before installing anything. The corrected fresh run used the installed npm CLI with bundled Node; the failure is retained privately. No global npm update followed its upgrade notice.
+
+New materials comprise8-slide editable PPTX/PDF,3-page reviewer guide,150-second genuine screenshot/output walkthrough with English captions, and the4-page real A4 report. All final PDF pages and7 encoded video scenes were visually inspected; the complete H264 stream decoded. A first PPTX draft had empty image payloads despite structural checks; replacing local-path references with embedded bytes fixed both screenshots, whose exact hashes were checked inside the final package. The failed draft is private. No native PowerPoint interaction is claimed. [Current materials and scene/file manifest](materials/20261104-final/README.md).
+
+Source publication, anonymous hosted-byte readback, a final platform submission receipt and the organizer's decision are separate steps. The original October20 Build50050 Check-in remains its historical submitted/UnderReview record. Earlier dated sections below keep their original attribution.
+
 ## November 4 review materials and CLI capture
 
 Product baseline 6059a1dbde747501be826696573a06a35ae28178 retains the November 3 594-test/typecheck/build checkpoint. This update changes documentation and media only. Node24.22.1 core compilation, six CLI rehearsals, historical report replay, monitor replay and probe compilation were actually executed on November4. Four official V3 samples /36 readonly requests passed at collection; later offline replay retained stale freshness. Refreshed Deck, guide, CLI video and exact evidence are in the [dated review checkpoint](review-checkpoint-20261104.md). Participant signing, new probe deployment/update, complete live evidence and final platform receipt remain pending.

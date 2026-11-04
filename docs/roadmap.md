@@ -1,5 +1,9 @@
 # PortalPulse 时间线与阶段状态
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 状态日期：2026-10-21。只读/离线原型、报告和六类验收预设已实现；99项聚焦/507项全套通过，真实本机网页已读回六场景。[评审指南](reviewer-guide.md)。原型Deck、字幕截图讲解和A4材料保留10/16归属。当前进度材料已于10/20随Build50050提交，最后回读Under Review，尚非审核通过或最终提交。[平台记录](evidence/checkin-submission-20261020.json)。可信网络身份、探针及实链完整执行仍待完成；下方有日期的小节保留历史检查点，不代表当前未提交。
 
 | 日期（2026 年） | 阶段与计划目标 | 状态 |

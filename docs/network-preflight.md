@@ -1,5 +1,9 @@
 # 网络只读预检与后续接入状态
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 **现行状态：2026-10-17 已取得官方替代配置，实际读取Test/3002、V14和EVM ChainID420420777。** 详见[现行观测、配置与部署条件](v3-readonly-20261017.md)。下列10/09–16端点、失败和“尚未取得”均保留为当时状态；不再代表当前未公布配置。独立可信创世依据、映射/资金、工具链/探针及真实执行仍未完成。
 
 **2026-10-13 接入状态补充：旧 RPC 配置不能作为当前活动配置。** 2026-10-10 读取到主办方 Titus 于 10 月 9 日 17:40（北京时间）的[回复](https://discord.com/channels/1440212664751099996/1479446495643303997/1558051618581389395)，明确旧 RPC 信息不再可用，升级配置完成后将公布最新 RPC。下表地址为历史值，部署或写入须先取得新配置或官方明确恢复说明，再重新核验全部身份和能力条件。10 月 13 日指南 main 仍为固定版本；最新频道公告未在本次核验。本次未继续探测旧地址，也没有当前网络可用性证据。

@@ -65,7 +65,7 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
   ['RPC 可达',vm.summary.reachability],['网络身份',vm.summary.identity],['最新区块推进',vm.summary.bestProgress],['最终确认推进',vm.summary.finalizedProgress],['数据新鲜度',vm.summary.freshness],
  ] as const:[];
  return <main>
-  <header className="masthead"><div><h1>PortalPulse</h1><p>只读网络观测台</p></div><span className="scope">本地只读增量 · V3 验证待完成</span></header>
+  <header className="masthead"><div><h1>PortalPulse</h1><p>只读网络观测台</p></div><span className="scope">只读观测 · 执行证据复核</span></header>
   <nav className="view-switch actions" aria-label="工作视图"><button aria-pressed={view==='network'} onClick={()=>setView('network')}>网络观测</button><button aria-pressed={view==='execution'} onClick={()=>{stop();setView('execution');}}>执行复核</button></nav>
   <section className="network-view" hidden={view!=='network'}>
   <section className="source-banner" aria-label="观测来源"><strong>{vm?.modeLabel??(running?'实时只读采集':'未连接')}</strong><span>{vm?.originLabel??(running?'等待 RPC 观测':'尚无观测')}</span><p>{vm?.network.source??'没有默认活动端点。模拟会话为人工数据；离线记录保留原始采集时间。'}</p></section>
@@ -86,7 +86,7 @@ export function App({initialReport,initialMode='offline'}:{initialReport?:Sessio
    <aside><h2>自定义只读连接</h2><p className="hint">手动启动。允许 HTTP / HTTPS / WS / WSS；拒绝认证、查询与片段。浏览器连接还取决于 CORS 和安全上下文。</p>
     <form onSubmit={start}><label>端点（必填）<input name="endpoint" required type="url" placeholder="https://your-node.example" value={config.endpoint??''} onChange={e=>change('endpoint',e.target.value)}/></label><label>端点别名（必填）<input required maxLength={128} value={config.endpointAlias} onChange={e=>change('endpointAlias',e.target.value)}/></label><label>公开来源说明（必填）<input required maxLength={512} value={config.source} onChange={e=>change('source',e.target.value)}/></label><label>网络名称（必填）<input required maxLength={256} value={config.name} onChange={e=>change('name',e.target.value)}/></label><label>配置 ID（必填）<input required maxLength={128} value={config.id} onChange={e=>change('id',e.target.value)}/></label><label>预期创世哈希（选填）<input maxLength={66} value={config.expectedGenesis??''} placeholder="留空则身份保持未验证" onChange={e=>change('expectedGenesis',e.target.value)}/></label><div className="form-actions"><button className="primary" disabled={running||busy} type="submit">开始只读采集</button><button type="button" disabled={!running} onClick={stop}>停止采集</button></div></form>
     <p className="hint">修改配置会中止旧请求并保留离线记录。报告仅使用别名与来源，配置端点不导出。数据留在本机，刷新页面会清空未导出的会话。</p>
-    <div className="pending"><h3>当前交付范围</h3><p>只读网络观测、报告与六类离线执行验收场景。进度材料已于2026-10-20随<a href="https://dorahacks.io/build/50050">Build50050</a>提交，最后回读为待审核；尚非审核通过或最终提交。可信网络身份、探针部署及实链执行 / 最终确认 / 状态回读仍待完成。</p></div>
+    <div className="pending"><h3>使用与实链记录</h3><p>网页提供只读网络观测、版本化报告与离线执行复核；原生探针的执行证据由 Node CLI 采集。<a href="https://github.com/JokerFuFu/portaldot-hacker-house-2026-portalpulse/blob/main/docs/live-chain-20261104.md">2026-11-04 官方 V3 实链记录</a>包含新部署、序号更新与最终状态回读。导入报告保留原始时间与 RPC 来源，见<a href="./materials/">演示与参赛材料</a>。</p></div>
    </aside>
   </div>
   </section>

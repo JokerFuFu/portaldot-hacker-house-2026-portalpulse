@@ -1,40 +1,33 @@
-# PortalPulse 验收标准与证据范围
+# PortalPulse acceptance and evidence scope
 
-**2026-11-02更新：** [原生只读观察器](native-observation.md)已实现指定区块/交易哈希与系统事件phase关联。官方V3历史公开交易试读成功仅为采集器范围，不是本项目部署/更新、探针语义、独立最终确认或合约读回；A08仍未通过。签名者、实际费用及完整实链六阶段集成继续待完成。旧10月的测试/提交/打印记录保留原日期。
+Updated 4 November 2026. Actual successful V3 probe integration and the browser report loop are complete. Negative cases preserve their actual local/artificial scope. Technical acceptance, source publication and the organizer's platform decision remain separate.
 
-**2026-10-22更新：** [官方来源身份](evidence/v3-identity-20261022.json)已有13项交叉核验；四样本监测仍真实保留一次metadata超时/exit1，不能视为全程健康。探针本地EVM行为9项及构建命令4项通过，V3构造器eth_call返回与编译运行时代码一致。这些是本地行为、工具链和只读模拟依据，A03–A06的真实部署、签名交易、执行/最终确认与锚定读回继续待验。实际签名者及费用/存储预算未确认，写入仍关闭。[使用与限制](probe-toolchain.md)。
+| ID | Requirement | Recorded evidence and scope |
+| --- | --- | --- |
+| A01 | Wrong network identity | Actual public browser changed only expected genesis to 0x11 repeated 32 bytes. Nine real samples stayed identity-abnormal despite successful RPC. Correct identity restored. No write path is enabled in the browser. |
+| A02 | Timeout, stale and cancellation | Local transport/session tests cover the 8-second timeout and cancellation. Actual October 22 monitor and November 4 operator metadata preflight retained their metadata timeout. November 4 real browser Stop/offline later became stale. No new induced browser-network timeout is claimed. |
+| A03 | Included execution failure | Artificial execution-failed/revert tests and six-case browser/CLI rehearsal stay abnormal. Actual participant update succeeded; no actual failed participant update was induced for this case. |
+| A04 | Another transaction's success | Wrong-transaction artificial tests reject another hash/phase. The real positive update separately matched exact native hash/index, contract, caller and uint64. The negative case remains a fixture. |
+| A05 | Not finalized | Artificial unfinalized/fork tests remain unverified. Actual participant update was observed pending and later matched to finalized 318410 with three exact parent links. Independent consensus remains outside scope. |
+| A06 | State mismatch | Artificial exact-uint64 mismatch remains abnormal. Actual pinned readback after record(1) matched 1; no false claim of an actual-chain mismatch. |
+| A07 | Report modification | Strict field/digest/size tests and dated October browser tamper rejection preserve a prior valid report. November 4 real download/reimport preserved the exact report and digest. |
+| A08 | Actual complete flow | Passed in official-source RPC scope: new deployment 318063, update 318407, exact success/probe events, finalized ancestry, pinned code/state 1, actual browser export/file-reimport/CLI replay and four-page A4 print. [Evidence](live-chain-20261104.md). |
+| A09 | Fresh environment | Passed November 4 in a fresh147-file checkout and initially empty npm cache:80 locked packages,594/594 tests, typecheck/build, exact saved-real-report replay and probe recompilation. Functional bytes match the snapshot. [Dated record](evidence/final-reproduction-20261104.json). Earlier clean-install evidence remains historical. |
+| A10 | Public delivery/privacy | Final public source, JSON, media, hosted assets and source ZIP are checked as a bounded release inventory. Final release/readback record is separate from individual file existence; no wallet backup/private key/seed/contact/local path belongs in the public package. |
 
-**2026-10-21更新：** A03–A06可通过网页/CLI的人工离线场景直接复现，行为提交5ad3fe6已通过99项聚焦/507项全套及类型构建检查，本机浏览器六场景状态已实读。它们验证事实一致性与错误分层，不替代认可V3交易、解码事件或独立共识。原打印/下载/新环境复现证据继续按原日期与提交归属。当前进度材料10月20日已随Build50050提交待审，审核及最终交付未完成。[复现步骤](reviewer-guide.md)。下文带日期的段落为历史范围，当前官方只读接入见[10/17记录](v3-readonly-20261017.md)。
+## Exact monitoring rules
 
-状态日期：2026-10-14。以下是完整产品必须逐项验证的标准。A01 / A02 已有本地单元与 SSR / localhost 证据；A07 增加 2f1a91e 实际浏览器篡改拒绝及旧报告保留证据，A09 的只读增量独立 Node 22.12 新目录复现已更新到 d58e695，附人工本地 RPC 完整等价 URL 脱敏浏览器专项；其他浏览器证据保留原提交范围。真实链与完整产品验收仍待完成，不能将这些证据视为全部通过。当前主网只读观测和失败的 V3 只读预检均见[网络预检](network-preflight.md)，不满足探针或产品验收。标准对应[设计](design.md)的六个模块。
+- Default sample interval 10 seconds, per-request timeout 8 seconds.
+- Original observation window and last update remain visible. Offline imports never become live automatically.
+- At least three adjacent observed block changes establish a baseline. Before that progress is unverified.
+- After the baseline, stalled threshold is max(180 seconds, 3 times median observed block interval). Reachability, freshness, best progress and finalized progress are separate.
+- Network reports retain at most 2,000 samples and 16 MiB compact UTF-8 JSON, showing dropped count/window. Execution reports are limited to 1 MiB without truncating facts.
+- Complete evidence, missing evidence and explicit failure produce distinct results. Stop/config changes abort old work. New writes never auto-resign or resend.
 
-V3 指南已公布配置及 Revive / Solidity 工作流；这些只作为后续核验输入。实测 WebSocket 连接错误和 EVM `eth_chainId([])` HTTP 502 没有验证网络身份或合约能力。网络恢复后须取得创世哈希、运行时、metadata 与实际 EVM 链 ID，并验证所选合约工具链；原生到 EVM 账户注资前须查询 `reviveApi.accountId` 映射，不能由已有 SS58 地址推定 EVM 部署者。Substrate 仍为网络观测路径，Revive / Solidity 为待验证候选；不要求同时实现 legacy WASM 与 EVM，不宣称跨 VM 可组合性或编译器 / 运行时兼容已经通过。
+## Scope
 
-## 十个验收场景
+The probe stores only the caller's uint64 test sequence. The browser is readonly. Native deployment/update were signed manually by the participant on the confirmed official-source testnet.
 
-| 编号 | 场景 | 必须观察到的结果与留存证据 | 当前状态 |
-|---|---|---|---|
-| A01 | 错误网络身份 | 展示身份差异；监控可解释错误，但部署与调用写入均禁用。保留配置来源、预期/实际创世哈希及拒绝结果 | 本地身份不符 / 未验证测试通过；真实链与浏览器待验 |
-| A02 | 请求超时 | 显示失败、8 秒超时及最后更新时间；不能复用旧正常状态。保留请求方法、时间与耗时 | 本地超时 / 陈旧与取消测试通过；真实链与浏览器待验 |
-| A03 | 已纳入但执行失败 | 保持异常，展示对应区块、当前交易及失败执行结果；纳入本身不算成功 | execution-failed人工离线预设/测试与网页状态已验；真实执行待验 |
-| A04 | 匹配到其他交易的成功事件 | 不能判当前交易成功；核对区块哈希、交易哈希、交易索引和事件归属并保留差异 | wrong-transaction人工成功结果的关联拒绝已验；实链事件解码待验 |
-| A05 | 尚未最终确认 | 展示当前阶段和最终确认依据缺口，不展示完整验证通过 | unfinalized人工离线预设/测试与网页状态已验；实链最终确认待验 |
-| A06 | 读回序号与预期不同 | 显示不匹配，保留预期与实际序号、合约地址和读回区块 | state-mismatch精确大整数差1的离线预设/测试与网页状态已验；实链读回待验 |
-| A07 | 报告字段或摘要改动 | 重新导入时字段或 SHA-256 摘要检查失败，不能继续标为验证通过 | 本地字段 / 摘要 / 大小与 SSR 测试通过；2f1a91e 浏览器文件导入、篡改拒绝并保留旧报告已观察；该文件导入 / 篡改场景未在 6b24591、c6bf4a0 或 d58e695 重跑 |
-| A08 | 真实完整流程 | 在认可测试网上新部署、更新、最终确认、读回、导出、重新复核全部有真实记录；保留身份、地址、交易、区块、执行事件与读回值 | 未执行 |
-| A09 | 新环境复现 | README 的实际命令、锁定依赖版本和部署/使用说明足以运行网页与命令行演示；留存真实命令、输出和环境版本 | d58e695 只读增量经 Node 22.12 新目录安装、200/200 测试、类型检查 / 构建及 CLI demo / inspect；完整等价 URL 脱敏浏览器专项使用非 Portaldot 人工夹具；6b24591 其他浏览器证据保留原范围；全产品复现未通过 |
-| A10 | 公开交付隐私审查 | 仓库、报告、视频、演示、Pitch Deck 和源码包无私钥、助记词、认证信息或无关内部资料；逐项回读最终交付件 | 未执行 |
+All execution imports stay mode=offline with verifiedNetwork/writeAllowed/fullVerification=false. SHA-256 checks content integrity. RPC source authenticity, signature ownership, independent consensus and trie/storage proofs are not established by a normal report. Live probe collection has a 32-parent-edge window and 90-second deadline; use saved JSON for historical replay. Deployment's separate operator readback checked 46 edges.
 
-## 采样和状态的精确标准
-
-- 默认每 **10 秒**采集一次；每个请求 **8 秒**超时。
-- 始终显示观察窗口、采集开始/结束时间和最后更新时间；离线导入显示原始来源与采集时间，不能标成实时在线。
-- 至少观察**三个相邻区块变化**才建立间隔基线；之前区块推进为未验证，不能显示正常。
-- 建立基线后，超过 **max(180 秒, 3 倍区块间隔中位数)** 未观察到推进时报警。连接失败、数据陈旧、没有区块推进分别展示，最终确认推进独立展示。
-- 本地报告同时限制 **2,000 条观测**与 **16 MiB 完整紧凑 UTF-8 JSON**；超过任一上限时删除最早记录，并显示累计丢弃条数和实际保留窗口。不能将这段观测或条数作为全天可用性。
-- 正常、异常、未验证、采集中四类状态各有明确依据；超时、元数据缺失、无法解码和查不到记录都不能转成成功。
-- 连接错误可重连；写入不能自动重签或重复发送。已知主网创世哈希必须拒绝写入；身份或测试网能力不明时禁用写入。
-- 导出带结构版本并检查 SHA-256；摘要只检测改动，不提供单一 RPC 之外的独立共识证明。
-- 探针只存发起者自己的测试序号；更新其他发起者状态、资金转移或私钥托管均不属于首版功能。
-
-以下为10/14检查点的历史浏览器范围，后来公开托管、10/16打印补验及10/20提交状态已由各自日期记录补充，不能把当时待办当作今日平台状态：已有2f1a91e下载/文件导入、390px、打印CSS及6b24591空态/配置拒绝/模拟/非RPC失败/Stop限定证据，后者未计量网络请求次数。c6bf4a0紧凑端点专项4条记录/36次夹具RPC、d58e695重复路径专项27次夹具RPC均为人工本地夹具；确认完整脱敏、身份未验证、Stop离线与恢复模拟。这些专项未重跑下载、文件导入、窄屏、打印与控制台错误，不用自动测试补称重验。[开发证据](development-evidence.md)按日期与版本列出后续核验；A08真实完整流程仍未通过，当前提交不等于主办方审核或最终验收。[提交清单](submission-checklist.md)。
+Historical browser narrow-layout, keyboard, pending-export cancellation and 26-page synthetic print checks retain their October dates and code attribution in [development evidence](development-evidence.md). [Current reviewer steps](reviewer-guide.md) and [platform checklist](submission-checklist.md).

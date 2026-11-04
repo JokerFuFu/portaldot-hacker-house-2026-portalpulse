@@ -1,0 +1,87 @@
+{
+  "recordedAt": "2026-11-04T10:14:27.732856+00:00",
+  "scope": "Actual November4 official V3 deployment and participant update, followed by portable offline review.",
+  "productBaseline": "6059a1dbde747501be826696573a06a35ae28178",
+  "contract": "0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d",
+  "deployment": {
+    "nativeBlock": "318063",
+    "transactionHash": "0x2ea2e1a719b819f168807b6b3f97d618fc0bff2cbe2817f938803f5c6632e3b5",
+    "runtimeBytes": 352,
+    "runtimeSha256": "8605cc54e9a5301eac736a1cdebfb672561fa0837e3c3d34cc05d7909c1c5b09",
+    "initialCallerSequence": "0"
+  },
+  "update": {
+    "nativeBlock": "318407",
+    "nativeBlockHash": "0xe5144ef8ce45c61fe87f15b91a96410312dc6a2802ba19d18b105e28adc4e8e8",
+    "transactionHash": "0xdbfe322c6fabf4f39f5f21ecfebc2f583a5511ba2e429cd7a38d7ef99785c7f3",
+    "index": 1,
+    "caller": "0xa8b69220b626457f4b718496ab516ccc6218d1cd",
+    "expectedSequence": "1",
+    "observedSequence": "1",
+    "finalizedNativeBlock": "318410",
+    "ancestryEdges": 3,
+    "collectorReadCalls": 17,
+    "collectorExit": 0,
+    "reportPayloadDigest": "6dcdad84f91ac6ebd74ef333fb9371bea8839a9433ba2bc789edccd6dc12bf5b"
+  },
+  "submissionObservation": {
+    "transactionHash": "0xdbfe322c6fabf4f39f5f21ecfebc2f583a5511ba2e429cd7a38d7ef99785c7f3",
+    "observedAt": "2026-11-04T09:18:07.879Z",
+    "source": "author_pendingExtrinsics first observation",
+    "nonce": "2",
+    "exactAccountAndCallMatched": true
+  },
+  "submissionProvenanceNote": "The CLI labels its optional timestamp participant-supplied. This value was supplied by the participant operator from an actual author_pendingExtrinsics first observation matching this exact transaction hash, account and call; it is not a fabricated wallet-send timestamp.",
+  "offlineReview": {
+    "mode": "offline",
+    "origin": "rpc",
+    "verifiedNetwork": false,
+    "writeAllowed": false,
+    "fullVerification": false,
+    "evidenceComplete": true,
+    "status": "normal",
+    "trust": "Offline RPC-supplied facts; source authenticity, current network and independent consensus are not verified",
+    "checks": {
+      "network": {
+        "state": "normal",
+        "reason": "Offline configured event-testnet genesis match; no current network verification"
+      },
+      "submission": {
+        "state": "normal",
+        "reason": "Submission hash recorded"
+      },
+      "inclusion": {
+        "state": "normal",
+        "reason": "Submitted hash matches inclusion and indexed transaction"
+      },
+      "execution": {
+        "state": "normal",
+        "reason": "Successful execution correlated to exact inclusion"
+      },
+      "finality": {
+        "state": "normal",
+        "reason": "Linked ancestry from finalized block to exact inclusion"
+      },
+      "state": {
+        "state": "normal",
+        "reason": "Finalized readback context and uint64 sequence match"
+      }
+    },
+    "expectedSequence": "1",
+    "observedSequence": "1"
+  },
+  "browserAcceptance": {
+    "realExportFileReimported": true,
+    "jsonEqualToCollectorReport": true,
+    "a4Pages": 4,
+    "realBrowserMonitorSamples": 11,
+    "normalMonitorRpcCalls": 99,
+    "identityNegativeTest": "operator deliberately changed expected genesis to 0x11 repeated32; actual node genesis stayed official and identity became abnormal"
+  },
+  "limits": [
+    "Selected official-source RPC correlation, not independent consensus or trie/storage proof.",
+    "Reports preserve original times and stay offline on import.",
+    "Live probe collector has a32-parent-edge window; use the saved report for historical replay.",
+    "Failure/revert/fork cases in the six rehearsal catalog remain synthetic unless separately identified."
+  ]
+}

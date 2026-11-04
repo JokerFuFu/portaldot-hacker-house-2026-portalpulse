@@ -1,5 +1,3 @@
-# PortalPulse materials - 4 November 2026
+# Historical morning materials, 4 November 2026
 
-[Review checkpoint, evidence dates and reproduction steps](../../review-checkpoint-20261104.md).
-
-The Pitch PDF/PPTX and reviewer guide describe source 6059a1d. The 144-second captioned video is an edited CLI output-snapshot walkthrough with actual readonly observations, dated historical RPC facts and labeled synthetic rehearsals. New participant-probe deployment/update and final platform readback remain pending.
+This directory preserves the morning readonly / historical / synthetic checkpoint at 87b6e6f. Its 144-second video and deck truthfully said participant-probe deployment was pending at that time. They are superseded by the later [real-chain review package](../../review-checkpoint-20261104.md) and [actual V3 evidence](../../live-chain-20261104.md). Earlier bytes and original dates are retained.

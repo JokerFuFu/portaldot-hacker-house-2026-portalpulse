@@ -1,5 +1,9 @@
 # Probe build and deployment preparation — updated October29
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 The probe source is implemented and tested locally. A readonly constructor `eth_call` and a later native candidate-account dry run on the identified V3 network returned the exact compiled runtime. The October27 native checkpoint also exercised a finite candidate storage-deposit limit and a zero-limit rejection. No contract was deployed and no transaction was submitted. Actual selected-wallet identity, transaction fee and final wallet budget, deployment, one caller update and finality/state readback remain pending. The web application continues to provide readonly monitoring and offline evidence review.
 
 ## Build the artifact

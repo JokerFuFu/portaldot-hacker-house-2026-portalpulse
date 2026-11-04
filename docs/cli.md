@@ -1,5 +1,9 @@
 # Readonly CLI
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 ## 原生交易只读观察（2026-11-02增量）
 
 除既有监控与离线执行命令外，可运行独立 `node scripts/observe-native.mjs --config PATH --block-hash H256 --tx-hash H256 --out PATH`。需要先正常npm ci（包含开发依赖）并build:core。它按指定历史区块、原生交易哈希及相同事件phase关联系统dispatch结果，输出独立nativeObservationVersion1文件；不兼容旧报告导入器，不证明签名者/探针语义/最终确认/合约状态，三个验证/写入标记继续false。无默认endpoint、写入或钱包功能；完整限制、退出码与历史公开交易试读范围见[原生观察说明](native-observation.md)。

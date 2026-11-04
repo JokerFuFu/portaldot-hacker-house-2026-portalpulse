@@ -1,60 +1,42 @@
-# PortalPulse 参赛提交清单
+# PortalPulse submission checklist
 
-**2026-11-04 当前状态。** [新评审材料](review-checkpoint-20261104.md)已补齐当前只读实现、真实监测与人工场景的可审阅交付。官方 V3 来源身份于10/22已核验，原生回读采集器已实现；实际所选钱包/费用预算、本人签名后的新探针部署和更新、实链验收与最终平台回读仍待。10/20 Build50050 Check-in 提交保留，审核结论未确认。11/4核心目标的完整实链条件尚未达成，11/6 12:00北京时间最终提交和冻结目标保持。
+Checkpoint: 4 November 2026. Track: Node Operations & Tooling. [Actual V3 evidence](live-chain-20261104.md), [current materials](review-checkpoint-20261104.md) and platform readback have separate scopes.
 
+## Original Check-in
 
-**2026-10-22更新：** [官方Week2公告](https://discord.com/channels/1440212664751099996/1506204427651125349/1562526145373544599)重申10/24 20:00北京时间截止，初步演示可使用标注模拟、偏好真实测试网交互，合约/交易证据按适用情况提供，审核/反馈预计by October26（无精确时区/时刻）。Build50050仍列在活动且可管理，本轮没有明确通过/修改意见；下列10/20待审回执保持原归属。新[网络身份与探针准备](probe-toolchain.md)不等于已部署或最终提交，不重复创建Build。
+- [x] Registered and persisted as the original event entry.
+- [x] October 20 progress materials submitted as [Build 50050](https://dorahacks.io/build/50050), before the October 24 20:00 Asia/Shanghai deadline.
+- [x] Platform showed Build Submitted and original Under Review readback. The submitted deployment field truthfully said not deployed at that time. [Dated record](evidence/checkin-submission-20261020.json).
+- [x] Original source, prototype video/Deck/demo links were read back. Later historical pending-probe text is superseded by the November 4 real-chain checkpoint.
+- [ ] Organizer approval or feedback is not inferred from an editable or publicly listed Build. The latest owner-only review result requires explicit platform readback.
 
-截至 2026-10-21，当前进度材料已于10月20日随[Build50050](https://dorahacks.io/build/50050)提交，最后平台回读为 **Under Review**，不等于审核通过或最终提交。[提交记录与范围](evidence/checkin-submission-20261020.json)。独立可信身份、探针部署和实链完整流程仍待完成；离线六场景与复现说明见[评审指南](reviewer-guide.md)。清单依据为10月16日实读的[本届官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)和10月20日实际提交表单；赛道为[Node Operations & Tooling](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/tracks)。
+Do not create a duplicate Build or repeat the original Check-in. Continue updates through Build 50050. Contact sharing and the October 20 agreements were confirmed by the participant. Any newly presented agreement requires its own human decision.
 
-## Check-in：2026-10-24 20:00 前（北京时间）
+## Technical package for final submission
 
-- [x] 10月20日进度与未完成事项已如实填写并提交。
-- [x] 公开GitHub、README、开发记录、架构与演示/视频/Deck链接已提交；固定Build页五个链接已回读。
-- [x] 部署字段如实填写尚未部署，没有伪造地址或交易；平台整体接受提交。
-- [x] 可演示原型与92秒模拟截图讲解已提供，明确其人工数据和历史日期。
-- [x] 10月20日DoraHacks成功提示、活动自己的Build卡片及Manage Submission均回读到Under Review，项目说明与材料链接匹配；10月22日未明示新的审核结论。
-- [ ] 主办方审核结果仍待确认；未将整体接受提交冒称所有九个自定义答案均有逐字段服务端读回。
-- [ ] 完整产品的认可V3探针部署、真实交易和状态证据仍未完成，原主网观测与模拟材料均不替代。
+- [x] Browser console, native Node CLI, network monitoring and portable JSON/print reports implemented.
+- [x] Official-source V3 identity, runtime, actual selected-account mapping/funds and finite preflight budgets checked before participant signing.
+- [x] Actual new native deployment at318063 and record(1) at318407, exact events, finalized ancestry, pinned runtime and caller state1. [Original evidence](live-chain-20261104.md).
+- [x] Real browser execution JSON download/file-reimport, CLI replay and four-page A4 printing accepted. Real11-sample monitoring and wrong-identity negative test retained.
+- [x] Fresh147-file checkout / empty npm cache installed80 locked packages.594/594 tests, typecheck/build, exact real-report replay, six synthetic expected-result cases and probe recompilation passed. [Reproduction](evidence/final-reproduction-20261104.json).
+- [x] Eight-slide Pitch PDF/editable PPTX, three-page reviewer guide and150-second real-data captioned walkthrough prepared and visually checked. [Materials](materials/20261104-final/README.md).
+- [x] README, deployment instructions, dependencies/licenses, architecture and dated evidence describe current behavior. Negative/revert/fork rehearsals remain synthetic. Offline reports keep their three false verification/write flags.
+- [ ] Final public source commit, source ZIP, static host and all submitted links must be anonymously read back against the exact release inventory.
+- [ ] Final source/material privacy and cross-document checks must cover the actual delivered inventory. No wallet backup, seed, private key, authentication secret, staff contact or local path belongs in the public package.
 
-本次是已提交待审的当前进度材料，尚不宣称Check-in审核合格。初期视频为92秒真实截图/实际报告组成的无声英文字幕讲解；实链演示仍待接入后更新。[材料与范围](checkin-materials.md)。
+## Final platform submission and freeze
 
-原内部目标为 **10-23 20:00 北京时间**，现已提前产生真实提交记录；不要重复创建Build或重复提交。10月20日本人确认协议后完成提交，联系人/协议待办已解除。后续沿Build50050更新真实进度并回读审核状态，最终提交另行核验。
+- [ ] Update the original public Build description, demo/video/Deck links and actual deployment/transaction evidence.
+- [ ] Update the original event submission fields and read back persisted answers, links and a final success state. Saving the public description alone is not the event submission receipt.
+- [ ] Save final submission time and exact source version. Freeze core code after final submission, preserving the source and media inventory.
 
-## Office Hours 申请：2026-10-27 20:00 前（北京时间）
+The deadline/freeze was last verified on November 3 as November 6, 04:00 UTC / 12:00 Asia/Shanghai on the [official event page](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail). A real technical report or uploaded file alone does not establish platform submission or organizer approval.
 
-- [ ] 整理当前进度、公开 GitHub、已完成模块、测试网部署状态、可用时的演示链接，以及需要与导师讨论的具体问题。
-- [ ] 根据官方 Discord 的申请入口提交并回读申请状态；填写未验证的部署状态时如实说明。
-- [ ] Office Hours 当前安排为 10-28 至 10-29（UTC 日期），具体北京时间场次待确认。
+## Demo Day and prizes
 
-上述日期以 2026-10-13 [官方详情](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail#key-dates)为准，见[排期观察记录](evidence/event-schedule-20261013.json)。申请入口与场次以主办方正式公告为准。
+- [x] Pitch, captioned demo and saved report support an offline fallback without new wallet signatures or dependence on a fresh RPC response.
+- [ ] Read the final official Demo Day slot/access instructions. Current published dates: November 8-9 UTC; individual participant slot remains unconfirmed.
+- [ ] Rehearse the assigned time limit using the approved source/video/report, and follow the code-freeze rules.
+- [ ] Community voting, award results and any payout require their own official result and receipt. Participation or submission does not guarantee a prize.
 
-## 最终提交：2026-11-06 12:00 前（北京时间）
-
-- [ ] 项目名称、团队成员和一句话简介完整且真实。
-- [ ] GitHub 仓库公开可访问，含完整 README、部署说明、项目文档和可复现 / 可运行的最终代码。
-- [ ] README 提供真实安装与运行命令、环境及锁定依赖版本、部署和使用说明；披露框架、官方 SDK 及第三方来源与许可。
-- [ ] 架构图与交付功能、代码和部署保持一致。
-- [ ] 提供可运行演示：网页 / DApp 链接，或 README 中清楚的本地部署说明；在新环境实测复现。
-- [ ] 提供真实 Portaldot V3 测试网部署信息，及适用的合约地址、交易哈希、区块哈希、执行结果、最终确认与状态读回证据；浏览器可用时提供相应链接。
-- [ ] 演示视频**最多三分钟**，链接公开可访问，展示真实产品、核心功能和 Portaldot 集成 / 使用。
-- [ ] Pitch Deck 为 PDF 或公开可访问链接，说明解决的问题、为何需要 Portaldot、产品功能实证及继续支持的理由。
-- [ ] 按[十项产品验收](acceptance.md)留存实际验证；发布材料与源码包逐项回读，无私钥、助记词、认证信息或无关内部资料。
-- [ ] DoraHacks 最终提交后回读字段、链接与成功状态；保存提交时间和版本，进入代码冻结。
-
-区块、执行、最终确认和状态读回记录是 PortalPulse 的产品证据要求；官方最终提交明确要求适用的合约地址和交易哈希。产品证据与官方字段要求应分别核对，不能凭演示点击或文件存在认定提交成功。[最终材料规则](https://dorahacks.io/hackathon/portaldot-hacker-house-2026/detail)。
-
-## 开发记录与 Demo Day
-
-- [ ] 代码主要在 2026-10-14 至 2026-11-06 期间产生，比赛期间仓库保持公开，至少三次有效比赛期提交；准备文档提交不计入。
-- [ ] 保留 commit / PR 时间线；核心模块最终版本不能在最终截止前最后 24 小时集中一次性提交。
-- [ ] 冻结后不实质改变核心功能、架构或评审结果；严重缺陷如必须修复，向主办方报告并保留清楚修改记录。
-- [ ] 为 11-08 至 11-09（官方 UTC 日期）Demo Day 准备讲解和可运行演示，具体北京时间场次以官方排期为准。
-
-## 社区投票与结果核验
-
-- [ ] Community Choice Voting 当前为 11-10 00:00 至 11-11 00:00（北京时间）；按官方 Discord 的投票规则及实际页面核验。
-- [ ] 获奖结果计划 11-11（UTC 日期）公布；获奖后资料收集计划 11-12 至 11-14（UTC 日期），准确场次和字段另行核验。
-- [ ] 奖励计划 11-14 20:00（北京时间）分发；获奖及到账均需实证，计划日期不代表获得奖金。
-
-完整阶段安排见[时间线](roadmap.md)。活动网络的现行观测与剩余条件见[10/17接入记录](v3-readonly-20261017.md)，不能填入猜测的地址、配置或交易记录。
+Office Hours dates and earlier materials remain dated historical milestones in [the roadmap](roadmap.md). An unsubmitted expired application is not marked attended. No organizer/support message is sent without separately authorized content and purpose.

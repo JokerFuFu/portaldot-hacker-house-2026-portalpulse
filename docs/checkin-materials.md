@@ -1,5 +1,9 @@
 # PortalPulse reviewer and prototype materials
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 **4 November current review checkpoint.** Refreshed eight-slide PDF/PPTX, three-page reviewer guide, 144-second captioned CLI output-snapshot walkthrough and importable reports are available in the [current review package](review-checkpoint-20261104.md). The media includes actual readonly observations, a dated historical transaction and synthetic cases. Participant-probe deployment/update, real finalized caller-state proof and final platform receipt remain pending. Check-in keeps the October20 Build50050 submission record, with approval unconfirmed.
 
 

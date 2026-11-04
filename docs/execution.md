@@ -1,5 +1,9 @@
 # Offline execution evidence
 
+## 4 November 2026 current integration checkpoint
+
+The participant deployed PortalPulseProbe at 0x7a7ceb705bb1886f2d7aee766c6e8ee8a3c42d2d and signed record(1). Exact native events, linked finalized headers, compiled runtime and pinned caller state 1 were captured by the product collector. Actual browser download/reimport, CLI replay and four-page A4 printing passed. [Actual facts and trust limits](live-chain-20261104.md) supersede the pending-probe statements in the historical dated sections below. The browser remains readonly; execution imports remain offline with all three verification/write flags false. Platform final submission has its own [checklist](submission-checklist.md).
+
 The M2A increment validates and evaluates supplied execution facts locally; M2B adds detached versioned execution report creation/import and CLI export. It does not connect to RPC, decode SCALE/events, use a wallet, deploy a probe, sign a call, or collect new execution facts. `origin: rpc` describes the supplied provenance and is not source authentication. The supplied JSON has no endpoint field. This format is separate from the M1 monitoring report and its SHA-256 envelope; it is not accepted by the monitoring report importer. M2C adds a separate local execution-review view to the existing web app.
 
 Build with Node.js >=22.12, then run:
